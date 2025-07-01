@@ -1,6 +1,6 @@
 # Connie Comet 🚀
 
-connie.one retail website powered by Payload CMS and Next.js.
+connie.one retail website powered by Payload CMS and Next.js and hosted @ AWS.
 
 ## ⚠️ Important Requirements
 
