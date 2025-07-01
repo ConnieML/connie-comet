@@ -1,6 +1,6 @@
 # Connie Comet 🚀
 
-Modern tech solutions platform built with Payload CMS and Next.js.
+connie.one retail website powered by Payload CMS and Next.js.
 
 ## ⚠️ Important Requirements
 
