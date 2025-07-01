@@ -1,6 +1,39 @@
-# Payload Website Template
+# Connie Comet 🚀
 
-This is the official [Payload Website Template](https://github.com/payloadcms/payload/blob/main/templates/website). Use it to power websites, blogs, or portfolios from small to enterprise. This repo includes a fully-working backend, enterprise-grade admin panel, and a beautifully designed, production-ready website.
+Modern tech solutions platform built with Payload CMS and Next.js.
+
+## ⚠️ Important Requirements
+
+- **Node.js:** 20.9.0 or higher (tested with 20.19.2)
+- **Package Manager:** pnpm (required - do not use npm or yarn)
+- **Database:** MongoDB (MongoDB Atlas recommended)
+
+## Quick Setup
+
+```bash
+# Install pnpm globally if needed
+npm install -g pnpm
+
+# Install dependencies  
+pnpm install
+
+# Copy environment file
+cp .env.example .env
+
+# Start development
+pnpm dev
+```
+
+Required environment variables in `.env`:
+- `DATABASE_URI` - MongoDB connection string
+- `PAYLOAD_SECRET` - 32+ character secret
+- `NEXT_PUBLIC_SERVER_URL` - Your site URL
+
+---
+
+## Original Template Documentation
+
+This is based on the official [Payload Website Template](https://github.com/payloadcms/payload/blob/main/templates/website). Use it to power websites, blogs, or portfolios from small to enterprise. This repo includes a fully-working backend, enterprise-grade admin panel, and a beautifully designed, production-ready website.
 
 This template is right for you if you are working on:
 
