@@ -1,6 +1,10 @@
+<a  href="https://www.connie.one">
+<img  src="https://i.postimg.cc/MGd7M6Cp/connie-logo-white-thin-deja-Vu-Sans.png"  alt="Connie SaaS For Nonprofits"  width="250"  />
+</a>
+
 # Connie Comet 🚀
 
-connie.one retail website powered by Payload CMS and Next.js and hosted @ AWS.
+connie.one retail website powered by Payload CMS and Next.js and hosted @ AWS 🚀.
 
 ## ⚠️ Important Requirements
 
