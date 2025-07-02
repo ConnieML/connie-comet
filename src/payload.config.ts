@@ -22,6 +22,23 @@ const dirname = path.dirname(filename)
 
 export default buildConfig({
   admin: {
+    meta: {
+      title: 'Connie Admin',
+      description: 'Connie Admin Panel',
+      icons: [
+        {
+          rel: 'icon',
+          type: 'image/x-icon',
+          url: '/connie-headset-icon-pink.ico'
+        },
+        {
+          rel: 'icon',
+          type: 'image/svg+xml',
+          url: '/favicon.svg'
+        }
+      ],
+      titleSuffix: ' - Connie'
+    },
     components: {
       // The `BeforeLogin` component renders a message that you see while logging into your admin panel.
       // Feel free to delete this at any time. Simply remove the line below and the import `BeforeLogin` statement on line 15.

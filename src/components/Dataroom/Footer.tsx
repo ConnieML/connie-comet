@@ -2,11 +2,8 @@
 
 import React from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
-import { useTheme } from './ThemeProvider'
 
 export function DataroomFooter() {
-  const { theme } = useTheme()
 
   return (
     <footer className="border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-slate-800 mt-16">

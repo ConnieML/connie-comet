@@ -45,7 +45,7 @@ export default function DocumentViewPage({ params }: PageProps) {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-800 text-white">
+      <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-200 text-slate-800">
         <div className="container mx-auto px-6 py-8">Loading...</div>
       </div>
     )
@@ -53,21 +53,36 @@ export default function DocumentViewPage({ params }: PageProps) {
 
   if (!doc) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-800 text-white">
+      <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-200 text-slate-800">
         <div className="container mx-auto px-6 py-8">Document not found</div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-800 text-white">
-      <div className="container mx-auto px-6 py-8">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-200 text-slate-800 relative overflow-hidden">
+      {/* Dot Matrix Background */}
+      <div className="dot-matrix fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[600px] pointer-events-none z-0 opacity-100">
+        <div className="dot absolute w-1 h-1 bg-slate-400 rounded-full opacity-40" style={{top: '10%', left: '15%', animationDelay: '0s'}}></div>
+        <div className="dot absolute w-1 h-1 bg-slate-500 rounded-full opacity-30" style={{top: '20%', left: '25%', animationDelay: '-1s'}}></div>
+        <div className="dot absolute w-1 h-1 bg-slate-400 rounded-full opacity-40" style={{top: '30%', left: '35%', animationDelay: '-2s'}}></div>
+        <div className="dot absolute w-1 h-1 bg-slate-500 rounded-full opacity-30" style={{top: '40%', left: '45%', animationDelay: '-3s'}}></div>
+        <div className="dot absolute w-1 h-1 bg-slate-400 rounded-full opacity-40" style={{top: '50%', left: '55%', animationDelay: '-4s'}}></div>
+        <div className="dot absolute w-1 h-1 bg-slate-500 rounded-full opacity-30" style={{top: '60%', left: '65%', animationDelay: '-5s'}}></div>
+        <div className="dot absolute w-1 h-1 bg-slate-400 rounded-full opacity-40" style={{top: '70%', left: '75%', animationDelay: '-6s'}}></div>
+        <div className="dot absolute w-1 h-1 bg-slate-500 rounded-full opacity-30" style={{top: '80%', left: '85%', animationDelay: '-7s'}}></div>
+        <div className="dot absolute w-1 h-1 bg-slate-400 rounded-full opacity-40" style={{top: '15%', left: '80%', animationDelay: '-8s'}}></div>
+        <div className="dot absolute w-1 h-1 bg-slate-500 rounded-full opacity-30" style={{top: '25%', left: '70%', animationDelay: '-9s'}}></div>
+        <div className="dot absolute w-1 h-1 bg-slate-400 rounded-full opacity-40" style={{top: '35%', left: '60%', animationDelay: '-10s'}}></div>
+        <div className="dot absolute w-1 h-1 bg-slate-500 rounded-full opacity-30" style={{top: '45%', left: '50%', animationDelay: '-11s'}}></div>
+      </div>
+      <div className="container mx-auto px-6 py-8 relative z-10">
           {/* Header */}
           <div className="flex items-center justify-between mb-8">
             <div className="flex items-center space-x-4">
               <Link 
                 href={`/dataroom/${doc.documentCategory || ''}`}
-                className="inline-flex items-center text-slate-400 hover:text-white transition-colors"
+                className="inline-flex items-center text-slate-600 hover:text-slate-800 transition-colors"
               >
                 ← Back to {categoryLabels[doc.documentCategory as string] || 'Documents'}
               </Link>
@@ -85,7 +100,7 @@ export default function DocumentViewPage({ params }: PageProps) {
               {/* Share Button */}
               <button
                 onClick={() => alert('Demo: Share functionality')}
-                className="inline-flex items-center px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition-colors"
+                className="inline-flex items-center px-4 py-2 bg-slate-600 hover:bg-slate-500 text-white rounded-lg transition-colors"
               >
                 🔗 Share
               </button>
@@ -94,17 +109,17 @@ export default function DocumentViewPage({ params }: PageProps) {
 
           {/* Document Info */}
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-light text-white mb-4">
+            <h1 className="text-3xl font-light text-slate-800 mb-4">
               {doc.alt || doc.filename}
             </h1>
             
             {doc.documentDescription && (
-              <p className="text-lg text-slate-300 max-w-3xl mx-auto mb-4">
+              <p className="text-lg text-slate-600 max-w-3xl mx-auto mb-4">
                 {doc.documentDescription}
               </p>
             )}
 
-            <div className="flex justify-center items-center space-x-6 text-sm text-slate-400">
+            <div className="flex justify-center items-center space-x-6 text-sm text-slate-600">
               <span>
                 Category: {categoryLabels[doc.documentCategory as string] || 'Uncategorized'}
               </span>
@@ -119,23 +134,23 @@ export default function DocumentViewPage({ params }: PageProps) {
 
         {/* Document Viewer */}
         <div className="max-w-5xl mx-auto">
-          <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8">
+          <div className="bg-white/60 backdrop-blur-sm border border-slate-200 rounded-2xl p-8 shadow-lg">
               {doc.mimeType?.includes('pdf') ? (
                 // PDF Viewer Demo
                 <div className="w-full">
                   <div className="w-full h-[800px] rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
                     <div className="text-center">
                       <div className="text-6xl mb-4">📄</div>
-                      <h3 className="text-2xl font-light text-gray-700 dark:text-gray-300 mb-4">
+                      <h3 className="text-2xl font-light text-slate-700 mb-4">
                         PDF Viewer Demo
                       </h3>
-                      <p className="text-gray-500 dark:text-gray-400">
+                      <p className="text-slate-600">
                         In production, this would display the actual PDF document
                       </p>
                     </div>
                   </div>
                   <div className="text-center mt-4">
-                    <p className="text-slate-400 text-sm">
+                    <p className="text-slate-600 text-sm">
                       Demo Mode - PDF Viewer Integration
                     </p>
                   </div>
@@ -144,7 +159,7 @@ export default function DocumentViewPage({ params }: PageProps) {
                 // Image Viewer
                 <div className="text-center">
                   <img
-                    src={documentUrl}
+                    src={doc.url || '#demo-image'}
                     alt={doc.alt || doc.filename}
                     className="max-w-full h-auto rounded-lg mx-auto"
                   />
@@ -153,14 +168,14 @@ export default function DocumentViewPage({ params }: PageProps) {
                 // Generic File
                 <div className="text-center py-16">
                   <div className="text-6xl mb-4">📄</div>
-                  <h3 className="text-2xl font-light text-white mb-4">
+                  <h3 className="text-2xl font-light text-slate-800 mb-4">
                     {doc.alt || doc.filename}
                   </h3>
-                  <p className="text-slate-400 mb-6">
+                  <p className="text-slate-600 mb-6">
                     This file type cannot be previewed in the browser.
                   </p>
                   <a
-                    href={documentUrl}
+                    href={doc.url || '#demo-download'}
                     download
                     className="inline-flex items-center px-6 py-3 bg-pink-600 hover:bg-pink-700 text-white rounded-lg transition-colors"
                   >
@@ -173,11 +188,11 @@ export default function DocumentViewPage({ params }: PageProps) {
 
           {/* Watermark */}
           <div className="text-center mt-8">
-            <p className="text-slate-500 text-xs">
+            <p className="text-slate-600 text-xs">
               CONFIDENTIAL - Connie Corp Data Room - {new Date().toLocaleDateString()}
             </p>
             <div className="mt-2">
-              <span className="inline-block px-2 py-1 bg-pink-500/20 text-pink-400 text-xs rounded border border-pink-500/30">
+              <span className="inline-block px-2 py-1 bg-pink-100 text-pink-700 text-xs rounded border border-pink-300">
                 DEMO VERSION
               </span>
             </div>
