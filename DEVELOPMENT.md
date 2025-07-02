@@ -3,10 +3,11 @@
 ## Future Development Tasks
 
 ### High Priority
+- [ ] **OKTA SSO Integration** - Replace default auth with Okta OAuth flow, integrate with existing "My Apps" dashboard
+- [ ] **DataRoom Functionality** - Recreate document portal using existing Media/Categories collections + new Documents collection. Previous implementation used S3 bucket `connie-one-dataroom`, Clerk auth, fast loading with multiple file sizes. Can leverage existing Payload infrastructure for 80% of functionality.
+- [ ] **Temporary Landing Page Theme** - Clean, simple theme for content team to build upon
 - [ ] **Enable Incremental Static Regeneration (ISR)** - Auto-regenerate pages when content changes without full rebuilds
 - [ ] **Fix TypeScript error in seed route** - Re-enable `src/app/(frontend)/next/seed/route.ts` with proper type casting
-- [ ] **Set up automated testing** - Add Playwright E2E tests for critical workflows
-- [ ] **Configure CDN/caching strategy** - Optimize performance for static assets
 
 ### Medium Priority  
 - [ ] **Implement Okta OAuth integration** - Original requirement for SSO authentication

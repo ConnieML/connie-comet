@@ -276,6 +276,22 @@ export interface Media {
     };
     [k: string]: unknown;
   } | null;
+  /**
+   * Include this document in the dataroom
+   */
+  isDataroomDocument?: boolean | null;
+  /**
+   * Category for organizing dataroom documents
+   */
+  documentCategory?: ('financial' | 'legal' | 'business' | 'technical') | null;
+  /**
+   * Who can access this document
+   */
+  accessLevel?: ('public' | 'investors' | 'board' | 'restricted') | null;
+  /**
+   * Brief description of the document content
+   */
+  documentDescription?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -374,6 +390,14 @@ export interface Category {
 export interface User {
   id: string;
   name?: string | null;
+  /**
+   * Determines dataroom access level
+   */
+  dataroomRole?: ('public' | 'investor' | 'board' | 'admin') | null;
+  /**
+   * Organization or company name
+   */
+  company?: string | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -1162,6 +1186,10 @@ export interface PostsSelect<T extends boolean = true> {
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
   caption?: T;
+  isDataroomDocument?: T;
+  documentCategory?: T;
+  accessLevel?: T;
+  documentDescription?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -1274,6 +1302,8 @@ export interface CategoriesSelect<T extends boolean = true> {
  */
 export interface UsersSelect<T extends boolean = true> {
   name?: T;
+  dataroomRole?: T;
+  company?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;

@@ -37,6 +37,52 @@ export const Media: CollectionConfig = {
         },
       }),
     },
+    // Dataroom fields
+    {
+      name: 'isDataroomDocument',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        description: 'Include this document in the dataroom',
+      },
+    },
+    {
+      name: 'documentCategory',
+      type: 'select',
+      options: [
+        { label: 'Financial Reports', value: 'financial' },
+        { label: 'Legal Documents', value: 'legal' },
+        { label: 'Business Operations', value: 'business' },
+        { label: 'Technical Documentation', value: 'technical' },
+      ],
+      admin: {
+        condition: (data) => data.isDataroomDocument,
+        description: 'Category for organizing dataroom documents',
+      },
+    },
+    {
+      name: 'accessLevel',
+      type: 'select',
+      options: [
+        { label: 'Public', value: 'public' },
+        { label: 'Investors', value: 'investors' },
+        { label: 'Board Members', value: 'board' },
+        { label: 'Restricted', value: 'restricted' },
+      ],
+      defaultValue: 'public',
+      admin: {
+        condition: (data) => data.isDataroomDocument,
+        description: 'Who can access this document',
+      },
+    },
+    {
+      name: 'documentDescription',
+      type: 'textarea',
+      admin: {
+        condition: (data) => data.isDataroomDocument,
+        description: 'Brief description of the document content',
+      },
+    },
   ],
   upload: {
     // Upload to the public/media directory in Next.js making them publicly accessible even outside of Payload

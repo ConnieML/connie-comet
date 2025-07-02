@@ -21,6 +21,27 @@ export const Users: CollectionConfig = {
       name: 'name',
       type: 'text',
     },
+    {
+      name: 'dataroomRole',
+      type: 'select',
+      options: [
+        { label: 'Public', value: 'public' },
+        { label: 'Investor', value: 'investor' },
+        { label: 'Board Member', value: 'board' },
+        { label: 'Admin', value: 'admin' },
+      ],
+      defaultValue: 'public',
+      admin: {
+        description: 'Determines dataroom access level',
+      },
+    },
+    {
+      name: 'company',
+      type: 'text',
+      admin: {
+        description: 'Organization or company name',
+      },
+    },
   ],
   timestamps: true,
 }
