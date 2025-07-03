@@ -86,7 +86,11 @@ export default buildConfig({
     ...plugins,
     s3Storage({
       collections: {
-        media: true,
+        media: {
+          generateFileURL: ({ filename }) => {
+            return `https://${process.env.S3_BUCKET_UPLOADS || 'admin-connie-one-uploads'}.s3.${process.env.S3_REGION || 'us-east-1'}.amazonaws.com/${filename}`
+          },
+        },
       },
       bucket: process.env.S3_BUCKET_UPLOADS || 'admin-connie-one-uploads',
       config: {

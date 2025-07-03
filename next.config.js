@@ -18,6 +18,16 @@ const nextConfig = {
           protocol: url.protocol.replace(':', ''),
         }
       }),
+      // Allow S3 bucket for media uploads
+      {
+        protocol: 'https',
+        hostname: 'admin-connie-one-uploads.s3.us-east-1.amazonaws.com',
+      },
+      // Allow S3 bucket for dataroom documents
+      {
+        protocol: 'https',
+        hostname: 'connie-one-dataroom.s3.us-east-1.amazonaws.com',
+      },
     ],
   },
   webpack: (webpackConfig) => {
