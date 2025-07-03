@@ -4,7 +4,7 @@ interface Props {
   className?: string
 }
 
-export const PayloadIcon = (props: Props) => {
+export const Icon: React.FC<Props> = (props) => {
   const { className } = props
 
   return (
@@ -18,5 +18,3 @@ export const PayloadIcon = (props: Props) => {
     />
   )
 }
-
-export const Icon = PayloadIcon

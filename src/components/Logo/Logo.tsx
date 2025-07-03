@@ -32,16 +32,16 @@ export const Logo = (props: Props) => {
   )
 }
 
-export const PayloadLogo = (props: PayloadLogoProps) => {
+export const PayloadLogo: React.FC<PayloadLogoProps> = (props) => {
   const { className } = props
 
   return (
     /* eslint-disable @next/next/no-img-element */
     <img
       alt="Connie Logo"
-      width={193}
-      height={51}
-      className={clsx('max-w-[9.375rem] w-full h-[51px]', className)}
+      width={150}
+      height={40}
+      className={clsx('max-w-[150px] w-full h-[40px]', className)}
       src="/connie-logo_v1-white.svg"
     />
   )
