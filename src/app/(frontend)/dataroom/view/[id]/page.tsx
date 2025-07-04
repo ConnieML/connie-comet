@@ -24,19 +24,23 @@ export default function DocumentViewPage({ params }: PageProps) {
     const loadDocument = async () => {
       const resolvedParams = await params
       
-      // Mock document for demo
-      const mockDoc = {
-        id: resolvedParams.id,
-        alt: 'Q4 2024 Financial Report',
-        documentDescription: 'Comprehensive quarterly financial analysis and projections for Q4 2024',
-        documentCategory: 'financial',
-        accessLevel: 'public',
-        mimeType: 'application/pdf',
-        filesize: 2400000,
-        url: '#demo-document'
+      try {
+        // Fetch the real document from PayloadCMS
+        const response = await fetch(`/api/media/${resolvedParams.id}`)
+        
+        if (response.ok) {
+          const data = await response.json()
+          console.log('Fetched document:', data)
+          setDoc(data)
+        } else {
+          console.error('Failed to fetch document:', response.status)
+          setDoc(null)
+        }
+      } catch (error) {
+        console.error('Error fetching document:', error)
+        setDoc(null)
       }
       
-      setDoc(mockDoc)
       setLoading(false)
     }
     

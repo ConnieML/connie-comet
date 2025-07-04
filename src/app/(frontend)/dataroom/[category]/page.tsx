@@ -37,31 +37,27 @@ export default function CategoryPage({ params }: PageProps) {
   const [docs, setDocs] = useState<any[]>([])
 
   useEffect(() => {
-    // Extract category from params
+    // Extract category from params and fetch real documents
     const getCategory = async () => {
       const resolvedParams = await params
       setCategory(resolvedParams.category)
       
-      // Mock some documents for demo
-      const mockDocs = [
-        {
-          id: '1',
-          alt: 'Q4 2024 Financial Report',
-          documentDescription: 'Comprehensive quarterly financial analysis and projections',
-          mimeType: 'application/pdf',
-          filesize: 2400000,
-          accessLevel: 'public'
-        },
-        {
-          id: '2', 
-          alt: 'Business Plan 2024',
-          documentDescription: 'Strategic business planning document for 2024',
-          mimeType: 'application/pdf',
-          filesize: 1800000,
-          accessLevel: 'investor'
+      try {
+        // Fetch documents from PayloadCMS API
+        const response = await fetch('/api/media?where[isDataroomDocument][equals]=true&where[documentCategory][equals]=' + resolvedParams.category + '&limit=50')
+        
+        if (response.ok) {
+          const data = await response.json()
+          console.log('Fetched documents:', data.docs)
+          setDocs(data.docs || [])
+        } else {
+          console.error('Failed to fetch documents:', response.status)
+          setDocs([])
         }
-      ]
-      setDocs(mockDocs)
+      } catch (error) {
+        console.error('Error fetching documents:', error)
+        setDocs([])
+      }
     }
     
     getCategory()

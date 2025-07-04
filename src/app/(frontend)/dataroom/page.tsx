@@ -1,35 +1,70 @@
 'use client'
 
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 
 export default function DataroomPage() {
+  const [categoryCounts, setCategoryCounts] = useState<Record<string, number>>({})
+
+  useEffect(() => {
+    // Fetch document counts for each category
+    const fetchCounts = async () => {
+      const categories = ['financial', 'legal', 'business', 'technical']
+      const counts: Record<string, number> = {}
+      
+      for (const category of categories) {
+        try {
+          const response = await fetch(`/api/media?where[isDataroomDocument][equals]=true&where[documentCategory][equals]=${category}&limit=0`)
+          if (response.ok) {
+            const data = await response.json()
+            counts[category] = data.totalDocs || 0
+          }
+        } catch (error) {
+          console.error(`Error fetching count for ${category}:`, error)
+          counts[category] = 0
+        }
+      }
+      
+      setCategoryCounts(counts)
+    }
+    
+    fetchCounts()
+  }, [])
+
   const categories = [
+    {
+      category: 'quarterly',
+      label: 'Quarterly Business Review',
+      count: 1,
+      icon: '📈',
+      description: 'Go-to-market strategy and quarterly performance metrics',
+      isSpecial: true
+    },
     {
       category: 'financial',
       label: 'Financial Reports',
-      count: 3,
+      count: categoryCounts.financial || 0,
       icon: '📊',
       description: 'Quarterly reports, audited statements, financial projections'
     },
     {
       category: 'legal',
       label: 'Legal Documents', 
-      count: 2,
+      count: categoryCounts.legal || 0,
       icon: '📋',
       description: 'Contracts, compliance documents, regulatory filings'
     },
     {
       category: 'business',
       label: 'Business Operations',
-      count: 4,
+      count: categoryCounts.business || 0,
       icon: '🎯',
       description: 'Business plans, market analysis, operational KPIs'
     },
     {
       category: 'technical',
       label: 'Technical Documentation',
-      count: 1,
+      count: categoryCounts.technical || 0,
       icon: '🔧',
       description: 'Architecture docs, API documentation, security reports'
     }
@@ -77,7 +112,11 @@ export default function DataroomPage() {
                 href={`/dataroom/${category.category}`}
                 className="group"
               >
-                <div className="bg-white/60 backdrop-blur-sm border border-slate-200 rounded-2xl p-8 hover:bg-white/80 hover:border-pink-500/50 transition-all duration-300 hover:transform hover:scale-[1.02] shadow-lg hover:shadow-xl">
+                <div className={`backdrop-blur-sm rounded-2xl p-8 transition-all duration-300 hover:transform hover:scale-[1.02] shadow-lg hover:shadow-xl ${
+                  category.isSpecial 
+                    ? 'bg-gradient-to-br from-blue-50 to-purple-50 border-2 border-blue-200 hover:border-blue-400' 
+                    : 'bg-white/60 border border-slate-200 hover:bg-white/80 hover:border-pink-500/50'
+                }`}>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">
                       <div className="text-4xl">{category.icon}</div>
