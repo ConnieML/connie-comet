@@ -94,12 +94,13 @@ export default function DocumentViewPage({ params }: PageProps) {
             
             <div className="flex items-center space-x-4">
               {/* Download Button */}
-              <button
-                onClick={() => alert('Demo: Download functionality')}
+              <a
+                href={doc.url || '#'}
+                download={doc.filename}
                 className="inline-flex items-center px-4 py-2 bg-pink-600 hover:bg-pink-700 text-white rounded-lg transition-colors"
               >
                 🔽 Download
-              </button>
+              </a>
               
               {/* Share Button */}
               <button
@@ -140,22 +141,16 @@ export default function DocumentViewPage({ params }: PageProps) {
         <div className="max-w-5xl mx-auto">
           <div className="bg-white/60 backdrop-blur-sm border border-slate-200 rounded-2xl p-8 shadow-lg">
               {doc.mimeType?.includes('pdf') ? (
-                // PDF Viewer Demo
+                // PDF Viewer
                 <div className="w-full">
-                  <div className="w-full h-[800px] rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
-                    <div className="text-center">
-                      <div className="text-6xl mb-4">📄</div>
-                      <h3 className="text-2xl font-light text-slate-700 mb-4">
-                        PDF Viewer Demo
-                      </h3>
-                      <p className="text-slate-600">
-                        In production, this would display the actual PDF document
-                      </p>
-                    </div>
-                  </div>
+                  <iframe
+                    src={doc.url}
+                    className="w-full h-[800px] rounded-lg border"
+                    title={doc.alt || doc.filename}
+                  />
                   <div className="text-center mt-4">
                     <p className="text-slate-600 text-sm">
-                      Demo Mode - PDF Viewer Integration
+                      {doc.alt || doc.filename} • PDF Document
                     </p>
                   </div>
                 </div>
@@ -163,7 +158,7 @@ export default function DocumentViewPage({ params }: PageProps) {
                 // Image Viewer
                 <div className="text-center">
                   <img
-                    src={doc.url || '#demo-image'}
+                    src={doc.url || '#'}
                     alt={doc.alt || doc.filename}
                     className="max-w-full h-auto rounded-lg mx-auto"
                   />
@@ -179,8 +174,8 @@ export default function DocumentViewPage({ params }: PageProps) {
                     This file type cannot be previewed in the browser.
                   </p>
                   <a
-                    href={doc.url || '#demo-download'}
-                    download
+                    href={doc.url || '#'}
+                    download={doc.filename}
                     className="inline-flex items-center px-6 py-3 bg-pink-600 hover:bg-pink-700 text-white rounded-lg transition-colors"
                   >
                     🔽 Download to View
