@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connie.one - AI Support Agent</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(180deg, #2a2f3a, #111216 43.45%);
+            min-height: 100vh;
+            color: white;
+            line-height: 1.6;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .dot-matrix {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 1000px;
+            height: 600px;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 1;
+        }
+
+        .dot {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: #E91E63;
+            border-radius: 50%;
+            animation: pulse 4s ease-in-out infinite;
+            opacity: 0.6;
+        }
+
+        .dot:nth-child(2n) {
+            background: rgba(255, 255, 255, 0.8);
+            animation-delay: -1s;
+            opacity: 0.4;
+        }
+
+        .dot:nth-child(3n) {
+            animation-delay: -2s;
+            animation-duration: 5s;
+            opacity: 0.3;
+        }
+
+        .dot:nth-child(4n) {
+            background: rgba(233, 30, 99, 0.9);
+            animation-delay: -0.5s;
+            animation-duration: 3s;
+            opacity: 0.5;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(0.8);
+                opacity: 0.3;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 80px 0 120px 0;
+            position: relative;
+        }
+
+        .logo {
+            font-size: 48px;
+            font-weight: 300;
+            margin-bottom: 40px;
+            letter-spacing: -1px;
+        }
+
+        .logo .headset-icon {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background: #E91E63;
+            border-radius: 50%;
+            margin: 0 8px;
+            position: relative;
+            vertical-align: middle;
+        }
+
+        .logo .headset-icon::before {
+            content: "💬";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 20px;
+        }
+
+        .hero h1 {
+            font-size: 64px;
+            font-weight: 200;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, #ffffff, #E91E63);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 24px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 48px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .glassmorphism-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(233, 30, 99, 0.2);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            margin: 0 auto 60px auto;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .email-form {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .email-input {
+            flex: 1;
+            padding: 16px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .email-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .email-input:focus {
+            border-color: #E91E63;
+            box-shadow: 0 0 0 2px rgba(233, 30, 99, 0.2);
+        }
+
+        .cta-button {
+            padding: 16px 32px;
+            background: #E91E63;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:hover {
+            background: #C2185B;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(233, 30, 99, 0.3);
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-bottom: 80px;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 32px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(233, 30, 99, 0.3);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #E91E63, #AD1457);
+            border-radius: 16px;
+            margin: 0 auto 24px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .feature-card h3 {
+            font-size: 24px;
+            margin-bottom: 16px;
+            color: white;
+        }
+
+        .feature-card p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 16px;
+        }
+
+        .decorative-headset {
+            position: absolute;
+            top: 20px;
+            right: 10%;
+            width: 80px;
+            height: 80px;
+            opacity: 0.1;
+            background: #E91E63;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 48px;
+            }
+            
+            .hero p {
+                font-size: 20px;
+            }
+            
+            .email-form {
+                flex-direction: column;
+            }
+            
+            .cta-button {
+                width: 100%;
+            }
+            
+            .decorative-headset {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dot-matrix" id="dotMatrix"></div>
+    
+    <div class="container">
+        <div class="decorative-headset">💬</div>
+        
+        <section class="hero">
+            <div class="logo">
+                c<span class="headset-icon"></span>nnie
+            </div>
+            
+            <h1>Your AI Support Agent,<br>Always Ready to Help</h1>
+            
+            <p>Transform customer support with intelligent conversations that understand context and provide instant solutions.</p>
+            
+            <div class="glassmorphism-card">
+                <form class="email-form">
+                    <input type="email" class="email-input" placeholder="your-email@company.com">
+                    <button type="submit" class="cta-button">Join Waitlist</button>
+                </form>
+            </div>
+        </section>
+
+        <section class="features">
+            <div class="feature-card">
+                <div class="feature-icon">🤖</div>
+                <h3>Intelligent Responses</h3>
+                <p>AI-powered conversations that understand context and provide personalized support experiences.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Instant Support</h3>
+                <p>24/7 availability with immediate responses, reducing wait times and improving satisfaction.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3>Smart Routing</h3>
+                <p>Automatically route complex issues to the right team while handling simple queries instantly.</p>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Create organized dot grid pattern
+        function createDotMatrix() {
+            const dotMatrix = document.getElementById('dotMatrix');
+            if (!dotMatrix) return;
+            
+            // Clear existing dots
+            dotMatrix.innerHTML = '';
+            
+            // Grid configuration
+            const rows = 15;
+            const cols = 25;
+            const spacing = 40; // pixels between dots
+            
+            // Calculate grid dimensions
+            const gridWidth = (cols - 1) * spacing;
+            const gridHeight = (rows - 1) * spacing;
+            
+            // Center the grid within the container
+            const startX = (1000 - gridWidth) / 2;
+            const startY = (600 - gridHeight) / 2;
+            
+            for (let row = 0; row < rows; row++) {
+                for (let col = 0; col < cols; col++) {
+                    const dot = document.createElement('div');
+                    dot.className = 'dot';
+                    
+                    // Calculate position in grid
+                    const x = startX + (col * spacing);
+                    const y = startY + (row * spacing);
+                    
+                    dot.style.left = x + 'px';
+                    dot.style.top = y + 'px';
+                    
+                    // Staggered animation delays for wave effect
+                    const delay = (row + col) * 0.1;
+                    dot.style.animationDelay = delay + 's';
+                    
+                    dotMatrix.appendChild(dot);
+                }
+            }
+            
+            console.log('Created', rows * cols, 'dots in organized grid');
+        }
+
+        // Initialize immediately and on load
+        createDotMatrix();
+        window.addEventListener('load', createDotMatrix);
+        
+        // Recreate on resize
+        window.addEventListener('resize', () => {
+            setTimeout(createDotMatrix, 100);
+        });
+    </script>
+</body>
+</html>

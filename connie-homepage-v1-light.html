@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connie Digital Communications Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(180deg, #f8fafc, #e2e8f0 43.45%);
+            min-height: 100vh;
+            color: #1e293b;
+            line-height: 1.6;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .dot-matrix {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 1000px;
+            height: 600px;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 1;
+        }
+
+        .dot {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: #64748b;
+            border-radius: 50%;
+            animation: pulse 4s ease-in-out infinite;
+            opacity: 0.4;
+        }
+
+        .dot:nth-child(2n) {
+            background: #475569;
+            animation-delay: -1s;
+            opacity: 0.3;
+        }
+
+        .dot:nth-child(3n) {
+            animation-delay: -2s;
+            animation-duration: 5s;
+            opacity: 0.2;
+        }
+
+        .dot:nth-child(4n) {
+            background: #334155;
+            animation-delay: -0.5s;
+            animation-duration: 3s;
+            opacity: 0.3;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(0.8);
+                opacity: 0.2;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 0.6;
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 80px 0 120px 0;
+            position: relative;
+        }
+
+        .logo {
+            margin-bottom: 40px;
+        }
+
+        .logo img {
+            height: 60px;
+            width: auto;
+        }
+
+        .hero h1 {
+            font-size: 64px;
+            font-weight: 200;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, #1e293b, #475569);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 24px;
+            color: #64748b;
+            margin-bottom: 48px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .glassmorphism-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(148, 163, 184, 0.3);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            margin: 0 auto 60px auto;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .email-form {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .email-input {
+            flex: 1;
+            padding: 16px 20px;
+            border: 1px solid rgba(148, 163, 184, 0.3);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.8);
+            color: #1e293b;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .email-input::placeholder {
+            color: #94a3b8;
+        }
+
+        .email-input:focus {
+            border-color: #475569;
+            box-shadow: 0 0 0 2px rgba(71, 85, 105, 0.2);
+        }
+
+        .cta-button {
+            padding: 16px 32px;
+            background: #475569;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:hover {
+            background: #334155;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(71, 85, 105, 0.3);
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-bottom: 80px;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 16px;
+            padding: 32px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(71, 85, 105, 0.3);
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #64748b, #475569);
+            border-radius: 16px;
+            margin: 0 auto 24px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .feature-card h3 {
+            font-size: 24px;
+            margin-bottom: 16px;
+            color: #1e293b;
+        }
+
+        .feature-card p {
+            color: #64748b;
+            font-size: 16px;
+        }
+
+        .webchat-icon {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: #475569;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(71, 85, 105, 0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            color: white;
+        }
+
+        .webchat-icon:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 25px rgba(71, 85, 105, 0.4);
+            background: #334155;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 48px;
+            }
+            
+            .hero p {
+                font-size: 20px;
+            }
+            
+            .email-form {
+                flex-direction: column;
+            }
+            
+            .cta-button {
+                width: 100%;
+            }
+            
+            .webchat-icon {
+                bottom: 20px;
+                right: 20px;
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dot-matrix" id="dotMatrix"></div>
+    
+    <div class="container">
+        
+        <section class="hero">
+            <div class="logo">
+                <img src="/Volumes/T9/Connie Corp/connie-bizops/BrandAssets/Logos/connie-logo.png" alt="Connie" />
+            </div>
+            
+            <h1>A Nonprofit<br>Community Engagement Platform</h1>
+            
+            <p>Transforming Access to Community Based Programs & Services</p>
+            
+            <div class="glassmorphism-card">
+                <form class="email-form">
+                    <input type="email" class="email-input" placeholder="your-email@company.com">
+                    <button type="submit" class="cta-button">Join Waitlist</button>
+                </form>
+            </div>
+        </section>
+
+        <section class="features">
+            <div class="feature-card">
+                <div class="feature-icon">🤝</div>
+                <h3>Community Connection</h3>
+                <p>Connect nonprofits with community members through intelligent matching and engagement tools.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Impact Tracking</h3>
+                <p>Measure and visualize community impact with comprehensive analytics and reporting.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3>Resource Management</h3>
+                <p>Efficiently distribute resources and services to those who need them most in your community.</p>
+            </div>
+        </section>
+    </div>
+
+    <!-- Webchat Icon -->
+    <div class="webchat-icon" onclick="openWebchat()">💬</div>
+
+    <script>
+        // Create organized dot grid pattern
+        function createDotMatrix() {
+            const dotMatrix = document.getElementById('dotMatrix');
+            if (!dotMatrix) return;
+            
+            // Clear existing dots
+            dotMatrix.innerHTML = '';
+            
+            // Grid configuration
+            const rows = 15;
+            const cols = 25;
+            const spacing = 40; // pixels between dots
+            
+            // Calculate grid dimensions
+            const gridWidth = (cols - 1) * spacing;
+            const gridHeight = (rows - 1) * spacing;
+            
+            // Center the grid within the container
+            const startX = (1000 - gridWidth) / 2;
+            const startY = (600 - gridHeight) / 2;
+            
+            for (let row = 0; row < rows; row++) {
+                for (let col = 0; col < cols; col++) {
+                    const dot = document.createElement('div');
+                    dot.className = 'dot';
+                    
+                    // Calculate position in grid
+                    const x = startX + (col * spacing);
+                    const y = startY + (row * spacing);
+                    
+                    dot.style.left = x + 'px';
+                    dot.style.top = y + 'px';
+                    
+                    // Staggered animation delays for wave effect
+                    const delay = (row + col) * 0.1;
+                    dot.style.animationDelay = delay + 's';
+                    
+                    dotMatrix.appendChild(dot);
+                }
+            }
+            
+            console.log('Created', rows * cols, 'dots in organized grid');
+        }
+
+        // Initialize immediately and on load
+        createDotMatrix();
+        window.addEventListener('load', createDotMatrix);
+        
+        // Recreate on resize
+        window.addEventListener('resize', () => {
+            setTimeout(createDotMatrix, 100);
+        });
+
+        // Webchat functionality placeholder
+        function openWebchat() {
+            // TODO: Integrate webchat functionality
+            console.log('Opening webchat...');
+            alert('Webchat integration coming soon!');
+        }
+    </script>
+</body>
+</html>
