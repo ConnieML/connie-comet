@@ -58,31 +58,7 @@ export async function GET(req: NextRequest) {
       console.log('Found existing user:', user.email)
     }
 
-    // Create a proper response object that can set cookies
-    const response = new NextResponse()
-    const resForPayload = {
-      cookie: (name: string, value: string, options: any) => {
-        console.log('Payload setting cookie:', name, 'with value length:', value.length)
-        response.cookies.set(name, value, {
-          httpOnly: options.httpOnly !== false,
-          secure: process.env.NODE_ENV === 'production',
-          sameSite: 'strict',
-          maxAge: options.maxAge || 7 * 24 * 60 * 60, // 7 days default
-          path: options.path || '/',
-        })
-      },
-      clearCookie: (name: string) => {
-        response.cookies.delete(name)
-      },
-      setHeader: (name: string, value: string) => {
-        response.headers.set(name, value)
-      },
-      getHeader: (name: string) => {
-        return response.headers.get(name)
-      },
-    }
-
-    // Use Payload's built-in login method with overrideAccess and pass res
+    // Use Payload's built-in login method with overrideAccess (without res to avoid type errors)
     const loginResult = await payload.login({
       collection: 'users',
       data: {
@@ -96,13 +72,10 @@ export async function GET(req: NextRequest) {
         headers: new Headers(),
         cookies: {},
       } as any,
-      res: resForPayload as any, // Let Payload set the cookie
     })
 
     console.log('Payload login successful for user:', user.email)
     console.log('Login result token exists:', !!loginResult.token)
-
-    console.log('Set-Cookie header:', response.headers.get('Set-Cookie'))
 
     // Return an HTML page that sets the cookie and redirects
     const html = `
@@ -124,20 +97,25 @@ export async function GET(req: NextRequest) {
       </html>
     `
 
-    // Update the existing response with HTML content
-    const finalResponse = new NextResponse(html, {
+    // Create response and manually set the payload cookie
+    const response = new NextResponse(html, {
       headers: {
         'Content-Type': 'text/html',
-        ...Object.fromEntries(response.headers.entries()), // Copy headers from payload response
       },
     })
 
-    // Copy cookies from the payload response
-    response.cookies.getAll().forEach(cookie => {
-      finalResponse.cookies.set(cookie.name, cookie.value, cookie)
-    })
+    // Manually set the payload-token cookie since we removed res from payload.login()
+    if (loginResult.token) {
+      response.cookies.set('payload-token', loginResult.token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: 7 * 24 * 60 * 60, // 7 days
+        path: '/',
+      })
+    }
 
-    return finalResponse
+    return response
 
   } catch (error) {
     console.error('Authentication callback error:', error)
