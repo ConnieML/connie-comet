@@ -1,4 +1,5 @@
 import React from 'react'
+import Link from 'next/link'
 
 const BeforeLogin: React.FC = () => {
   return (
@@ -6,7 +7,7 @@ const BeforeLogin: React.FC = () => {
       <p>
         <b>Welcome to Connie Admin!</b>
       </p>
-      <a
+      <Link
         href="/api/auth/okta"
         style={{
           backgroundColor: '#007dc1',
@@ -22,7 +23,7 @@ const BeforeLogin: React.FC = () => {
         }}
       >
         Login with Okta SSO
-      </a>
+      </Link>
       <p style={{ fontSize: '14px', color: '#666' }}>
         Use your Okta credentials to access the admin panel
       </p>
