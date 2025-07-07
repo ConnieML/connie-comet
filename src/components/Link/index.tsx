@@ -40,6 +40,14 @@ export const CMSLink: React.FC<CMSLinkType> = (props) => {
         }`
       : url
 
+  // For debugging: log when reference links can't be resolved
+  if (type === 'reference' && !href) {
+    console.warn('CMSLink: Reference link not populated or missing slug:', {
+      reference,
+      label,
+    })
+  }
+
   if (!href) return null
 
   const size = appearance === 'link' ? 'clear' : sizeFromProps
