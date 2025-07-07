@@ -25,6 +25,41 @@ export const Footer: GlobalConfig = {
         },
       },
     },
+    {
+      name: 'footerColumns',
+      type: 'array',
+      fields: [
+        {
+          name: 'title',
+          type: 'text',
+          required: true,
+          admin: {
+            placeholder: 'Column Title (e.g., "Connie Platform")',
+          },
+        },
+        {
+          name: 'links',
+          type: 'array',
+          fields: [
+            link({
+              appearances: false,
+            }),
+          ],
+          maxRows: 8,
+          admin: {
+            initCollapsed: true,
+            components: {
+              RowLabel: '@/Footer/RowLabel#RowLabel',
+            },
+          },
+        },
+      ],
+      maxRows: 4,
+      admin: {
+        initCollapsed: true,
+        description: 'Footer columns with links (e.g., "Connie Platform", "Resources", "Quick Links")',
+      },
+    },
   ],
   hooks: {
     afterChange: [revalidateFooter],
