@@ -72,6 +72,7 @@ export interface Config {
     media: Media;
     categories: Category;
     users: User;
+    'external-documents': ExternalDocument;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -88,6 +89,7 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
+    'external-documents': ExternalDocumentsSelect<false> | ExternalDocumentsSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -280,6 +282,14 @@ export interface Media {
    * Include this document in the dataroom
    */
   isDataroomDocument?: boolean | null;
+  /**
+   * Choose how to provide this document
+   */
+  documentSource?: ('upload' | 'external') | null;
+  /**
+   * URL to external document (Box, Google Drive, etc.)
+   */
+  externalUrl?: string | null;
   /**
    * Category for organizing dataroom documents
    */
@@ -760,6 +770,35 @@ export interface Form {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "external-documents".
+ */
+export interface ExternalDocument {
+  id: string;
+  /**
+   * Display name for this document
+   */
+  title: string;
+  /**
+   * URL to external document (Box, Google Drive, etc.)
+   */
+  externalUrl: string;
+  /**
+   * Category for organizing dataroom documents
+   */
+  documentCategory: 'financial' | 'legal' | 'business' | 'technical';
+  /**
+   * Who can access this document
+   */
+  accessLevel: 'public' | 'investors' | 'board' | 'restricted';
+  /**
+   * Brief description of the document content
+   */
+  documentDescription?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -950,6 +989,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'users';
         value: string | User;
+      } | null)
+    | ({
+        relationTo: 'external-documents';
+        value: string | ExternalDocument;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1187,6 +1230,8 @@ export interface MediaSelect<T extends boolean = true> {
   alt?: T;
   caption?: T;
   isDataroomDocument?: T;
+  documentSource?: T;
+  externalUrl?: T;
   documentCategory?: T;
   accessLevel?: T;
   documentDescription?: T;
@@ -1320,6 +1365,19 @@ export interface UsersSelect<T extends boolean = true> {
         createdAt?: T;
         expiresAt?: T;
       };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "external-documents_select".
+ */
+export interface ExternalDocumentsSelect<T extends boolean = true> {
+  title?: T;
+  externalUrl?: T;
+  documentCategory?: T;
+  accessLevel?: T;
+  documentDescription?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

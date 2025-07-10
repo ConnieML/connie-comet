@@ -47,6 +47,27 @@ export const Media: CollectionConfig = {
       },
     },
     {
+      name: 'documentSource',
+      type: 'select',
+      options: [
+        { label: 'Upload File', value: 'upload' },
+        { label: 'External Link', value: 'external' }
+      ],
+      defaultValue: 'upload',
+      admin: {
+        condition: (data) => data.isDataroomDocument,
+        description: 'Choose how to provide this document',
+      },
+    },
+    {
+      name: 'externalUrl',
+      type: 'text',
+      admin: {
+        condition: (data) => data.isDataroomDocument && data.documentSource === 'external',
+        description: 'URL to external document (Box, Google Drive, etc.)',
+      },
+    },
+    {
       name: 'documentCategory',
       type: 'select',
       options: [
