@@ -785,7 +785,19 @@ export interface ExternalDocument {
   /**
    * Category for organizing dataroom documents
    */
-  documentCategory: 'financial' | 'legal' | 'business' | 'technical';
+  documentCategory:
+    | 'strategy'
+    | 'operations'
+    | 'finance'
+    | 'legal'
+    | 'architecture'
+    | 'security'
+    | 'infrastructure'
+    | 'apis'
+    | 'quarterly'
+    | 'financial'
+    | 'business'
+    | 'technical';
   /**
    * Who can access this document
    */

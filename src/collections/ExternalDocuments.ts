@@ -35,6 +35,18 @@ export const ExternalDocuments: CollectionConfig = {
       name: 'documentCategory',
       type: 'select',
       options: [
+        // BizOps categories
+        { label: 'Strategic Planning', value: 'strategy' },
+        { label: 'Operations Management', value: 'operations' },
+        { label: 'Financial Management', value: 'finance' },
+        { label: 'Legal & Compliance', value: 'legal' },
+        // TechOps categories  
+        { label: 'System Architecture', value: 'architecture' },
+        { label: 'Security & Compliance', value: 'security' },
+        { label: 'Infrastructure & DevOps', value: 'infrastructure' },
+        { label: 'API Documentation', value: 'apis' },
+        // Investor categories
+        { label: 'Quarterly Business Review', value: 'quarterly' },
         { label: 'Financial Reports', value: 'financial' },
         { label: 'Legal Documents', value: 'legal' },
         { label: 'Business Operations', value: 'business' },
