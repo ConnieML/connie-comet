@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Connie Pre-Release Landing</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #f8fafc 0%, #e0e7ef 100%);
+      color: #23254B;
+      overflow-x: hidden;
+    }
+    .dot-bg {
+      position: fixed; top:0; left:0; width:100vw; height:100vh; z-index:0; pointer-events:none;
+    }
+    .container {
+      z-index:2;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      padding: 5vh 1rem 0 1rem;
+    }
+    .logo { margin-bottom: 2.0rem; }
+    .logo img { width: 66px; height: auto; }
+    .headline {
+      font-size: 2rem;
+      font-weight: 650;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.3rem;
+      text-align: center;
+    }
+    .blurb {
+      font-size: 1.13rem;
+      color: #6668a1;
+      margin-bottom: 2.2rem;
+      text-align:center;
+      max-width:26em;
+    }
+    .waitlist-card {
+      background: rgba(255,255,255,0.98);
+      box-shadow: 0 4px 24px 0 rgba(122, 99, 187, 0.12);
+      padding: 2rem 1.6rem 1.4rem 1.6rem;
+      border-radius:17px;
+      max-width:400px; width: 100%;
+      margin-bottom: 3vh;
+      display:flex; flex-direction:column; align-items:center;
+    }
+    form { width:100%; display:flex; gap:0.7rem; }
+    input[type="email"] {
+      flex:1;
+      padding: 0.95em 1em;
+      border: 1.8px solid #ebe6f8;
+      border-radius:11px;
+      font-size:1rem; font-family:inherit;
+      background:#f5f7fb;
+      margin-bottom:0.3rem;
+      transition: border 0.18s;
+    }
+    input[type="email"]:focus { border-color: #ec4899; outline:none;}
+    button {
+      padding:0.95em 1.7em;
+      font-size:1rem;font-weight:700;
+      background: linear-gradient(90deg,#ec4899, #8b5cf6 94%);
+      color:#fff;
+      border:none; border-radius:10px;
+      cursor:pointer; outline:none;
+      box-shadow: 0 2px 6px #ec48992a;
+      transition: background .16s, box-shadow .18s;
+    }
+    button:hover, button:focus { filter:brightness(1.14);}
+    .success, .error {
+      margin-top:0.7em;
+      font-size:1.06rem;
+      color:#22c55e;
+      text-align:center;
+      display:none;
+    }
+    .error { color:#dc2626;}
+    @media (max-width:700px) {
+      .container { padding-top:2.2rem;}
+      .logo img { width:44px; }
+      .headline { font-size: 1.19rem;}
+      .waitlist-card { padding:1rem 0.7rem 1.0rem 0.7rem;}
+    }
+  </style>
+</head>
+<body>
+  <!-- Animated SVG Dot Matrix -->
+  <svg class="dot-bg" id="dot-bg"></svg>
+  <main class="container">
+    <div class="logo">
+      <img src="/connie-logo-black-strong.svg" alt="Connie logo">
+    </div>
+    <div class="headline">The Modern Communications Platform for Nonprofit CBOs</div>
+    <div class="blurb">Empowering you to serve more people and improve your community impact—across any channel.</div>
+    <section class="waitlist-card">
+      <form id="waitlist-form" autocomplete="off">
+        <input type="email" required placeholder="your-email@nonprofit.org" id="email" />
+        <button type="submit">Join Waitlist</button>
+      </form>
+      <div class="success" id="success-msg">Thank you! We’ll be in touch shortly.</div>
+      <div class="error" id="error-msg">Please use a valid email.</div>
+    </section>
+  </main>
+  <script>
+    // Dot Matrix SVG w/ Activation Animation
+    function renderDotMatrix() {
+      const svg = document.getElementById('dot-bg');
+      const width = window.innerWidth, height = window.innerHeight;
+      const dotsX = Math.ceil(width/34) + 2, dotsY = Math.ceil(height/34) + 2;
+      svg.setAttribute('width',width); svg.setAttribute('height',height);
+      let html = "";
+      for(let y=0; y<dotsY; y++) {
+        for(let x=0; x<dotsX; x++) {
+          const cx = x*34 + 17, cy = y*34 + 17;
+          const id = `d${x}_${y}`;
+          const delay = Math.random()*3;
+          html += `<circle id="${id}" cx="${cx}" cy="${cy}" r="3" fill="#e0dfff" opacity="0.82">
+           <animate attributeName="fill" values="#e0dfff;#fff;#e0dfff" keyTimes="0;0.48;1"
+             dur="${2.8+Math.random()*2}s" begin="${delay.toFixed(2)}s" repeatCount="indefinite"/>
+           <animate attributeName="opacity" values="0.87;1;0.87" keyTimes="0;0.45;1"
+             dur="${2.5+Math.random()*1.9}s" begin="${delay.toFixed(2)}s" repeatCount="indefinite"/>
+           </circle>`;
+        }
+      }
+      svg.innerHTML = html;
+    }
+    window.addEventListener('load',renderDotMatrix); window.addEventListener('resize',renderDotMatrix);
+
+    // Waitlist form (demo)
+    document.getElementById('waitlist-form').addEventListener('submit',function(e){
+      e.preventDefault();
+      let email = document.getElementById('email').value.trim();
+      if(!/^[^@]+@[^@]+\.\w+/.test(email)) {
+        document.getElementById('error-msg').style.display="block";
+        document.getElementById('success-msg').style.display="none";
+        return;
+      }
+      document.getElementById('error-msg').style.display="none";
+      document.getElementById('success-msg').style.display="block";
+      this.querySelector('button').disabled=true;
+      setTimeout(()=>{document.getElementById('success-msg').style.display="none";this.querySelector('button').disabled=false;},2800);
+      this.reset();
+    });
+  </script>
+</body>
+</html>
