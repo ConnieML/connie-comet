@@ -23,7 +23,7 @@ const categoryLabels: Record<string, { label: string; icon: string; description:
   business: {
     label: 'Business Operations',
     icon: '🎯',
-    description: 'Business plans, market analysis, operational KPIs'
+    description: 'Business plans, market analysis, operational KPIs, UAT reports, product testing'
   },
   technical: {
     label: 'Technical Documentation',
@@ -109,73 +109,125 @@ export default function CategoryPage({ params }: PageProps) {
         </div>
 
         {/* Documents Grid */}
-        {docs.length > 0 ? (
-          <div className="max-w-6xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {docs.map((doc: any) => (
-                <Link
-                  key={doc.id}
-                  href={`/dataroom/view/${doc.id}`}
-                  className="group"
-                >
-                  <div className="bg-white/60 backdrop-blur-sm border border-slate-200 rounded-xl p-6 hover:bg-white/80 hover:border-pink-500/50 transition-all duration-300 hover:transform hover:scale-[1.02] shadow-lg hover:shadow-xl">
-                    {/* File Icon */}
-                    <div className="text-center mb-4">
-                      <div className="text-4xl mb-2">
-                        {doc.mimeType?.includes('pdf') ? '📄' : 
-                         doc.mimeType?.includes('image') ? '🖼️' :
-                         doc.mimeType?.includes('spreadsheet') || doc.mimeType?.includes('excel') ? '📊' :
-                         '📄'}
-                      </div>
-                    </div>
-
-                    {/* Document Info */}
-                    <div className="text-center">
-                      <h3 className="text-lg font-medium text-slate-800 mb-2 group-hover:text-pink-600 transition-colors">
-                        {doc.alt || doc.filename}
-                      </h3>
-                      
-                      {doc.documentDescription && (
-                        <p className="text-sm text-slate-600 mb-3 line-clamp-2">
-                          {doc.documentDescription}
-                        </p>
-                      )}
-
-                      <div className="flex justify-between items-center text-xs text-slate-600">
-                        <span>
-                          {doc.mimeType?.split('/')[1]?.toUpperCase() || 'FILE'}
-                        </span>
-                        <span>
-                          {doc.filesize ? `${Math.round(doc.filesize / 1024)} KB` : ''}
-                        </span>
-                      </div>
-
-                      {/* Access Level Badge */}
-                      <div className="mt-3">
-                        <span className={`inline-block px-2 py-1 rounded-full text-xs ${
-                          doc.accessLevel === 'public' ? 'bg-green-100 text-green-700 border border-green-300' :
-                          doc.accessLevel === 'investors' ? 'bg-blue-100 text-blue-700 border border-blue-300' :
-                          doc.accessLevel === 'board' ? 'bg-purple-100 text-purple-700 border border-purple-300' :
-                          'bg-red-100 text-red-700 border border-red-300'
-                        }`}>
-                          {doc.accessLevel || 'public'}
-                        </span>
-                      </div>
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            
+            {/* Special UAT Hub Card for Business Category */}
+            {category === 'business' && (
+              <Link
+                href="/dataroom/user-acceptance-testing"
+                className="group"
+              >
+                <div className="bg-gradient-to-br from-green-50 to-blue-50 border-2 border-green-200 rounded-xl p-6 hover:from-green-100 hover:to-blue-100 hover:border-green-300 transition-all duration-300 hover:transform hover:scale-[1.02] shadow-lg hover:shadow-xl">
+                  {/* UAT Icon */}
+                  <div className="text-center mb-4">
+                    <div className="text-4xl mb-2">🧪</div>
+                    <div className="inline-block px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full border border-green-300">
+                      UAT HUB
                     </div>
                   </div>
-                </Link>
-              ))}
+
+                  {/* UAT Info */}
+                  <div className="text-center">
+                    <h3 className="text-lg font-medium text-slate-800 mb-2 group-hover:text-green-600 transition-colors">
+                      User Acceptance & Beta Testing
+                    </h3>
+                    
+                    <p className="text-sm text-slate-600 mb-3">
+                      Comprehensive testing resources, interactive dashboards, documentation, and beta feedback programs
+                    </p>
+
+                    <div className="flex justify-between items-center text-xs text-slate-600 mb-3">
+                      <span>TESTING HUB</span>
+                      <span>📊 Resources</span>
+                    </div>
+                    
+                    <div className="text-xs text-green-600 font-medium">
+                      Explore UAT Resources →
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            )}
+
+            {/* Regular Documents */}
+            {docs.length > 0 && docs.map((doc: any) => (
+              <Link
+                key={doc.id}
+                href={`/dataroom/view/${doc.id}`}
+                className="group"
+              >
+                <div className="bg-white/60 backdrop-blur-sm border border-slate-200 rounded-xl p-6 hover:bg-white/80 hover:border-pink-500/50 transition-all duration-300 hover:transform hover:scale-[1.02] shadow-lg hover:shadow-xl">
+                  {/* File Icon */}
+                  <div className="text-center mb-4">
+                    <div className="text-4xl mb-2">
+                      {doc.mimeType?.includes('pdf') ? '📄' : 
+                       doc.mimeType?.includes('image') ? '🖼️' :
+                       doc.mimeType?.includes('spreadsheet') || doc.mimeType?.includes('excel') ? '📊' :
+                       '📄'}
+                    </div>
+                  </div>
+
+                  {/* Document Info */}
+                  <div className="text-center">
+                    <h3 className="text-lg font-medium text-slate-800 mb-2 group-hover:text-pink-600 transition-colors">
+                      {doc.alt || doc.filename}
+                    </h3>
+                    
+                    {doc.documentDescription && (
+                      <p className="text-sm text-slate-600 mb-3 line-clamp-2">
+                        {doc.documentDescription}
+                      </p>
+                    )}
+
+                    <div className="flex justify-between items-center text-xs text-slate-600">
+                      <span>
+                        {doc.mimeType?.split('/')[1]?.toUpperCase() || 'FILE'}
+                      </span>
+                      <span>
+                        {doc.filesize ? `${Math.round(doc.filesize / 1024)} KB` : ''}
+                      </span>
+                    </div>
+
+                    {/* Access Level Badge */}
+                    <div className="mt-3">
+                      <span className={`inline-block px-2 py-1 rounded-full text-xs ${
+                        doc.accessLevel === 'public' ? 'bg-green-100 text-green-700 border border-green-300' :
+                        doc.accessLevel === 'investors' ? 'bg-blue-100 text-blue-700 border border-blue-300' :
+                        doc.accessLevel === 'board' ? 'bg-purple-100 text-purple-700 border border-purple-300' :
+                        'bg-red-100 text-red-700 border border-red-300'
+                      }`}>
+                        {doc.accessLevel || 'public'}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+          
+          {/* Show "No Documents Yet" message only if business category has no docs and no UAT card */}
+          {docs.length === 0 && category !== 'business' && (
+            <div className="text-center py-16">
+              <div className="text-6xl mb-4">📂</div>
+              <h3 className="text-2xl font-light text-slate-800 mb-4">No Documents Yet</h3>
+              <p className="text-slate-600">
+                Documents in this category will appear here once uploaded.
+              </p>
             </div>
-          </div>
-        ) : (
-          <div className="text-center py-16">
-            <div className="text-6xl mb-4">📂</div>
-            <h3 className="text-2xl font-light text-slate-800 mb-4">No Documents Yet</h3>
-            <p className="text-slate-600">
-              Documents in this category will appear here once uploaded.
-            </p>
-          </div>
-        )}
+          )}
+          
+          {/* Special message for business category when no docs */}
+          {docs.length === 0 && category === 'business' && (
+            <div className="text-center py-16">
+              <div className="text-6xl mb-4">📂</div>
+              <h3 className="text-2xl font-light text-slate-800 mb-4">Business Documents Coming Soon</h3>
+              <p className="text-slate-600">
+                Check out the UAT Testing Dashboard above, or additional business documents will appear here once uploaded.
+              </p>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   )
