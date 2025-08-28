@@ -32,9 +32,19 @@ const categoryLabels: Record<string, { label: string; icon: string; description:
   },
 }
 
+interface DocumentData {
+  id: string
+  alt?: string
+  filename: string
+  mimeType?: string
+  documentDescription?: string
+  filesize?: number
+  accessLevel?: 'public' | 'investors' | 'board' | 'admin'
+}
+
 export default function CategoryPage({ params }: PageProps) {
   const [category, setCategory] = useState<string>('')
-  const [docs, setDocs] = useState<any[]>([])
+  const [docs, setDocs] = useState<DocumentData[]>([])
 
   useEffect(() => {
     // Extract category from params and fetch real documents
@@ -48,7 +58,6 @@ export default function CategoryPage({ params }: PageProps) {
         
         if (response.ok) {
           const data = await response.json()
-          console.log('Fetched documents:', data.docs)
           setDocs(data.docs || [])
         } else {
           console.error('Failed to fetch documents:', response.status)
@@ -112,46 +121,85 @@ export default function CategoryPage({ params }: PageProps) {
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             
-            {/* Special UAT Hub Card for Business Category */}
+            {/* Special Business Category Cards */}
             {category === 'business' && (
-              <Link
-                href="/dataroom/user-acceptance-testing"
-                className="group"
-              >
-                <div className="bg-gradient-to-br from-green-50 to-blue-50 border-2 border-green-200 rounded-xl p-6 hover:from-green-100 hover:to-blue-100 hover:border-green-300 transition-all duration-300 hover:transform hover:scale-[1.02] shadow-lg hover:shadow-xl">
-                  {/* UAT Icon */}
-                  <div className="text-center mb-4">
-                    <div className="text-4xl mb-2">🧪</div>
-                    <div className="inline-block px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full border border-green-300">
-                      UAT HUB
+              <>
+                {/* Product Development Hub Card */}
+                <Link
+                  href="/dataroom/business/product-development"
+                  className="group"
+                >
+                  <div className="bg-gradient-to-br from-purple-50 to-pink-50 border-2 border-purple-200 rounded-xl p-6 hover:from-purple-100 hover:to-pink-100 hover:border-purple-300 transition-all duration-300 hover:transform hover:scale-[1.02] shadow-lg hover:shadow-xl">
+                    {/* Product Dev Icon */}
+                    <div className="text-center mb-4">
+                      <div className="text-4xl mb-2">🚀</div>
+                      <div className="inline-block px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded-full border border-purple-300">
+                        PRODUCT DEV
+                      </div>
+                    </div>
+
+                    {/* Product Dev Info */}
+                    <div className="text-center">
+                      <h3 className="text-lg font-medium text-slate-800 mb-2 group-hover:text-purple-600 transition-colors">
+                        Product Development
+                      </h3>
+                      
+                      <p className="text-sm text-slate-600 mb-3">
+                        Product roadmaps, feature specifications, development timelines, and innovation initiatives
+                      </p>
+
+                      <div className="flex justify-between items-center text-xs text-slate-600 mb-3">
+                        <span>INNOVATION</span>
+                        <span>🛠️ Roadmap</span>
+                      </div>
+                      
+                      <div className="text-xs text-purple-600 font-medium">
+                        Explore Product Hub →
+                      </div>
                     </div>
                   </div>
+                </Link>
 
-                  {/* UAT Info */}
-                  <div className="text-center">
-                    <h3 className="text-lg font-medium text-slate-800 mb-2 group-hover:text-green-600 transition-colors">
-                      User Acceptance & Beta Testing
-                    </h3>
-                    
-                    <p className="text-sm text-slate-600 mb-3">
-                      Comprehensive testing resources, interactive dashboards, documentation, and beta feedback programs
-                    </p>
-
-                    <div className="flex justify-between items-center text-xs text-slate-600 mb-3">
-                      <span>TESTING HUB</span>
-                      <span>📊 Resources</span>
+                {/* UAT Hub Card */}
+                <Link
+                  href="/dataroom/user-acceptance-testing"
+                  className="group"
+                >
+                  <div className="bg-gradient-to-br from-green-50 to-blue-50 border-2 border-green-200 rounded-xl p-6 hover:from-green-100 hover:to-blue-100 hover:border-green-300 transition-all duration-300 hover:transform hover:scale-[1.02] shadow-lg hover:shadow-xl">
+                    {/* UAT Icon */}
+                    <div className="text-center mb-4">
+                      <div className="text-4xl mb-2">🧪</div>
+                      <div className="inline-block px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full border border-green-300">
+                        UAT HUB
+                      </div>
                     </div>
-                    
-                    <div className="text-xs text-green-600 font-medium">
-                      Explore UAT Resources →
+
+                    {/* UAT Info */}
+                    <div className="text-center">
+                      <h3 className="text-lg font-medium text-slate-800 mb-2 group-hover:text-green-600 transition-colors">
+                        User Acceptance & Beta Testing
+                      </h3>
+                      
+                      <p className="text-sm text-slate-600 mb-3">
+                        Comprehensive testing resources, interactive dashboards, documentation, and beta feedback programs
+                      </p>
+
+                      <div className="flex justify-between items-center text-xs text-slate-600 mb-3">
+                        <span>TESTING HUB</span>
+                        <span>📊 Resources</span>
+                      </div>
+                      
+                      <div className="text-xs text-green-600 font-medium">
+                        Explore UAT Resources →
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Link>
+                </Link>
+              </>
             )}
 
             {/* Regular Documents */}
-            {docs.length > 0 && docs.map((doc: any) => (
+            {docs.length > 0 && docs.map((doc: DocumentData) => (
               <Link
                 key={doc.id}
                 href={`/dataroom/view/${doc.id}`}
