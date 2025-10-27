@@ -2,6 +2,7 @@
 
 import React from 'react'
 import Link from 'next/link'
+import COGSCalculator from './COGSCalculator'
 
 export default function PAndLCalculatorPage() {
   return (
@@ -30,17 +31,9 @@ export default function PAndLCalculatorPage() {
             <h2 className="text-2xl font-medium text-slate-800 mb-4">About This Calculator</h2>
             <div className="space-y-3 text-slate-600">
               <p>
-                This calculator provides two modes of operation:
+                This calculator uses ConnieRTC wholesale costs validated from NSS audit (October 2025)
+                with margin scenario modeling for strategic pricing decisions.
               </p>
-              <ul className="list-disc list-inside space-y-2 ml-4">
-                <li>
-                  <strong>Client Mode:</strong> Uses Twilio Flex pricing for client-facing cost estimates
-                </li>
-                <li>
-                  <strong>P&L Mode (Admin Only):</strong> Uses ConnieRTC wholesale costs validated from NSS audit
-                  (October 2025) with margin scenario modeling
-                </li>
-              </ul>
               <p className="mt-4">
                 <strong>Key Features:</strong> Transaction-level cost breakdown, target margin calculator,
                 pricing scenarios (30%, 40%, 50%, 60% margins), break-even analysis, and MRR projections.
@@ -49,20 +42,9 @@ export default function PAndLCalculatorPage() {
           </div>
         </div>
 
-        {/* Embedded Calculator */}
-        <div className="max-w-full mx-auto">
-          <div className="bg-white/80 backdrop-blur-sm border-2 border-slate-300 rounded-2xl shadow-2xl overflow-hidden">
-            <iframe
-              src="https://connie.plus/admin/cogs-calculator"
-              className="w-full"
-              style={{
-                height: 'calc(100vh - 200px)',
-                minHeight: '800px',
-                border: 'none'
-              }}
-              title="P&L Calculator"
-            />
-          </div>
+        {/* Calculator Component */}
+        <div className="mb-12">
+          <COGSCalculator />
         </div>
 
         {/* Related Resources */}
