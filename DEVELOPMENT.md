@@ -46,8 +46,39 @@
 4. Auto-deployment via AWS Amplify
 5. Verify changes on live site
 
+### DataRoom Portal Authentication
+
+**Current Status:** Authentication is temporarily disabled for content setup (as of Oct 2025)
+
+**Affected Files:** 15 files in `/src/app/(frontend)/dataroom-portal/`
+- 3 parent landing pages (bizops, investors, techops)
+- 12 child category pages (operations, finance, legal, strategy, business, financial, quarterly, technical, apis, architecture, infrastructure, security)
+
+**To Re-enable Authentication:**
+
+Use this prompt with Claude:
+```
+Re-enable authentication on all dataroom-portal pages by reverting the temporary
+auth bypass. Search for "TEMP: Auth disabled for content setup" comments and
+restore the original Okta authentication checks.
+```
+
+**To Switch to Different Auth System:**
+
+Use this prompt with Claude:
+```
+Replace Okta authentication with [NEW AUTH SYSTEM] on all dataroom-portal pages.
+Currently marked with "TEMP: Auth disabled for content setup" comments.
+```
+
+**What Changed:**
+- Initial auth state: `useState(true)` instead of `useState(false)`
+- useEffect: Removed `/api/users/me` auth check, loads documents directly
+- All pages marked with `// TEMP: Auth disabled for content setup` comments
+
 ### Known Issues
 - New content requires rebuild to appear on static pages (ISR will fix this)
 - Seed route disabled due to TypeScript compatibility issue
+- DataRoom authentication temporarily disabled (Oct 2025)
 
-Last updated: 2025-07-01
+Last updated: 2025-10-27

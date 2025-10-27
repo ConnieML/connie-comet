@@ -11,9 +11,9 @@ interface PageProps {
 
 const categoryLabels: Record<string, { label: string; icon: string; description: string }> = {
   financial: {
-    label: 'Financial Reports',
+    label: 'Financial Reports & Tools',
     icon: '📊',
-    description: 'Quarterly reports, audited statements, financial projections'
+    description: 'Interactive calculators, pricing models, unit economics, cash flow projections'
   },
   legal: {
     label: 'Legal Documents',

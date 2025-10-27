@@ -187,8 +187,8 @@ export default function BizOpsDataroomPage() {
         <div className="max-w-4xl mx-auto">
           <div className="grid gap-6">
             {categories.map((category) => {
-              const isClickable = isAuthenticated && !authLoading
-              
+              const isClickable = true  // TEMP: Auth disabled for content setup
+
               const content = (
                 <div className={`backdrop-blur-sm rounded-2xl p-8 transition-all duration-300 shadow-lg bg-white/60 border border-slate-200 ${
                   isClickable 

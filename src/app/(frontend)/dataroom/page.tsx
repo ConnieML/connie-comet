@@ -42,10 +42,10 @@ export default function DataroomPage() {
     },
     {
       category: 'financial',
-      label: 'Financial Reports',
-      count: categoryCounts.financial || 0,
+      label: 'Financial Reports & Tools',
+      count: 7,
       icon: '📊',
-      description: 'Quarterly reports, audited statements, financial projections'
+      description: 'Interactive calculators, pricing models, unit economics, cash flow projections'
     },
     {
       category: 'legal',
