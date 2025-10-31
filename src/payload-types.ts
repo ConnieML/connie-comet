@@ -204,7 +204,6 @@ export interface Page {
     | MediaBlock
     | ArchiveBlock
     | FormBlock
-    | CardGridBlock
     | RawHTMLBlock
     | WaitlistLandingBlock
     | WaitlistStaticBlock
@@ -815,32 +814,6 @@ export interface Form {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CardGridBlock".
- */
-export interface CardGridBlock {
-  heading: string;
-  subtitle?: string | null;
-  cards?:
-    | {
-        title: string;
-        icon?: string | null;
-        description: string;
-        status?: ('live' | 'uat' | 'planning' | 'development' | 'coming-soon') | null;
-        link?: {
-          type?: ('internal' | 'external') | null;
-          internalLink?: (string | null) | Page;
-          externalLink?: string | null;
-          label?: string | null;
-        };
-        id?: string | null;
-      }[]
-    | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'cardGrid';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "RawHTMLBlock".
  */
 export interface RawHTMLBlock {
@@ -1212,7 +1185,6 @@ export interface PagesSelect<T extends boolean = true> {
         mediaBlock?: T | MediaBlockSelect<T>;
         archive?: T | ArchiveBlockSelect<T>;
         formBlock?: T | FormBlockSelect<T>;
-        cardGrid?: T | CardGridBlockSelect<T>;
         rawHTML?: T | RawHTMLBlockSelect<T>;
         waitlistLanding?: T | WaitlistLandingBlockSelect<T>;
         waitlistStatic?: T | WaitlistStaticBlockSelect<T>;
@@ -1326,33 +1298,6 @@ export interface FormBlockSelect<T extends boolean = true> {
   form?: T;
   enableIntro?: T;
   introContent?: T;
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CardGridBlock_select".
- */
-export interface CardGridBlockSelect<T extends boolean = true> {
-  heading?: T;
-  subtitle?: T;
-  cards?:
-    | T
-    | {
-        title?: T;
-        icon?: T;
-        description?: T;
-        status?: T;
-        link?:
-          | T
-          | {
-              type?: T;
-              internalLink?: T;
-              externalLink?: T;
-              label?: T;
-            };
-        id?: T;
-      };
   id?: T;
   blockName?: T;
 }

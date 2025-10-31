@@ -45,9 +45,9 @@ export default function UATHubPage() {
         </div>
 
         {/* UAT Resources Grid */}
-        <div className="max-w-4xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+
             {/* UAT Testing Dashboard Card */}
             <Link
               href="/dataroom/uat"
@@ -121,6 +121,78 @@ export default function UATHubPage() {
                 </div>
               </div>
             </a>
+
+            {/* UAT Cohort Pricing Card */}
+            <Link
+              href="/dataroom/user-acceptance-testing/pricing"
+              className="group"
+            >
+              <div className="bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-amber-200 rounded-xl p-8 hover:from-amber-100 hover:to-orange-100 hover:border-amber-300 transition-all duration-300 hover:transform hover:scale-[1.02] shadow-lg hover:shadow-xl">
+                {/* Pricing Icon */}
+                <div className="text-center mb-6">
+                  <div className="text-6xl mb-4">💰</div>
+                  <div className="inline-block px-3 py-2 bg-amber-100 text-amber-700 text-sm rounded-full border border-amber-300 font-semibold">
+                    TRANSPARENT PRICING
+                  </div>
+                </div>
+
+                {/* Pricing Info */}
+                <div className="text-center">
+                  <h3 className="text-2xl font-semibold text-slate-800 mb-4 group-hover:text-amber-600 transition-colors">
+                    UAT Cohort Pricing
+                  </h3>
+
+                  <p className="text-slate-600 mb-6 leading-relaxed">
+                    Complete cost breakdown for UAT cohort participants with per-channel rates and support costs
+                  </p>
+
+                  <div className="flex justify-between items-center text-sm text-slate-600 mb-4">
+                    <span className="font-medium">💰 Cost-Based</span>
+                    <span className="font-medium">🔍 Transparent</span>
+                  </div>
+
+                  <div className="text-sm text-amber-600 font-semibold">
+                    View Pricing Grid →
+                  </div>
+                </div>
+              </div>
+            </Link>
+
+            {/* Partner Discovery Intake Card */}
+            <Link
+              href="/dataroom/user-acceptance-testing/discovery"
+              className="group"
+            >
+              <div className="bg-gradient-to-br from-indigo-50 to-purple-50 border-2 border-indigo-200 rounded-xl p-8 hover:from-indigo-100 hover:to-purple-100 hover:border-indigo-300 transition-all duration-300 hover:transform hover:scale-[1.02] shadow-lg hover:shadow-xl">
+                {/* Discovery Icon */}
+                <div className="text-center mb-6">
+                  <div className="text-6xl mb-4">📋</div>
+                  <div className="inline-block px-3 py-2 bg-indigo-100 text-indigo-700 text-sm rounded-full border border-indigo-300 font-semibold">
+                    INTAKE FORM
+                  </div>
+                </div>
+
+                {/* Discovery Info */}
+                <div className="text-center">
+                  <h3 className="text-2xl font-semibold text-slate-800 mb-4 group-hover:text-indigo-600 transition-colors">
+                    Partner Discovery
+                  </h3>
+
+                  <p className="text-slate-600 mb-6 leading-relaxed">
+                    Intake questionnaire for prospective UAT partners to collect operational data and communication needs
+                  </p>
+
+                  <div className="flex justify-between items-center text-sm text-slate-600 mb-4">
+                    <span className="font-medium">📊 Data Collection</span>
+                    <span className="font-medium">🤝 Partners</span>
+                  </div>
+
+                  <div className="text-sm text-indigo-600 font-semibold">
+                    Start Discovery Form →
+                  </div>
+                </div>
+              </div>
+            </Link>
 
           </div>
         </div>
