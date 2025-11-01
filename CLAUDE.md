@@ -203,12 +203,41 @@ S3_REGION=us-east-1
 - **Package Manager**: pnpm (latest version installed during build)
 - **Build Process**: Includes Payload importmap generation before build
 
+### CRITICAL: Memory Configuration Requirements
+**⚠️ AWS Amplify builds WILL FAIL without proper Node.js heap size configuration**
+
+- **Problem**: Next.js build process exceeds default Node.js heap size (~2GB)
+- **Symptom**: Build fails with "FATAL ERROR: Ineffective mark-compacts near heap limit Allocation failed - JavaScript heap out of memory"
+- **Solution**: Must configure NODE_OPTIONS with increased heap size in package.json build script
+
+**Required Configuration:**
+```json
+{
+  "scripts": {
+    "build": "cross-env NODE_OPTIONS=\"--no-deprecation --max_old_space_size=6144\" next build"
+  }
+}
+```
+
+**Why this works:**
+- AWS Amplify Standard build compute: 8GiB Memory
+- Allocates 6GB (6144MB) to Node.js heap, leaving 2GB for other processes
+- Must be in package.json because `cross-env` overrides any NODE_OPTIONS set in amplify.yml
+- Combines with `--no-deprecation` flag to suppress deprecation warnings
+
+**Common Mistakes to Avoid:**
+1. ❌ Setting NODE_OPTIONS in amplify.yml build phase - will be overridden by cross-env
+2. ❌ Using only `--max_old_space_size` without `--no-deprecation` - breaks existing setup
+3. ❌ Not using quotes around multiple NODE_OPTIONS flags - will fail to parse
+
 ### Deployment Checklist
 1. ✅ Ensure all environment variables are set in Amplify console
 2. ✅ Verify amplify.yml is correct and includes all required preBuild commands
-3. ✅ Test locally with `pnpm build` before deploying
-4. ✅ Monitor build logs carefully for any missing dependencies
-5. ✅ After deployment, verify CMS admin access and functionality
+3. ✅ **CRITICAL**: Verify package.json build script includes `--max_old_space_size=6144`
+4. ✅ Test locally with `pnpm build` before deploying
+5. ✅ Monitor build logs carefully for any missing dependencies
+6. ✅ Check build logs for "cross-env NODE_OPTIONS" to confirm heap size is set
+7. ✅ After deployment, verify CMS admin access and functionality
 
 ## Next Steps
 1. ✅ Complete authentication provider evaluation (Okta selected)
