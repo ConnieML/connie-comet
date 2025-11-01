@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connie: Connectivity Platform for Nonprofits</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: white;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .header .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 1rem;
+        }
+        
+        .header .tagline {
+            font-size: 1rem;
+            opacity: 0.8;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .main-content {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .problem-solution {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .problem-solution h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+        
+        .before-after {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 2rem;
+            align-items: center;
+            margin-top: 2rem;
+        }
+        
+        .before, .after {
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+        }
+        
+        .before {
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+        
+        .after {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.5);
+        }
+        
+        .arrow {
+            font-size: 2rem;
+            color: white;
+        }
+        
+        .features-section {
+            padding: 3rem 2rem;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .feature-card {
+            background: #f8f9ff;
+            border-radius: 15px;
+            padding: 2rem;
+            border-left: 5px solid #667eea;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .feature-card h3 {
+            color: #667eea;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .feature-icon {
+            font-size: 1.5rem;
+            margin-right: 0.5rem;
+        }
+        
+        .feature-description {
+            margin-bottom: 1rem;
+            color: #555;
+        }
+        
+        .feature-benefits {
+            list-style: none;
+        }
+        
+        .feature-benefits li {
+            color: #27ae60;
+            margin-bottom: 0.5rem;
+        }
+        
+        .feature-benefits li:before {
+            content: "✓ ";
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+        
+        .user-roles {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 3rem 2rem;
+        }
+        
+        .user-roles h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+        }
+        
+        .roles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .role-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+        
+        .role-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+        
+        .role-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .value-prop {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+        
+        .value-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .metric {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 2rem;
+        }
+        
+        .metric-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .cta-section {
+            background: #2c3e50;
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+        
+        .cta-button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 1rem 0.5rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+        }
+        
+        @media (max-width: 768px) {
+            .before-after {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .arrow {
+                transform: rotate(90deg);
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Connie</h1>
+            <div class="subtitle">Connectivity Platform for Community-Based Organizations</div>
+            <div class="tagline">Your digital transformation onramp - making enterprise-level contact center technology accessible and affordable for nonprofits</div>
+        </header>
+        
+        <div class="main-content">
+            <section class="problem-solution">
+                <h2>Breaking the Overwhelm Cycle</h2>
+                <p>Community demand is rising, but your team is drowning in disconnected systems</p>
+                
+                <div class="before-after">
+                    <div class="before">
+                        <h3>Before Connie</h3>
+                        <ul style="list-style: none; text-align: left;">
+                            <li>📞 Missing calls across multiple lines</li>
+                            <li>📧 Email buried in different inboxes</li>
+                            <li>📱 Social media requests overlooked</li>
+                            <li>📄 Fax machines in closets</li>
+                            <li>😰 Staff switching between 5+ systems</li>
+                            <li>📊 No visibility into true demand</li>
+                            <li>⏰ Growing wait times</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="arrow">→</div>
+                    
+                    <div class="after">
+                        <h3>With Connie</h3>
+                        <ul style="list-style: none; text-align: left;">
+                            <li>🎯 All channels in one unified view</li>
+                            <li>⚡ Instant access to caller history</li>
+                            <li>📈 Real-time demand insights</li>
+                            <li>🤝 Seamless team handoffs</li>
+                            <li>🎉 Staff efficiency boost</li>
+                            <li>📊 Board-ready reporting</li>
+                            <li>🚀 Faster community response</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="features-section">
+                <h2 style="text-align: center; font-size: 2rem; margin-bottom: 1rem; color: #2c3e50;">Core Features</h2>
+                <p style="text-align: center; color: #666; margin-bottom: 2rem;">Everything your team needs to transform community engagement</p>
+                
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <h3><span class="feature-icon">🎯</span>Unified Intake Hub</h3>
+                        <div class="feature-description">All community requests flow through one "front door" - voice, email, text, web chat, social media, and fax</div>
+                        <ul class="feature-benefits">
+                            <li>No more missed requests</li>
+                            <li>Complete demand visibility</li>
+                            <li>Intelligent task prioritization</li>
+                            <li>Automatic caller identification</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <h3><span class="feature-icon">⚡</span>ConnieRTC Workspace</h3>
+                        <div class="feature-description">Your staff's command center - everything they need in one intuitive screen</div>
+                        <ul class="feature-benefits">
+                            <li>Instant CRM data access</li>
+                            <li>One-click task acceptance</li>
+                            <li>Seamless system switching</li>
+                            <li>Real-time collaboration</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <h3><span class="feature-icon">🔗</span>Smart CRM Integration</h3>
+                        <div class="feature-description">Works with your existing tools - Salesforce, HubSpot, or even spreadsheets</div>
+                        <ul class="feature-benefits">
+                            <li>No data migration headaches</li>
+                            <li>Updates sync automatically</li>
+                            <li>Complete interaction history</li>
+                            <li>Professional services support</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <h3><span class="feature-icon">📊</span>Impact Analytics</h3>
+                        <div class="feature-description">Ready-to-use dashboards that grow with your sophistication</div>
+                        <ul class="feature-benefits">
+                            <li>Service demand trends</li>
+                            <li>Peak time identification</li>
+                            <li>Staff utilization insights</li>
+                            <li>Board-ready reports</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <h3><span class="feature-icon">📢</span>Community Outreach</h3>
+                        <div class="feature-description">Two-way communication including emergency broadcast capabilities</div>
+                        <ul class="feature-benefits">
+                            <li>Proactive client contact</li>
+                            <li>Program updates & reminders</li>
+                            <li>Emergency notifications</li>
+                            <li>Community-wide alerts</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <h3><span class="feature-icon">🚀</span>Easy Setup</h3>
+                        <div class="feature-description">Digital transformation without the technical headaches</div>
+                        <ul class="feature-benefits">
+                            <li>Guided onboarding process</li>
+                            <li>Professional services available</li>
+                            <li>No IT team required</li>
+                            <li>Affordable pricing tiers</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="user-roles">
+                <h2>Built for Your Entire Team</h2>
+                <div class="roles-grid">
+                    <div class="role-card">
+                        <span class="role-icon">👥</span>
+                        <h3>Front-Line Staff</h3>
+                        <p>Unified workspace eliminates system juggling. Focus on helping people, not managing technology.</p>
+                    </div>
+                    <div class="role-card">
+                        <span class="role-icon">📈</span>
+                        <h3>Program Managers</h3>
+                        <p>Real-time operations oversight and powerful reporting to optimize staffing and program delivery.</p>
+                    </div>
+                    <div class="role-card">
+                        <span class="role-icon">🎯</span>
+                        <h3>Executive Directors</h3>
+                        <p>Strategic visibility into community demand and organizational efficiency with board-ready insights.</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="value-prop">
+                <h2>Proven Impact Metrics</h2>
+                <p>Transform your community response capabilities</p>
+                <div class="value-metrics">
+                    <div class="metric">
+                        <div class="metric-number">60%</div>
+                        <div>Faster Response Times</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-number">80%</div>
+                        <div>Reduction in Missed Requests</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-number">45%</div>
+                        <div>Staff Efficiency Improvement</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-number">90%</div>
+                        <div>Setup Complete in Days</div>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="cta-section">
+                <h2>Ready to Transform Your Community Impact?</h2>
+                <p>Join the nonprofits already using Connie to serve their communities better</p>
+                <button class="cta-button">Schedule Demo</button>
+                <button class="cta-button">View Pricing</button>
+            </section>
+        </div>
+    </div>
+</body>
+</html>

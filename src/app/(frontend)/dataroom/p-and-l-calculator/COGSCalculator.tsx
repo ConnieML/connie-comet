@@ -20,12 +20,22 @@ const WHOLESALE_RATES = {
     per_form: 0.00 // Delivered via Twilio Conversations = FREE
   },
   platform: {
-    fixed_monthly: 553.00 // Platform OpEx (validated Sept 2025)
+    default_monthly: 250.00 // Default baseline for network operation
   }
 }
 
 const DEFAULT_VALUES = {
-  // Transaction-level defaults (based on NSS monthly averages)
+  // Start with zeros for professional users
+  platform_opex: 250.00, // Configurable platform costs
+  voice_calls: 0,
+  fax_count: 0,
+  email_count: 0,
+  web_form_count: 0
+}
+
+const NSS_SAMPLE_DATA = {
+  // Sample data based on NSS monthly averages (Oct 2025)
+  platform_opex: 553.00, // NSS full platform with all features
   voice_calls: 55,
   fax_count: 76,
   email_count: 142,
@@ -33,6 +43,7 @@ const DEFAULT_VALUES = {
 }
 
 interface CalculatorState {
+  platformOpex: number
   voiceCalls: number
   faxCount: number
   emailCount: number
@@ -56,6 +67,7 @@ interface CostBreakdown {
 
 export default function COGSCalculator() {
   const [state, setState] = useState<CalculatorState>({
+    platformOpex: DEFAULT_VALUES.platform_opex,
     voiceCalls: DEFAULT_VALUES.voice_calls,
     faxCount: DEFAULT_VALUES.fax_count,
     emailCount: DEFAULT_VALUES.email_count,
@@ -80,7 +92,7 @@ export default function COGSCalculator() {
   const [showComparison, setShowComparison] = useState(false)
 
   const calculateCosts = useCallback(() => {
-    const platformCost = WHOLESALE_RATES.platform.fixed_monthly
+    const platformCost = state.platformOpex
 
     // Transaction-level wholesale costs
     const blendedVoiceCost = WHOLESALE_RATES.voice.per_call +
@@ -125,11 +137,23 @@ export default function COGSCalculator() {
 
   const handleReset = () => {
     setState({
+      platformOpex: DEFAULT_VALUES.platform_opex,
       voiceCalls: DEFAULT_VALUES.voice_calls,
       faxCount: DEFAULT_VALUES.fax_count,
       emailCount: DEFAULT_VALUES.email_count,
       webFormCount: DEFAULT_VALUES.web_form_count,
       targetMargin: 40
+    })
+  }
+
+  const handleLoadSample = () => {
+    setState({
+      ...state,
+      platformOpex: NSS_SAMPLE_DATA.platform_opex,
+      voiceCalls: NSS_SAMPLE_DATA.voice_calls,
+      faxCount: NSS_SAMPLE_DATA.fax_count,
+      emailCount: NSS_SAMPLE_DATA.email_count,
+      webFormCount: NSS_SAMPLE_DATA.web_form_count
     })
   }
 
@@ -158,6 +182,31 @@ export default function COGSCalculator() {
             <h2 className="text-2xl font-semibold text-slate-800 mb-6">Transaction Configuration</h2>
 
             <div className="space-y-6">
+              <div>
+                <label htmlFor="platformOpex" className="block text-sm font-medium text-slate-700 mb-2">
+                  Platform OpEx (Monthly)
+                  <span className="text-slate-500 font-normal ml-2">
+                    (Twilio Flex, phone numbers, infrastructure)
+                  </span>
+                </label>
+                <input
+                  id="platformOpex"
+                  type="number"
+                  value={state.platformOpex}
+                  onChange={(e) => setState({ ...state, platformOpex: parseFloat(e.target.value) || 0 })}
+                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  min={0}
+                  step={0.01}
+                />
+                <p className="text-xs text-slate-500 mt-1">
+                  Default: $250 (baseline), NSS full platform: $553
+                </p>
+              </div>
+
+              <div className="border-t border-slate-200 pt-6">
+                <h3 className="text-lg font-semibold text-slate-800 mb-4">Transaction Volumes</h3>
+              </div>
+
               <div>
                 <label htmlFor="voiceCalls" className="block text-sm font-medium text-slate-700 mb-2">
                   Voice Calls
@@ -255,6 +304,12 @@ export default function COGSCalculator() {
                   Reset All
                 </button>
                 <button
+                  onClick={handleLoadSample}
+                  className="px-6 py-2 bg-teal-600 hover:bg-teal-700 text-white font-medium rounded-lg transition-colors"
+                >
+                  Load Sample Data
+                </button>
+                <button
                   onClick={() => setShowComparison(!showComparison)}
                   className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
                 >
@@ -270,53 +325,128 @@ export default function COGSCalculator() {
           <div className="bg-white/80 backdrop-blur-sm border border-slate-300 rounded-2xl p-8 shadow-lg sticky top-8">
             <h2 className="text-2xl font-semibold text-slate-800 mb-6">P&L Analysis</h2>
 
-            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-xl p-6 mb-6 text-center">
+            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-xl p-6 mb-6 text-center group relative cursor-help">
               <div className="text-4xl font-bold text-blue-900">
                 ${costs.suggestedPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </div>
               <div className="text-sm text-blue-700 mt-2">
                 Suggested Monthly Price ({state.targetMargin}% margin)
               </div>
+              <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 hidden group-hover:block w-80 p-4 bg-slate-800 text-white text-xs rounded-lg shadow-lg z-10">
+                <div className="font-semibold mb-2 text-center">Suggested Price Formula</div>
+                <div className="text-slate-300 text-center mb-2">
+                  Price = Wholesale Cost ÷ (1 - Margin%)
+                </div>
+                <div className="text-slate-400 text-center">
+                  ${costs.wholesaleCost.toFixed(2)} ÷ (1 - {(state.targetMargin / 100).toFixed(2)}) = ${costs.suggestedPrice.toFixed(2)}
+                </div>
+                <div className="text-green-400 text-center mt-2 text-xs">
+                  This ensures {state.targetMargin}% gross margin on each sale
+                </div>
+              </div>
             </div>
 
             <div className="space-y-3 text-sm">
-              <div className="flex justify-between">
-                <span className="text-slate-600">Platform OpEx (Fixed)</span>
+              <div className="flex justify-between group relative cursor-help">
+                <span className="text-slate-600">Platform OpEx</span>
                 <span className="font-semibold">${costs.platformCost.toFixed(2)}</span>
+                <div className="absolute left-0 bottom-full mb-2 hidden group-hover:block w-72 p-3 bg-slate-800 text-white text-xs rounded-lg shadow-lg z-10">
+                  <div className="font-semibold mb-1">Platform Operating Expenses</div>
+                  <div className="text-slate-300">Configurable monthly cost: ${state.platformOpex.toFixed(2)}</div>
+                  <div className="text-slate-400 text-xs mt-1">
+                    Includes: Twilio Flex licenses, phone numbers, infrastructure
+                  </div>
+                </div>
               </div>
-              <div className="flex justify-between">
+              <div className="flex justify-between group relative cursor-help">
                 <span className="text-slate-600">Voice Calls ({state.voiceCalls})</span>
                 <span className="font-semibold">${costs.voiceCallCost.toFixed(2)}</span>
+                <div className="absolute left-0 bottom-full mb-2 hidden group-hover:block w-72 p-3 bg-slate-800 text-white text-xs rounded-lg shadow-lg z-10">
+                  <div className="font-semibold mb-1">Voice Call Cost Calculation</div>
+                  <div className="text-slate-300">{state.voiceCalls} calls × $0.0364/call</div>
+                  <div className="text-slate-400 text-xs mt-1">
+                    Blended rate: $0.0041/call + ($0.0129/min × 2.5 min avg)
+                  </div>
+                </div>
               </div>
-              <div className="flex justify-between">
+              <div className="flex justify-between group relative cursor-help">
                 <span className="text-slate-600">Fax Variable ({state.faxCount})</span>
                 <span className="font-semibold">${costs.faxVariableCost.toFixed(2)}</span>
+                <div className="absolute left-0 bottom-full mb-2 hidden group-hover:block w-72 p-3 bg-slate-800 text-white text-xs rounded-lg shadow-lg z-10">
+                  <div className="font-semibold mb-1">Fax Variable Cost</div>
+                  <div className="text-slate-300">{state.faxCount} faxes × $0.0788/fax</div>
+                  <div className="text-slate-400 text-xs mt-1">
+                    Based on 1.75 pages avg @ $0.045/page
+                  </div>
+                </div>
               </div>
-              <div className="flex justify-between">
+              <div className="flex justify-between group relative cursor-help">
                 <span className="text-slate-600">Fax Fixed (Sinch)</span>
                 <span className="font-semibold">${costs.faxFixedCost.toFixed(2)}</span>
+                <div className="absolute left-0 bottom-full mb-2 hidden group-hover:block w-72 p-3 bg-slate-800 text-white text-xs rounded-lg shadow-lg z-10">
+                  <div className="font-semibold mb-1">Fax Fixed Monthly Fee</div>
+                  <div className="text-slate-300">Sinch baseline: $20.00/month</div>
+                  <div className="text-slate-400 text-xs mt-1">
+                    Required for fax infrastructure regardless of volume
+                  </div>
+                </div>
               </div>
-              <div className="flex justify-between">
+              <div className="flex justify-between group relative cursor-help">
                 <span className="text-slate-600">Email ({state.emailCount})</span>
                 <span className="font-semibold">${costs.emailTransactionCost.toFixed(2)}</span>
+                <div className="absolute left-0 bottom-full mb-2 hidden group-hover:block w-72 p-3 bg-slate-800 text-white text-xs rounded-lg shadow-lg z-10">
+                  <div className="font-semibold mb-1">Email Cost</div>
+                  <div className="text-slate-300">{state.emailCount} emails × $0.00</div>
+                  <div className="text-green-400 text-xs mt-1">
+                    FREE - Inbound via Twilio Conversations API
+                  </div>
+                </div>
               </div>
-              <div className="flex justify-between">
+              <div className="flex justify-between group relative cursor-help">
                 <span className="text-slate-600">Web Forms ({state.webFormCount})</span>
                 <span className="font-semibold">${costs.webFormCost.toFixed(2)}</span>
+                <div className="absolute left-0 bottom-full mb-2 hidden group-hover:block w-72 p-3 bg-slate-800 text-white text-xs rounded-lg shadow-lg z-10">
+                  <div className="font-semibold mb-1">Web Form Cost</div>
+                  <div className="text-slate-300">{state.webFormCount} forms × $0.00</div>
+                  <div className="text-green-400 text-xs mt-1">
+                    FREE - Delivered via Twilio Conversations API
+                  </div>
+                </div>
               </div>
 
               <div className="border-t border-slate-200 pt-3 mt-3">
-                <div className="flex justify-between font-bold text-slate-800">
+                <div className="flex justify-between font-bold text-slate-800 group relative cursor-help">
                   <span>Total Wholesale Cost</span>
                   <span>${costs.wholesaleCost.toFixed(2)}</span>
+                  <div className="absolute left-0 bottom-full mb-2 hidden group-hover:block w-72 p-3 bg-slate-800 text-white text-xs rounded-lg shadow-lg z-10">
+                    <div className="font-semibold mb-1">Total Wholesale Cost</div>
+                    <div className="text-slate-300">Platform OpEx + Transaction Costs</div>
+                    <div className="text-slate-400 text-xs mt-1">
+                      ${costs.platformCost.toFixed(2)} + ${costs.transactionTotalCost.toFixed(2)} = ${costs.wholesaleCost.toFixed(2)}
+                    </div>
+                  </div>
                 </div>
-                <div className="flex justify-between text-green-700 font-bold mt-2">
+                <div className="flex justify-between text-green-700 font-bold mt-2 group relative cursor-help">
                   <span>Gross Margin</span>
                   <span>${costs.grossMargin.toFixed(2)}</span>
+                  <div className="absolute left-0 bottom-full mb-2 hidden group-hover:block w-72 p-3 bg-slate-800 text-white text-xs rounded-lg shadow-lg z-10">
+                    <div className="font-semibold mb-1">Gross Margin Calculation</div>
+                    <div className="text-slate-300">Suggested Price - Wholesale Cost</div>
+                    <div className="text-slate-400 text-xs mt-1">
+                      ${costs.suggestedPrice.toFixed(2)} - ${costs.wholesaleCost.toFixed(2)} = ${costs.grossMargin.toFixed(2)}
+                    </div>
+                  </div>
                 </div>
-                <div className="flex justify-between text-green-600 mt-1">
+                <div className="flex justify-between text-green-600 mt-1 group relative cursor-help">
                   <span>Margin %</span>
                   <span>{costs.marginPercentage.toFixed(1)}%</span>
+                  <div className="absolute left-0 bottom-full mb-2 hidden group-hover:block w-72 p-3 bg-slate-800 text-white text-xs rounded-lg shadow-lg z-10">
+                    <div className="font-semibold mb-1">Margin Percentage</div>
+                    <div className="text-slate-300">(Gross Margin ÷ Suggested Price) × 100</div>
+                    <div className="text-slate-400 text-xs mt-1">
+                      (${costs.grossMargin.toFixed(2)} ÷ ${costs.suggestedPrice.toFixed(2)}) × 100 = {costs.marginPercentage.toFixed(1)}%
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -326,7 +456,7 @@ export default function COGSCalculator() {
               <div className="space-y-2 text-xs text-slate-600">
                 <div className="flex justify-between">
                   <span>Platform OpEx</span>
-                  <span>$553.00/month</span>
+                  <span>Configurable (${state.platformOpex.toFixed(2)})</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Voice (Per Call)</span>
