@@ -6,7 +6,7 @@
   "type": "module",
   "packageManager": "pnpm@10.12.4",
   "scripts": {
-    "build": "cross-env NODE_OPTIONS=--no-deprecation next build",
+    "build": "cross-env NODE_OPTIONS=\"--no-deprecation --max_old_space_size=6144\" next build",
     "postbuild": "next-sitemap --config next-sitemap.config.cjs",
     "create-admin": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/create-admin.ts",
     "unlock-user": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/unlock-user.ts",
