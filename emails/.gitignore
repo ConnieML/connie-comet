@@ -1,0 +1,28 @@
+# Production recipient lists - NEVER commit real customer data
+recipients.json
+customers.json
+*-production.json
+*-prod.json
+
+# Environment variables
+.env
+.env.local
+.env.production
+
+# API Keys and secrets
+api-keys.json
+secrets.json
+
+# Logs
+*.log
+logs/
+debug/
+
+# Temporary files
+*.tmp
+*.temp
+.DS_Store
+
+# Test output
+test-results/
+screenshots/

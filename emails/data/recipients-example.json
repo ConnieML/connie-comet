@@ -1,0 +1,17 @@
+[
+  {
+    "to": "director@seniorservices.org",
+    "organizationName": "Valley Senior Services",
+    "contactName": "Maria Rodriguez"
+  },
+  {
+    "to": "john@communityaction.org",
+    "organizationName": "Community Action Partnership",
+    "contactName": "John Smith"
+  },
+  {
+    "to": "admin@veteranshelp.org",
+    "organizationName": "Veterans Support Center",
+    "contactName": "Sarah Johnson"
+  }
+]

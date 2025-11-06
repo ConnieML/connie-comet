@@ -81,4 +81,32 @@ Currently marked with "TEMP: Auth disabled for content setup" comments.
 - Seed route disabled due to TypeScript compatibility issue
 - DataRoom authentication temporarily disabled (Oct 2025)
 
-Last updated: 2025-10-27
+---
+
+## Infrastructure Updates
+
+### Email Service Configuration (Nov 3, 2025)
+- **Resend Email Service**: DNS verification completed for `send.connie.one`
+- **Account**: Created with chris@chrisberno.dev (Gmail)
+- **DNS Records**: DKIM, SPF, MX, DMARC configured via AWS Route53
+- **Status**: ✅ Verified and operational
+- **Documentation**: [Complete DNS Verification Guide](/docs/DNS-RESEND-VERIFICATION-COMPLETE.md)
+- **Available Sending Addresses**: `*@send.connie.one`
+
+### Email Templates & Scripts (Nov 3, 2025)
+- **Location**: `/emails/` directory in project root
+- **Templates**: UAT invitation email (HTML + React versions)
+- **Scripts**: Automated sending scripts using Resend API
+- **Documentation**: [Email Templates Guide](/emails/README.md)
+- **Quick Start**: See `/emails/docs/CONNIE-UAT-EMAIL-SETUP.md`
+
+**Directory Structure:**
+```
+/emails/
+├── templates/          ← Email templates (HTML, React)
+├── scripts/            ← Sending scripts
+├── data/               ← Example recipients
+└── docs/               ← Email documentation
+```
+
+Last updated: 2025-11-03
