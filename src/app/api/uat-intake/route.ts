@@ -92,8 +92,16 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: true })
   } catch (error) {
     console.error('Error submitting intake form:', error)
+    console.error('Error details:', JSON.stringify(error, null, 2))
+    console.error('Private key exists:', !!process.env.GOOGLE_PRIVATE_KEY)
+    console.error('Private key first 50 chars:', process.env.GOOGLE_PRIVATE_KEY?.substring(0, 50))
+    console.error('Client email:', process.env.GOOGLE_CLIENT_EMAIL)
     return NextResponse.json(
-      { error: 'Failed to submit form' },
+      {
+        error: 'Failed to submit form',
+        // Temporarily expose error details for debugging (remove after fixing!)
+        details: error instanceof Error ? error.message : 'Unknown error'
+      },
       { status: 500 }
     )
   }
