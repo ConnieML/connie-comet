@@ -100,7 +100,7 @@ export async function POST(request: Request) {
     try {
       // Send to both admin emails
       await resend.emails.send({
-        from: 'Connie UAT <uat@send.connie.one>',
+        from: 'Connie Team <uat@send.connie.one>',
         to: ['cberno@nevadaseniorservices.org', 'admin@connie.direct'],
         subject: `New UAT Discovery Form Submission - ${formData.orgName}`,
         react: ConnieUATSubmissionNotification({
