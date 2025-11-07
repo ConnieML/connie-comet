@@ -1,5 +1,9 @@
 import { NextResponse } from 'next/server'
 import { google } from 'googleapis'
+import { Resend } from 'resend'
+import ConnieUATSubmissionNotification from '../../../../emails/templates/connie-uat-submission-notification'
+
+const resend = new Resend(process.env.RESEND_API_KEY)
 
 export async function POST(request: Request) {
   try {
@@ -88,6 +92,33 @@ export async function POST(request: Request) {
         values: [rowData]
       }
     })
+
+    // Send email notifications
+    const submissionDate = new Date().toISOString()
+    const spreadsheetUrl = `https://docs.google.com/spreadsheets/d/${spreadsheetId}`
+
+    try {
+      // Send to both admin emails
+      await resend.emails.send({
+        from: 'Connie UAT <uat@send.connie.one>',
+        to: ['cberno@nevadaseniorservices.org', 'admin@connie.direct'],
+        subject: `New UAT Discovery Form Submission - ${formData.orgName}`,
+        react: ConnieUATSubmissionNotification({
+          organizationName: formData.orgName,
+          contactName: formData.contactName,
+          email: formData.email,
+          phone: formData.phone,
+          submissionDate,
+          spreadsheetUrl,
+        }),
+      })
+
+      console.log('Email notification sent successfully')
+    } catch (emailError) {
+      // Log email error but don't fail the request
+      console.error('Failed to send email notification:', emailError)
+      console.error('Email error details:', JSON.stringify(emailError, null, 2))
+    }
 
     return NextResponse.json({ success: true })
   } catch (error) {
