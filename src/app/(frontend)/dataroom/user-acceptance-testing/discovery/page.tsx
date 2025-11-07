@@ -2,7 +2,19 @@
 
 import React, { useState } from 'react'
 import Link from 'next/link'
-import { Phone, MessageSquare, MessagesSquare, FileText, Mail, Printer, Share2, ChevronLeft, ChevronRight, HelpCircle } from 'lucide-react'
+import Image from 'next/image'
+import {
+  Phone,
+  MessageSquare,
+  MessagesSquare,
+  FileText,
+  Mail,
+  Printer,
+  Share2,
+  ChevronLeft,
+  ChevronRight,
+  HelpCircle,
+} from 'lucide-react'
 
 export default function UATDiscoveryPage() {
   const [formData, setFormData] = useState({
@@ -75,7 +87,7 @@ export default function UATDiscoveryPage() {
     // Section 7: Additional
     additionalContext: '',
     howHeard: '',
-    referralDetails: ''
+    referralDetails: '',
   })
 
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -93,7 +105,7 @@ export default function UATDiscoveryPage() {
       const response = await fetch('/api/uat-intake', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(formData),
       })
 
       if (!response.ok) throw new Error('Submission failed')
@@ -101,21 +113,63 @@ export default function UATDiscoveryPage() {
       setSubmitSuccess(true)
       // Reset form
       setFormData({
-        orgName: '', contactName: '', contactTitle: '', email: '', phone: '',
-        orgType: '', orgTypeOther: '', serviceArea: '', clientsServed: '',
-        daysOfOperation: [], operatingHours: '', afterHoursSupport: '', afterHoursDescription: '',
-        staffCount: '', staffRoles: '', hoursPerDay: '', daysPerMonth: '',
-        busiestDays: [], usageNotes: '', channelsToMigrate: [], socialMediaPlatforms: [],
-        inboundCalls: '', outboundCalls: '', avgCallDuration: '', inboundFaxes: '', outboundFaxes: '',
-        avgFaxPagesInbound: '', avgFaxPagesOutbound: '', emailsSent: '',
-        emailsReceived: '', smsUsage: '', smsVolume: '', webFormsUsage: '',
-        formSubmissions: '', hasTechnicalResources: '', technicalResourcesDescription: '',
-        phoneSystem: '', phoneSystemDetails: '', mainBusinessLines: '',
-        businessPhoneProvider: '', faxSystem: '',
-        faxSystemDetails: '', emailSystem: '', emailSystemDetails: '', websiteStatus: '',
-        painPoints: '', idealStart: '', targetDate: '', duration: '',
-        primaryGoals: [], otherGoals: '', budgetProcess: '', approvalTimeline: '',
-        excitedAbout: '', additionalContext: '', howHeard: '', referralDetails: ''
+        orgName: '',
+        contactName: '',
+        contactTitle: '',
+        email: '',
+        phone: '',
+        orgType: '',
+        orgTypeOther: '',
+        serviceArea: '',
+        clientsServed: '',
+        daysOfOperation: [],
+        operatingHours: '',
+        afterHoursSupport: '',
+        afterHoursDescription: '',
+        staffCount: '',
+        staffRoles: '',
+        hoursPerDay: '',
+        daysPerMonth: '',
+        busiestDays: [],
+        usageNotes: '',
+        channelsToMigrate: [],
+        socialMediaPlatforms: [],
+        inboundCalls: '',
+        outboundCalls: '',
+        avgCallDuration: '',
+        inboundFaxes: '',
+        outboundFaxes: '',
+        avgFaxPagesInbound: '',
+        avgFaxPagesOutbound: '',
+        emailsSent: '',
+        emailsReceived: '',
+        smsUsage: '',
+        smsVolume: '',
+        webFormsUsage: '',
+        formSubmissions: '',
+        hasTechnicalResources: '',
+        technicalResourcesDescription: '',
+        phoneSystem: '',
+        phoneSystemDetails: '',
+        mainBusinessLines: '',
+        businessPhoneProvider: '',
+        faxSystem: '',
+        faxSystemDetails: '',
+        emailSystem: '',
+        emailSystemDetails: '',
+        websiteStatus: '',
+        painPoints: '',
+        idealStart: '',
+        targetDate: '',
+        duration: '',
+        primaryGoals: [],
+        otherGoals: '',
+        budgetProcess: '',
+        approvalTimeline: '',
+        excitedAbout: '',
+        additionalContext: '',
+        howHeard: '',
+        referralDetails: '',
       })
     } catch (_error) {
       setSubmitError('Failed to submit form. Please try again.')
@@ -124,20 +178,36 @@ export default function UATDiscoveryPage() {
     }
   }
 
-  const handleCheckboxChange = (field: 'daysOfOperation' | 'busiestDays' | 'primaryGoals' | 'channelsToMigrate' | 'socialMediaPlatforms', value: string) => {
-    setFormData(prev => ({
+  const handleCheckboxChange = (
+    field:
+      | 'daysOfOperation'
+      | 'busiestDays'
+      | 'primaryGoals'
+      | 'channelsToMigrate'
+      | 'socialMediaPlatforms',
+    value: string,
+  ) => {
+    setFormData((prev) => ({
       ...prev,
       [field]: prev[field].includes(value)
         ? prev[field].filter((v: string) => v !== value)
-        : [...prev[field], value]
+        : [...prev[field], value],
     }))
   }
 
   const handleSelectAllChannels = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const allChannels = ['Live Voice Calls', 'Messaging SMS/TXT', 'Webchat', 'Webforms', 'Email', 'Fax', 'Social Media']
-    setFormData(prev => ({
+    const allChannels = [
+      'Live Voice Calls',
+      'Messaging SMS/TXT',
+      'Webchat',
+      'Webforms',
+      'Email',
+      'Fax',
+      'Social Media',
+    ]
+    setFormData((prev) => ({
       ...prev,
-      channelsToMigrate: e.target.checked ? allChannels : []
+      channelsToMigrate: e.target.checked ? allChannels : [],
     }))
   }
 
@@ -147,28 +217,31 @@ export default function UATDiscoveryPage() {
         if (!formData.orgName) return 'Organization Name is required'
         if (!formData.contactName) return 'Primary Contact Name is required'
         if (!formData.email) return 'Email Address is required'
+        if (!formData.phone) return 'Phone Number is required'
         if (!formData.orgType) return 'Organization Type is required'
         break
       case 2:
-        if (formData.daysOfOperation.length === 0) return 'Please select at least one day of operation'
+        if (formData.daysOfOperation.length === 0)
+          return 'Please select at least one day of operation'
         if (!formData.operatingHours) return 'Typical Operating Hours is required'
         break
       case 3:
         if (!formData.staffCount) return 'Staff Count is required'
-        if (!formData.hoursPerDay) return 'Hours per day is required'
-        if (!formData.daysPerMonth) return 'Days per month is required'
+        if (!formData.staffRoles) return 'Staff Roles is required'
         break
       case 4:
-        if (formData.channelsToMigrate.length === 0) return 'Please select at least one communication channel'
-        if (!formData.avgCallDuration) return 'Average Call Duration is required'
+        if (formData.channelsToMigrate.length === 0)
+          return 'Please select at least one communication channel'
+        if (formData.channelsToMigrate.includes('Live Voice Calls') && !formData.avgCallDuration)
+          return 'Average Call Duration is required when Live Voice Calls is selected'
         break
       case 5:
-        if (!formData.hasTechnicalResources) return 'Please indicate if you have technical resources'
+        if (!formData.hasTechnicalResources)
+          return 'Please indicate if you have technical resources'
         if (!formData.painPoints) return 'Pain Points description is required'
         break
       case 6:
-        if (!formData.idealStart) return 'Ideal start date is required'
-        if (formData.primaryGoals.length === 0) return 'Please select at least one primary goal'
+        // No required fields in Step 6
         break
     }
     return ''
@@ -181,14 +254,14 @@ export default function UATDiscoveryPage() {
       return
     }
     setStepError('')
-    setCurrentStep(prev => Math.min(prev + 1, totalSteps))
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    setCurrentStep((prev) => Math.min(prev + 1, totalSteps))
+    setTimeout(() => window.scrollTo(0, 0), 0)
   }
 
   const goToPreviousStep = () => {
     setStepError('')
-    setCurrentStep(prev => Math.max(prev - 1, 0))
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    setCurrentStep((prev) => Math.max(prev - 1, 0))
+    setTimeout(() => window.scrollTo(0, 0), 0)
   }
 
   if (submitSuccess) {
@@ -212,14 +285,38 @@ export default function UATDiscoveryPage() {
                 </ul>
               </div>
               <p className="text-sm text-slate-600 mb-6">
-                Questions? Contact Chris Berno at chris.berno@nevsenior.org
+                Questions? Contact Chris Berno at{' '}
+                <a
+                  href="mailto:cberno@nevadaseniorservices.org"
+                  className="text-indigo-600 hover:text-indigo-800 underline"
+                >
+                  cberno@nevadaseniorservices.org
+                </a>
               </p>
-              <Link
-                href="/dataroom/user-acceptance-testing"
-                className="inline-block px-6 py-3 bg-slate-800 text-white rounded-lg hover:bg-slate-700 transition-colors"
-              >
-                Back to UAT Hub
-              </Link>
+              <div className="flex items-center justify-center gap-4">
+                <Link
+                  href="/dataroom/user-acceptance-testing"
+                  className="inline-block px-6 py-3 bg-slate-800 text-white rounded-lg hover:bg-slate-700 transition-colors"
+                >
+                  Back to UAT Hub
+                </Link>
+                <button
+                  onClick={() => window.close()}
+                  className="inline-block px-6 py-3 bg-slate-200 text-slate-800 rounded-lg hover:bg-slate-300 transition-colors"
+                >
+                  Close Window
+                </button>
+              </div>
+
+              {/* Connie Logo */}
+              <div className="mt-8 flex justify-center opacity-40 hover:opacity-60 transition-opacity">
+                <Image
+                  src="/connie-logo-black-strong.svg"
+                  alt="Connie"
+                  width={120}
+                  height={32}
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -229,29 +326,45 @@ export default function UATDiscoveryPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-100 to-slate-400 text-slate-800">
-      <div className="container mx-auto px-6 py-16">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-5xl font-light text-slate-900 mb-6">
-            UAT Partner Discovery
-          </h1>
-          <p className="text-xl text-slate-700 max-w-2xl mx-auto mb-4">
-            Help us understand your communication needs for UAT participation
-          </p>
-          <div className="flex items-center justify-center gap-4 mb-4">
-            <a
-              href="https://connie.plus/support"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm border border-slate-300 rounded-full hover:bg-white transition-colors text-sm font-medium text-slate-700"
-            >
-              <HelpCircle className="w-4 h-4" />
-              Support
-            </a>
-          </div>
-        </div>
-
+      <div className="container mx-auto px-6 py-8">
         <div className="max-w-4xl mx-auto relative">
+          {/* Top Navigation - Only show on Step 0 and Success */}
+          {(currentStep === 0 || submitSuccess) && (
+            <div className="flex items-center justify-between mb-6">
+              <Link
+                href="/dataroom/user-acceptance-testing"
+                className="inline-flex items-center gap-1 text-sm text-slate-600 hover:text-slate-900 transition-colors"
+              >
+                <ChevronLeft className="w-4 h-4" />
+                Back to UAT Hub
+              </Link>
+              <a
+                href="https://connie.plus/support"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm border border-slate-300 rounded-full hover:bg-white transition-colors text-sm font-medium text-slate-700"
+              >
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                Get Support
+              </a>
+            </div>
+          )}
+
+          {/* Support Button Only - Show during form steps */}
+          {currentStep > 0 && !submitSuccess && (
+            <div className="flex justify-end mb-4">
+              <a
+                href="https://connie.plus/support"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm border border-slate-300 rounded-full hover:bg-white transition-colors text-sm font-medium text-slate-700"
+              >
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                Get Support
+              </a>
+            </div>
+          )}
+
           {/* Step Error Display */}
           {stepError && (
             <div className="mb-6 p-6 bg-red-50 border-2 border-red-300 rounded-xl text-red-800 text-lg font-medium">
@@ -262,15 +375,40 @@ export default function UATDiscoveryPage() {
           {/* Scrollable Content Area */}
           <div className="bg-white/80 backdrop-blur-md border border-slate-300 rounded-t-2xl shadow-2xl shadow-slate-900/20 ring-1 ring-white/50 max-h-[600px] overflow-y-auto">
             <div className="p-12">
+              {/* Logo - Only on Step 0 and Success */}
+              {(currentStep === 0 || submitSuccess) && (
+                <div className="flex justify-center mb-10">
+                  <Image
+                    src="/connie-logo-black-strong.svg"
+                    alt="Connie"
+                    width={250}
+                    height={66}
+                    priority
+                  />
+                </div>
+              )}
 
               {/* Step 0: Welcome */}
               {currentStep === 0 && (
                 <div className="space-y-8">
                   <div className="text-center">
-                    <h2 className="text-4xl font-light text-slate-900 mb-6">Welcome to UAT Discovery</h2>
-                    <p className="text-xl text-slate-700 mb-8 leading-relaxed">
-                      This wizard will help us understand your organization's communication needs and determine if you're a good fit for our UAT Cohort program.
+                    <h2 className="text-4xl font-light text-slate-900 mb-6">
+                      Cohort Team Intake Form
+                    </h2>
+                    <p className="text-xl text-slate-700 mb-6 leading-normal">
+                      The following intake wizard will ask you a series of business operations
+                      questions. The information provided will be used to define your organizations
+                      requirements, estimate costs and and set up your new Connie environment for
+                      quick and easy onboarding process and adoption by your staff. Click "Next" to
+                      get
                     </p>
+                    <div className="bg-slate-100 border-2 border-slate-300 rounded-lg p-4 mb-8 max-w-2xl mx-auto">
+                      <p className="text-base text-slate-700 font-medium">
+                        <strong>Please Note:</strong> Your responses are not saved until you
+                        complete and submit the entire form. We recommend setting aside 10-15
+                        minutes to complete it in one session.
+                      </p>
+                    </div>
                   </div>
 
                   <div className="bg-indigo-50 border-2 border-indigo-300 rounded-xl p-8 space-y-6">
@@ -278,37 +416,41 @@ export default function UATDiscoveryPage() {
                     <ul className="space-y-4 text-lg text-slate-700">
                       <li className="flex items-start gap-4">
                         <span className="text-indigo-600 text-2xl flex-shrink-0">1</span>
-                        <span><strong className="text-slate-900">7 sections</strong> covering organization info, operations, staffing, volumes, tech, goals, and additional context</span>
+                        <span>
+                          <strong className="text-slate-900">7 sections</strong> covering
+                          organization info, operations, staffing, volumes, tech, goals, and
+                          additional context
+                        </span>
                       </li>
                       <li className="flex items-start gap-4">
                         <span className="text-indigo-600 text-2xl flex-shrink-0">2</span>
-                        <span><strong className="text-slate-900">10-15 minutes</strong> to complete - you can go back and forth between steps</span>
+                        <span>
+                          <strong className="text-slate-900">10-15 minutes</strong> to complete -
+                          you can go back and forth between steps
+                        </span>
                       </li>
                       <li className="flex items-start gap-4">
                         <span className="text-indigo-600 text-2xl flex-shrink-0">3</span>
-                        <span><strong className="text-slate-900">Best estimates are fine</strong> - we're looking for general understanding, not exact numbers</span>
+                        <span>
+                          <strong className="text-slate-900">Best estimates are fine</strong> -
+                          we're looking for general understanding, not exact numbers
+                        </span>
                       </li>
                       <li className="flex items-start gap-4">
                         <span className="text-indigo-600 text-2xl flex-shrink-0">4</span>
-                        <span><strong className="text-slate-900">Required fields marked with *</strong> - you must complete these to move forward</span>
+                        <span>
+                          <strong className="text-slate-900">
+                            Required fields marked with <span className="text-red-600">*</span>
+                          </strong>{' '}
+                          - you must complete these to move forward
+                        </span>
                       </li>
                     </ul>
                   </div>
 
-                  <div className="bg-green-50 border-2 border-green-300 rounded-xl p-8 space-y-4">
-                    <h3 className="text-2xl font-semibold text-slate-900 mb-4">Need Support?</h3>
-                    <p className="text-lg text-slate-700 leading-relaxed">
-                      If you have questions at any point during this discovery process, you can reach out to the Connie team:
-                    </p>
-                    <div className="space-y-3 text-lg">
-                      <p><strong className="text-slate-900">Email:</strong> <a href="mailto:chris.berno@nevsenior.org" className="text-indigo-600 hover:text-indigo-800 underline">chris.berno@nevsenior.org</a></p>
-                      <p><strong className="text-slate-900">Support Portal:</strong> <a href="https://connie.plus/support" target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:text-indigo-800 underline">connie.plus/support</a></p>
-                    </div>
-                  </div>
-
                   <div className="text-center pt-4">
                     <p className="text-lg text-slate-600 mb-6">
-                      All information you provide is confidential and will only be used to evaluate your fit for the UAT Cohort program.
+                      All information provided is confidential and used only for program evaluation.
                     </p>
                   </div>
                 </div>
@@ -318,8 +460,12 @@ export default function UATDiscoveryPage() {
               {currentStep === 1 && (
                 <div className="space-y-8">
                   <div>
-                    <h2 className="text-3xl font-semibold text-slate-900 mb-3">Organization Information</h2>
-                    <p className="text-lg text-slate-600">Tell us about your organization and who we'll be working with.</p>
+                    <h2 className="text-3xl font-semibold text-slate-900 mb-3">
+                      🏢 Organization Information
+                    </h2>
+                    <p className="text-lg text-slate-600">
+                      Tell us about your organization and who we'll be working with.
+                    </p>
                   </div>
 
                   <div className="space-y-8">
@@ -331,63 +477,9 @@ export default function UATDiscoveryPage() {
                         type="text"
                         required
                         value={formData.orgName}
-                        onChange={(e) => setFormData({...formData, orgName: e.target.value})}
+                        onChange={(e) => setFormData({ ...formData, orgName: e.target.value })}
                         className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
                       />
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div>
-                        <label className="block text-base font-semibold text-slate-900 mb-3">
-                          Primary Contact Name <span className="text-red-600 text-xl">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          required
-                          value={formData.contactName}
-                          onChange={(e) => setFormData({...formData, contactName: e.target.value})}
-                          className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-base font-semibold text-slate-900 mb-3">
-                          Contact Title/Role
-                        </label>
-                        <input
-                          type="text"
-                          value={formData.contactTitle}
-                          onChange={(e) => setFormData({...formData, contactTitle: e.target.value})}
-                          className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div>
-                        <label className="block text-base font-semibold text-slate-900 mb-3">
-                          Email Address <span className="text-red-600 text-xl">*</span>
-                        </label>
-                        <input
-                          type="email"
-                          required
-                          value={formData.email}
-                          onChange={(e) => setFormData({...formData, email: e.target.value})}
-                          className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-base font-semibold text-slate-900 mb-3">
-                          Phone Number
-                        </label>
-                        <input
-                          type="tel"
-                          value={formData.phone}
-                          onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                          className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
-                        />
-                      </div>
                     </div>
 
                     <div>
@@ -397,11 +489,13 @@ export default function UATDiscoveryPage() {
                       <select
                         required
                         value={formData.orgType}
-                        onChange={(e) => setFormData({...formData, orgType: e.target.value})}
+                        onChange={(e) => setFormData({ ...formData, orgType: e.target.value })}
                         className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
                       >
                         <option value="">Select type...</option>
-                        <option value="Senior Services / Area Agency on Aging">Senior Services / Area Agency on Aging</option>
+                        <option value="Senior Services / Area Agency on Aging">
+                          Senior Services / Area Agency on Aging
+                        </option>
                         <option value="Community Action Agency">Community Action Agency</option>
                         <option value="Health & Human Services">Health & Human Services</option>
                         <option value="Housing Services">Housing Services</option>
@@ -419,11 +513,72 @@ export default function UATDiscoveryPage() {
                         <input
                           type="text"
                           value={formData.orgTypeOther}
-                          onChange={(e) => setFormData({...formData, orgTypeOther: e.target.value})}
+                          onChange={(e) =>
+                            setFormData({ ...formData, orgTypeOther: e.target.value })
+                          }
                           className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
                         />
                       </div>
                     )}
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div>
+                        <label className="block text-base font-semibold text-slate-900 mb-3">
+                          Primary Contact Name <span className="text-red-600 text-xl">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={formData.contactName}
+                          onChange={(e) =>
+                            setFormData({ ...formData, contactName: e.target.value })
+                          }
+                          className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-base font-semibold text-slate-900 mb-3">
+                          Contact Title/Role
+                        </label>
+                        <input
+                          type="text"
+                          value={formData.contactTitle}
+                          onChange={(e) =>
+                            setFormData({ ...formData, contactTitle: e.target.value })
+                          }
+                          className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div>
+                        <label className="block text-base font-semibold text-slate-900 mb-3">
+                          Email Address <span className="text-red-600 text-xl">*</span>
+                        </label>
+                        <input
+                          type="email"
+                          required
+                          value={formData.email}
+                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                          className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-base font-semibold text-slate-900 mb-3">
+                          Phone Number <span className="text-red-600 text-xl">*</span>
+                        </label>
+                        <input
+                          type="tel"
+                          required
+                          value={formData.phone}
+                          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                          className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                        />
+                      </div>
+                    </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
@@ -434,7 +589,9 @@ export default function UATDiscoveryPage() {
                           type="text"
                           placeholder="e.g., Clark County, Nevada"
                           value={formData.serviceArea}
-                          onChange={(e) => setFormData({...formData, serviceArea: e.target.value})}
+                          onChange={(e) =>
+                            setFormData({ ...formData, serviceArea: e.target.value })
+                          }
                           className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
                         />
                       </div>
@@ -447,7 +604,9 @@ export default function UATDiscoveryPage() {
                           type="text"
                           placeholder="Best estimate is fine"
                           value={formData.clientsServed}
-                          onChange={(e) => setFormData({...formData, clientsServed: e.target.value})}
+                          onChange={(e) =>
+                            setFormData({ ...formData, clientsServed: e.target.value })
+                          }
                           className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
                         />
                       </div>
@@ -460,8 +619,12 @@ export default function UATDiscoveryPage() {
               {currentStep === 2 && (
                 <div className="space-y-8">
                   <div>
-                    <h2 className="text-3xl font-semibold text-slate-900 mb-3">Hours of Operation</h2>
-                    <p className="text-lg text-slate-600">Tell us when your organization operates and provides services.</p>
+                    <h2 className="text-3xl font-semibold text-slate-900 mb-3">
+                      ⏰ Hours of Operation
+                    </h2>
+                    <p className="text-lg text-slate-600">
+                      Tell us when your organization operates and provides services.
+                    </p>
                   </div>
 
                   <div className="space-y-8">
@@ -470,7 +633,15 @@ export default function UATDiscoveryPage() {
                         Days of Operation <span className="text-red-600 text-xl">*</span>
                       </label>
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                        {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map(day => (
+                        {[
+                          'Monday',
+                          'Tuesday',
+                          'Wednesday',
+                          'Thursday',
+                          'Friday',
+                          'Saturday',
+                          'Sunday',
+                        ].map((day) => (
                           <label key={day} className="flex items-center space-x-3 cursor-pointer">
                             <input
                               type="checkbox"
@@ -493,7 +664,9 @@ export default function UATDiscoveryPage() {
                         required
                         placeholder="e.g., 8:00 AM - 5:00 PM Monday-Friday"
                         value={formData.operatingHours}
-                        onChange={(e) => setFormData({...formData, operatingHours: e.target.value})}
+                        onChange={(e) =>
+                          setFormData({ ...formData, operatingHours: e.target.value })
+                        }
                         className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
                       />
                     </div>
@@ -504,12 +677,18 @@ export default function UATDiscoveryPage() {
                       </label>
                       <select
                         value={formData.afterHoursSupport}
-                        onChange={(e) => setFormData({...formData, afterHoursSupport: e.target.value})}
+                        onChange={(e) =>
+                          setFormData({ ...formData, afterHoursSupport: e.target.value })
+                        }
                         className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
                       >
                         <option value="">Select...</option>
-                        <option value="No, standard business hours only">No, standard business hours only</option>
-                        <option value="Yes, limited after-hours coverage">Yes, limited after-hours coverage</option>
+                        <option value="No, standard business hours only">
+                          No, standard business hours only
+                        </option>
+                        <option value="Yes, limited after-hours coverage">
+                          Yes, limited after-hours coverage
+                        </option>
                         <option value="Yes, 24/7 operations">Yes, 24/7 operations</option>
                       </select>
                     </div>
@@ -521,7 +700,9 @@ export default function UATDiscoveryPage() {
                         </label>
                         <textarea
                           value={formData.afterHoursDescription}
-                          onChange={(e) => setFormData({...formData, afterHoursDescription: e.target.value})}
+                          onChange={(e) =>
+                            setFormData({ ...formData, afterHoursDescription: e.target.value })
+                          }
                           rows={3}
                           className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
                         />
@@ -535,33 +716,41 @@ export default function UATDiscoveryPage() {
               {currentStep === 3 && (
                 <div className="space-y-8">
                   <div>
-                    <h2 className="text-3xl font-semibold text-slate-900 mb-3">Staffing & Usage Patterns</h2>
-                    <p className="text-lg text-slate-600">Help us understand who will use Connie and how often.</p>
+                    <h2 className="text-3xl font-semibold text-slate-900 mb-3">
+                      👥 Staffing & Usage Patterns
+                    </h2>
+                    <p className="text-lg text-slate-600">
+                      Help us understand who will use Connie and how often.
+                    </p>
                   </div>
 
                   <div className="space-y-8">
                     <div>
                       <label className="block text-base font-semibold text-slate-900 mb-3">
-                        How many staff members will actively use Connie? <span className="text-red-600 text-xl">*</span>
+                        How many staff members will actively use Connie?{' '}
+                        <span className="text-red-600 text-xl">*</span>
                       </label>
                       <input
                         type="number"
                         required
                         value={formData.staffCount}
-                        onChange={(e) => setFormData({...formData, staffCount: e.target.value})}
+                        onChange={(e) => setFormData({ ...formData, staffCount: e.target.value })}
                         className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
                       />
-                      <p className="text-base text-slate-600 mt-2">Include agents, case managers, supervisors, and administrators</p>
+                      <p className="text-base text-slate-600 mt-2">
+                        Include agents, case managers, supervisors, and administrators
+                      </p>
                     </div>
 
                     <div>
                       <label className="block text-base font-semibold text-slate-900 mb-3">
-                        Please describe the roles of staff who will use Connie
+                        Please describe the roles of staff who will use Connie <span className="text-red-600 text-xl">*</span>
                       </label>
                       <textarea
+                        required
                         placeholder="e.g., '2 front-line intake specialists, 1 case manager, 1 supervisor'"
                         value={formData.staffRoles}
-                        onChange={(e) => setFormData({...formData, staffRoles: e.target.value})}
+                        onChange={(e) => setFormData({ ...formData, staffRoles: e.target.value })}
                         rows={3}
                         className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
                       />
@@ -569,43 +758,19 @@ export default function UATDiscoveryPage() {
 
                     <div>
                       <label className="block text-base font-semibold text-slate-900 mb-3">
-                        Average hours per day each staff member will use the platform <span className="text-red-600 text-xl">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        placeholder="e.g., '5-6 hours' or 'Full-time: 7 hours, Part-time: 3 hours'"
-                        value={formData.hoursPerDay}
-                        onChange={(e) => setFormData({...formData, hoursPerDay: e.target.value})}
-                        className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
-                      />
-                      <p className="text-base text-slate-600 mt-2">Time actively logged in (not breaks/meetings)</p>
-                    </div>
-
-                    <div>
-                      <label className="block text-base font-semibold text-slate-900 mb-3">
-                        How many days per month do you typically operate? <span className="text-red-600 text-xl">*</span>
-                      </label>
-                      <select
-                        required
-                        value={formData.daysPerMonth}
-                        onChange={(e) => setFormData({...formData, daysPerMonth: e.target.value})}
-                        className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
-                      >
-                        <option value="">Select...</option>
-                        <option value="15-17 days">15-17 days (part-time schedule)</option>
-                        <option value="18-20 days">18-20 days (standard M-F minus holidays)</option>
-                        <option value="21-23 days">21-23 days (M-F plus some weekends)</option>
-                        <option value="24+ days">24+ days (extensive weekend/holiday operations)</option>
-                      </select>
-                    </div>
-
-                    <div>
-                      <label className="block text-base font-semibold text-slate-900 mb-3">
                         Which days tend to be your busiest?
                       </label>
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                        {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Consistent across all days'].map(day => (
+                        {[
+                          'Monday',
+                          'Tuesday',
+                          'Wednesday',
+                          'Thursday',
+                          'Friday',
+                          'Saturday',
+                          'Sunday',
+                          'Consistent across all days',
+                        ].map((day) => (
                           <label key={day} className="flex items-center space-x-3 cursor-pointer">
                             <input
                               type="checkbox"
@@ -613,7 +778,9 @@ export default function UATDiscoveryPage() {
                               onChange={() => handleCheckboxChange('busiestDays', day)}
                               className="rounded border-2 border-slate-300 text-indigo-600 focus:ring-4 focus:ring-indigo-500 w-6 h-6"
                             />
-                            <span className="text-lg text-slate-900">{day === 'Consistent across all days' ? 'Consistent' : day}</span>
+                            <span className="text-lg text-slate-900">
+                              {day === 'Consistent across all days' ? 'Consistent' : day}
+                            </span>
                           </label>
                         ))}
                       </div>
@@ -626,7 +793,7 @@ export default function UATDiscoveryPage() {
                       <textarea
                         placeholder="e.g., 'Busiest on Mondays after weekend, slower on Fridays'"
                         value={formData.usageNotes}
-                        onChange={(e) => setFormData({...formData, usageNotes: e.target.value})}
+                        onChange={(e) => setFormData({ ...formData, usageNotes: e.target.value })}
                         rows={2}
                         className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
                       />
@@ -639,15 +806,20 @@ export default function UATDiscoveryPage() {
               {currentStep === 4 && (
                 <div className="space-y-8">
                   <div>
-                    <h2 className="text-3xl font-semibold text-slate-900 mb-3">Current Communication Volumes</h2>
-                    <p className="text-lg text-slate-600">Help us understand your current communication channels and volumes.</p>
+                    <h2 className="text-3xl font-semibold text-slate-900 mb-3">
+                      📞 Current Communication Volumes
+                    </h2>
+                    <p className="text-lg text-slate-600">
+                      Help us understand your current communication channels and volumes.
+                    </p>
                   </div>
 
                   <div className="space-y-8">
                     {/* Channels to Migrate */}
                     <div>
                       <label className="block text-base font-semibold text-slate-900 mb-4">
-                        Which communication channels are you interested in migrating to the cloud? <span className="text-red-600 text-xl">*</span>
+                        Which communication channels are you interested in migrating to the cloud?{' '}
+                        <span className="text-red-600 text-xl">*</span>
                       </label>
 
                       <div className="space-y-3">
@@ -659,7 +831,9 @@ export default function UATDiscoveryPage() {
                             onChange={handleSelectAllChannels}
                             className="rounded border-2 border-slate-300 text-indigo-600 focus:ring-4 focus:ring-indigo-500 w-6 h-6"
                           />
-                          <span className="text-lg font-semibold text-indigo-900">Select All Channels</span>
+                          <span className="text-lg font-semibold text-indigo-900">
+                            Select All Channels
+                          </span>
                         </label>
 
                         {/* Individual Channel Options with Icons */}
@@ -668,22 +842,30 @@ export default function UATDiscoveryPage() {
                             <input
                               type="checkbox"
                               checked={formData.channelsToMigrate.includes('Live Voice Calls')}
-                              onChange={() => handleCheckboxChange('channelsToMigrate', 'Live Voice Calls')}
+                              onChange={() =>
+                                handleCheckboxChange('channelsToMigrate', 'Live Voice Calls')
+                              }
                               className="rounded border-2 border-slate-300 text-indigo-600 focus:ring-4 focus:ring-indigo-500 w-6 h-6"
                             />
                             <Phone className="w-6 h-6 text-indigo-600" />
-                            <span className="text-lg text-slate-900 font-medium">Live Voice Calls</span>
+                            <span className="text-lg text-slate-900 font-medium">
+                              Live Voice Calls
+                            </span>
                           </label>
 
                           <label className="flex items-center space-x-3 p-4 bg-white border-2 border-slate-300 rounded-xl hover:bg-slate-50 transition-colors cursor-pointer">
                             <input
                               type="checkbox"
                               checked={formData.channelsToMigrate.includes('Messaging SMS/TXT')}
-                              onChange={() => handleCheckboxChange('channelsToMigrate', 'Messaging SMS/TXT')}
+                              onChange={() =>
+                                handleCheckboxChange('channelsToMigrate', 'Messaging SMS/TXT')
+                              }
                               className="rounded border-2 border-slate-300 text-indigo-600 focus:ring-4 focus:ring-indigo-500 w-6 h-6"
                             />
                             <MessageSquare className="w-6 h-6 text-green-600" />
-                            <span className="text-lg text-slate-900 font-medium">Messaging SMS/TXT</span>
+                            <span className="text-lg text-slate-900 font-medium">
+                              Messaging SMS/TXT
+                            </span>
                           </label>
 
                           <label className="flex items-center space-x-3 p-4 bg-white border-2 border-slate-300 rounded-xl hover:bg-slate-50 transition-colors cursor-pointer">
@@ -734,7 +916,9 @@ export default function UATDiscoveryPage() {
                             <input
                               type="checkbox"
                               checked={formData.channelsToMigrate.includes('Social Media')}
-                              onChange={() => handleCheckboxChange('channelsToMigrate', 'Social Media')}
+                              onChange={() =>
+                                handleCheckboxChange('channelsToMigrate', 'Social Media')
+                              }
                               className="rounded border-2 border-slate-300 text-indigo-600 focus:ring-4 focus:ring-indigo-500 w-6 h-6"
                             />
                             <Share2 className="w-6 h-6 text-pink-600" />
@@ -749,12 +933,26 @@ export default function UATDiscoveryPage() {
                               Which social media platforms would you like to handle using Connie?
                             </label>
                             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                              {['Facebook', 'Instagram', 'Twitter/X', 'LinkedIn', 'WhatsApp', 'TikTok', 'YouTube', 'Other'].map(platform => (
-                                <label key={platform} className="flex items-center space-x-3 cursor-pointer">
+                              {[
+                                'Facebook',
+                                'Instagram',
+                                'Twitter/X',
+                                'LinkedIn',
+                                'WhatsApp',
+                                'TikTok',
+                                'YouTube',
+                                'Other',
+                              ].map((platform) => (
+                                <label
+                                  key={platform}
+                                  className="flex items-center space-x-3 cursor-pointer"
+                                >
                                   <input
                                     type="checkbox"
                                     checked={formData.socialMediaPlatforms.includes(platform)}
-                                    onChange={() => handleCheckboxChange('socialMediaPlatforms', platform)}
+                                    onChange={() =>
+                                      handleCheckboxChange('socialMediaPlatforms', platform)
+                                    }
                                     className="rounded border-2 border-slate-300 text-pink-600 focus:ring-4 focus:ring-pink-500 w-6 h-6"
                                   />
                                   <span className="text-lg text-slate-900">{platform}</span>
@@ -766,199 +964,256 @@ export default function UATDiscoveryPage() {
                       </div>
                     </div>
 
-                    <p className="text-base text-slate-600">Please provide best estimates - exact numbers aren&apos;t required</p>
+                    <p className="text-base text-slate-600">
+                      Please provide best estimates - exact numbers aren&apos;t required
+                    </p>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div>
-                        <label className="block text-base font-semibold text-slate-900 mb-3">
-                          Monthly Inbound Phone Calls
-                        </label>
-                        <input
-                          type="number"
-                          placeholder="Calls you receive"
-                          value={formData.inboundCalls}
-                          onChange={(e) => setFormData({...formData, inboundCalls: e.target.value})}
-                          className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
-                        />
-                      </div>
+                    {/* Live Voice Calls - Conditional */}
+                    {formData.channelsToMigrate.includes('Live Voice Calls') && (
+                      <>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          <div>
+                            <label className="block text-base font-semibold text-slate-900 mb-3">
+                              Monthly Inbound Phone Calls
+                            </label>
+                            <input
+                              type="number"
+                              placeholder="Calls you receive"
+                              value={formData.inboundCalls}
+                              onChange={(e) =>
+                                setFormData({ ...formData, inboundCalls: e.target.value })
+                              }
+                              className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                            />
+                          </div>
 
-                      <div>
-                        <label className="block text-base font-semibold text-slate-900 mb-3">
-                          Monthly Outbound Phone Calls
-                        </label>
-                        <input
-                          type="number"
-                          placeholder="Calls you make"
-                          value={formData.outboundCalls}
-                          onChange={(e) => setFormData({...formData, outboundCalls: e.target.value})}
-                          className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
-                        />
-                      </div>
-                    </div>
+                          <div>
+                            <label className="block text-base font-semibold text-slate-900 mb-3">
+                              Monthly Outbound Phone Calls
+                            </label>
+                            <input
+                              type="number"
+                              placeholder="Calls you make"
+                              value={formData.outboundCalls}
+                              onChange={(e) =>
+                                setFormData({ ...formData, outboundCalls: e.target.value })
+                              }
+                              className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                            />
+                          </div>
+                        </div>
 
-                    <div>
-                      <label className="block text-base font-semibold text-slate-900 mb-3">
-                        Average Call Duration <span className="text-red-600 text-xl">*</span>
-                      </label>
-                      <select
-                        required
-                        value={formData.avgCallDuration}
-                        onChange={(e) => setFormData({...formData, avgCallDuration: e.target.value})}
-                        className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
-                      >
-                        <option value="">Select...</option>
-                        <option value="Under 2 minutes">Under 2 minutes</option>
-                        <option value="2-5 minutes">2-5 minutes</option>
-                        <option value="5-10 minutes">5-10 minutes</option>
-                        <option value="10-15 minutes">10-15 minutes</option>
-                        <option value="15+ minutes">15+ minutes</option>
-                      </select>
-                    </div>
+                        <div>
+                          <label className="block text-base font-semibold text-slate-900 mb-3">
+                            Average Call Duration <span className="text-red-600 text-xl">*</span>
+                          </label>
+                          <select
+                            required
+                            value={formData.avgCallDuration}
+                            onChange={(e) =>
+                              setFormData({ ...formData, avgCallDuration: e.target.value })
+                            }
+                            className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                          >
+                            <option value="">Select...</option>
+                            <option value="Under 2 minutes">Under 2 minutes</option>
+                            <option value="2-5 minutes">2-5 minutes</option>
+                            <option value="5-10 minutes">5-10 minutes</option>
+                            <option value="10-15 minutes">10-15 minutes</option>
+                            <option value="15+ minutes">15+ minutes</option>
+                          </select>
+                        </div>
+                      </>
+                    )}
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div>
-                        <label className="block text-base font-semibold text-slate-900 mb-3">
-                          Monthly Inbound Faxes
-                        </label>
-                        <input
-                          type="number"
-                          placeholder="Enter 0 if you don't use fax"
-                          value={formData.inboundFaxes}
-                          onChange={(e) => setFormData({...formData, inboundFaxes: e.target.value})}
-                          className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
-                        />
-                      </div>
+                    {/* Fax - Conditional */}
+                    {formData.channelsToMigrate.includes('Fax') && (
+                      <>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          <div>
+                            <label className="block text-base font-semibold text-slate-900 mb-3">
+                              Monthly Inbound Faxes
+                            </label>
+                            <input
+                              type="number"
+                              placeholder="Enter 0 if you don't use fax"
+                              value={formData.inboundFaxes}
+                              onChange={(e) =>
+                                setFormData({ ...formData, inboundFaxes: e.target.value })
+                              }
+                              className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                            />
+                          </div>
 
-                      <div>
-                        <label className="block text-base font-semibold text-slate-900 mb-3">
-                          Monthly Outbound Faxes
-                        </label>
-                        <input
-                          type="number"
-                          placeholder="Enter 0 if you don't use fax"
-                          value={formData.outboundFaxes}
-                          onChange={(e) => setFormData({...formData, outboundFaxes: e.target.value})}
-                          className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
-                        />
-                      </div>
-                    </div>
+                          <div>
+                            <label className="block text-base font-semibold text-slate-900 mb-3">
+                              Monthly Outbound Faxes
+                            </label>
+                            <input
+                              type="number"
+                              placeholder="Enter 0 if you don't use fax"
+                              value={formData.outboundFaxes}
+                              onChange={(e) =>
+                                setFormData({ ...formData, outboundFaxes: e.target.value })
+                              }
+                              className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                            />
+                          </div>
+                        </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div>
-                        <label className="block text-base font-semibold text-slate-900 mb-3">
-                          Average Pages per Inbound Fax
-                        </label>
-                        <input
-                          type="number"
-                          placeholder="e.g., 3"
-                          value={formData.avgFaxPagesInbound}
-                          onChange={(e) => setFormData({...formData, avgFaxPagesInbound: e.target.value})}
-                          className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
-                        />
-                      </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          <div>
+                            <label className="block text-base font-semibold text-slate-900 mb-3">
+                              Average Pages per Inbound Fax
+                            </label>
+                            <input
+                              type="number"
+                              placeholder="e.g., 3"
+                              value={formData.avgFaxPagesInbound}
+                              onChange={(e) =>
+                                setFormData({ ...formData, avgFaxPagesInbound: e.target.value })
+                              }
+                              className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                            />
+                          </div>
 
-                      <div>
-                        <label className="block text-base font-semibold text-slate-900 mb-3">
-                          Average Pages per Outbound Fax
-                        </label>
-                        <input
-                          type="number"
-                          placeholder="e.g., 5"
-                          value={formData.avgFaxPagesOutbound}
-                          onChange={(e) => setFormData({...formData, avgFaxPagesOutbound: e.target.value})}
-                          className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
-                        />
-                      </div>
-                    </div>
+                          <div>
+                            <label className="block text-base font-semibold text-slate-900 mb-3">
+                              Average Pages per Outbound Fax
+                            </label>
+                            <input
+                              type="number"
+                              placeholder="e.g., 5"
+                              value={formData.avgFaxPagesOutbound}
+                              onChange={(e) =>
+                                setFormData({ ...formData, avgFaxPagesOutbound: e.target.value })
+                              }
+                              className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                            />
+                          </div>
+                        </div>
+                      </>
+                    )}
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div>
-                        <label className="block text-base font-semibold text-slate-900 mb-3">
-                          Monthly Emails Sent
-                        </label>
-                        <input
-                          type="number"
-                          placeholder="Bulk and individual combined"
-                          value={formData.emailsSent}
-                          onChange={(e) => setFormData({...formData, emailsSent: e.target.value})}
-                          className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
-                        />
-                      </div>
+                    {/* Email - Conditional */}
+                    {formData.channelsToMigrate.includes('Email') && (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                          <label className="block text-base font-semibold text-slate-900 mb-3">
+                            Monthly Emails Sent
+                          </label>
+                          <input
+                            type="number"
+                            placeholder="Bulk and individual combined"
+                            value={formData.emailsSent}
+                            onChange={(e) => setFormData({ ...formData, emailsSent: e.target.value })}
+                            className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                          />
+                        </div>
 
-                      <div>
-                        <label className="block text-base font-semibold text-slate-900 mb-3">
-                          Monthly Emails Received
-                        </label>
-                        <input
-                          type="number"
-                          placeholder="From clients"
-                          value={formData.emailsReceived}
-                          onChange={(e) => setFormData({...formData, emailsReceived: e.target.value})}
-                          className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
-                        />
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-base font-semibold text-slate-900 mb-3">
-                        SMS Text Messaging Usage
-                      </label>
-                      <select
-                        value={formData.smsUsage}
-                        onChange={(e) => setFormData({...formData, smsUsage: e.target.value})}
-                        className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
-                      >
-                        <option value="">Select...</option>
-                        <option value="No, we don't use SMS">No, we don&apos;t use SMS</option>
-                        <option value="Yes, limited use (under 50/month)">Yes, limited use (under 50/month)</option>
-                        <option value="Yes, moderate use (50-200/month)">Yes, moderate use (50-200/month)</option>
-                        <option value="Yes, heavy use (200+/month)">Yes, heavy use (200+/month)</option>
-                      </select>
-                    </div>
-
-                    {formData.smsUsage && formData.smsUsage.startsWith('Yes') && (
-                      <div>
-                        <label className="block text-base font-semibold text-slate-900 mb-3">
-                          Approximate Monthly SMS Volume
-                        </label>
-                        <input
-                          type="number"
-                          value={formData.smsVolume}
-                          onChange={(e) => setFormData({...formData, smsVolume: e.target.value})}
-                          className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
-                        />
+                        <div>
+                          <label className="block text-base font-semibold text-slate-900 mb-3">
+                            Monthly Emails Received
+                          </label>
+                          <input
+                            type="number"
+                            placeholder="From clients"
+                            value={formData.emailsReceived}
+                            onChange={(e) =>
+                              setFormData({ ...formData, emailsReceived: e.target.value })
+                            }
+                            className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                          />
+                        </div>
                       </div>
                     )}
 
-                    <div>
-                      <label className="block text-base font-semibold text-slate-900 mb-3">
-                        Online Intake / Web Forms
-                      </label>
-                      <select
-                        value={formData.webFormsUsage}
-                        onChange={(e) => setFormData({...formData, webFormsUsage: e.target.value})}
-                        className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
-                      >
-                        <option value="">Select...</option>
-                        <option value="No">No</option>
-                        <option value="Yes, occasionally (under 10/month)">Yes, occasionally (under 10/month)</option>
-                        <option value="Yes, regularly (10-50/month)">Yes, regularly (10-50/month)</option>
-                        <option value="Yes, frequently (50+/month)">Yes, frequently (50+/month)</option>
-                      </select>
-                    </div>
+                    {/* SMS - Conditional */}
+                    {formData.channelsToMigrate.includes('Messaging SMS/TXT') && (
+                      <>
+                        <div>
+                          <label className="block text-base font-semibold text-slate-900 mb-3">
+                            SMS Text Messaging Usage
+                          </label>
+                          <select
+                            value={formData.smsUsage}
+                            onChange={(e) => setFormData({ ...formData, smsUsage: e.target.value })}
+                            className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                          >
+                            <option value="">Select...</option>
+                            <option value="No, we don't use SMS">No, we don&apos;t use SMS</option>
+                            <option value="Yes, limited use (under 50/month)">
+                              Yes, limited use (under 50/month)
+                            </option>
+                            <option value="Yes, moderate use (50-200/month)">
+                              Yes, moderate use (50-200/month)
+                            </option>
+                            <option value="Yes, heavy use (200+/month)">
+                              Yes, heavy use (200+/month)
+                            </option>
+                          </select>
+                        </div>
 
-                    {formData.webFormsUsage && formData.webFormsUsage.startsWith('Yes') && (
-                      <div>
-                        <label className="block text-base font-semibold text-slate-900 mb-3">
-                          Approximate Monthly Form Submissions
-                        </label>
-                        <input
-                          type="number"
-                          value={formData.formSubmissions}
-                          onChange={(e) => setFormData({...formData, formSubmissions: e.target.value})}
-                          className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
-                        />
-                      </div>
+                        {formData.smsUsage && formData.smsUsage.startsWith('Yes') && (
+                          <div>
+                            <label className="block text-base font-semibold text-slate-900 mb-3">
+                              Approximate Monthly SMS Volume
+                            </label>
+                            <input
+                              type="number"
+                              value={formData.smsVolume}
+                              onChange={(e) => setFormData({ ...formData, smsVolume: e.target.value })}
+                              className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                            />
+                          </div>
+                        )}
+                      </>
+                    )}
+
+                    {/* Webforms - Conditional */}
+                    {formData.channelsToMigrate.includes('Webforms') && (
+                      <>
+                        <div>
+                          <label className="block text-base font-semibold text-slate-900 mb-3">
+                            Online Intake / Web Forms
+                          </label>
+                          <select
+                            value={formData.webFormsUsage}
+                            onChange={(e) =>
+                              setFormData({ ...formData, webFormsUsage: e.target.value })
+                            }
+                            className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                          >
+                            <option value="">Select...</option>
+                            <option value="No">No</option>
+                            <option value="Yes, occasionally (under 10/month)">
+                              Yes, occasionally (under 10/month)
+                            </option>
+                            <option value="Yes, regularly (10-50/month)">
+                              Yes, regularly (10-50/month)
+                            </option>
+                            <option value="Yes, frequently (50+/month)">
+                              Yes, frequently (50+/month)
+                            </option>
+                          </select>
+                        </div>
+
+                        {formData.webFormsUsage && formData.webFormsUsage.startsWith('Yes') && (
+                          <div>
+                            <label className="block text-base font-semibold text-slate-900 mb-3">
+                              Approximate Monthly Form Submissions
+                            </label>
+                            <input
+                              type="number"
+                              value={formData.formSubmissions}
+                              onChange={(e) =>
+                                setFormData({ ...formData, formSubmissions: e.target.value })
+                              }
+                              className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                            />
+                          </div>
+                        )}
+                      </>
                     )}
                   </div>
                 </div>
@@ -968,19 +1223,26 @@ export default function UATDiscoveryPage() {
               {currentStep === 5 && (
                 <div className="space-y-8">
                   <div>
-                    <h2 className="text-3xl font-semibold text-slate-900 mb-3">Current Technology Setup</h2>
-                    <p className="text-lg text-slate-600">Tell us about your current communication technology and pain points.</p>
+                    <h2 className="text-3xl font-semibold text-slate-900 mb-3">
+                      💻 Current Technology Setup
+                    </h2>
+                    <p className="text-lg text-slate-600">
+                      Tell us about your current communication technology and pain points.
+                    </p>
                   </div>
 
                   <div className="space-y-8">
                     <div>
                       <label className="block text-base font-semibold text-slate-900 mb-3">
-                        Do you have dedicated Technical Resources? <span className="text-red-600 text-xl">*</span>
+                        Do you have dedicated Technical Resources?{' '}
+                        <span className="text-red-600 text-xl">*</span>
                       </label>
                       <select
                         required
                         value={formData.hasTechnicalResources}
-                        onChange={(e) => setFormData({...formData, hasTechnicalResources: e.target.value})}
+                        onChange={(e) =>
+                          setFormData({ ...formData, hasTechnicalResources: e.target.value })
+                        }
                         className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
                       >
                         <option value="">Select...</option>
@@ -997,7 +1259,12 @@ export default function UATDiscoveryPage() {
                         <textarea
                           placeholder="e.g., '1 full-time IT manager, 2 part-time support staff' or 'Outsourced IT support via managed service provider'"
                           value={formData.technicalResourcesDescription}
-                          onChange={(e) => setFormData({...formData, technicalResourcesDescription: e.target.value})}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              technicalResourcesDescription: e.target.value,
+                            })
+                          }
                           rows={3}
                           className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
                         />
@@ -1010,19 +1277,22 @@ export default function UATDiscoveryPage() {
                       </label>
                       <select
                         value={formData.phoneSystem}
-                        onChange={(e) => setFormData({...formData, phoneSystem: e.target.value})}
+                        onChange={(e) => setFormData({ ...formData, phoneSystem: e.target.value })}
                         className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
                       >
                         <option value="">Select...</option>
                         <option value="Traditional landline/PBX">Traditional landline/PBX</option>
                         <option value="VoIP system">VoIP system</option>
-                        <option value="Mix of landlines and cell phones">Mix of landlines and cell phones</option>
+                        <option value="Mix of landlines and cell phones">
+                          Mix of landlines and cell phones
+                        </option>
                         <option value="Cell phones only">Cell phones only</option>
                         <option value="Other">Other</option>
                       </select>
                     </div>
 
-                    {(formData.phoneSystem === 'VoIP system' || formData.phoneSystem === 'Other') && (
+                    {(formData.phoneSystem === 'VoIP system' ||
+                      formData.phoneSystem === 'Other') && (
                       <div>
                         <label className="block text-base font-semibold text-slate-900 mb-3">
                           Please specify provider/system
@@ -1030,7 +1300,9 @@ export default function UATDiscoveryPage() {
                         <input
                           type="text"
                           value={formData.phoneSystemDetails}
-                          onChange={(e) => setFormData({...formData, phoneSystemDetails: e.target.value})}
+                          onChange={(e) =>
+                            setFormData({ ...formData, phoneSystemDetails: e.target.value })
+                          }
                           className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
                         />
                       </div>
@@ -1044,10 +1316,14 @@ export default function UATDiscoveryPage() {
                         type="text"
                         placeholder="Enter phone numbers, separated by commas"
                         value={formData.mainBusinessLines}
-                        onChange={(e) => setFormData({...formData, mainBusinessLines: e.target.value})}
+                        onChange={(e) =>
+                          setFormData({ ...formData, mainBusinessLines: e.target.value })
+                        }
                         className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
                       />
-                      <p className="text-base text-slate-600 mt-2">e.g., (702) 555-1234, (702) 555-5678</p>
+                      <p className="text-base text-slate-600 mt-2">
+                        e.g., (702) 555-1234, (702) 555-5678
+                      </p>
                     </div>
 
                     <div>
@@ -1056,7 +1332,9 @@ export default function UATDiscoveryPage() {
                       </label>
                       <select
                         value={formData.businessPhoneProvider}
-                        onChange={(e) => setFormData({...formData, businessPhoneProvider: e.target.value})}
+                        onChange={(e) =>
+                          setFormData({ ...formData, businessPhoneProvider: e.target.value })
+                        }
                         className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
                       >
                         <option value="">Select...</option>
@@ -1081,18 +1359,21 @@ export default function UATDiscoveryPage() {
                       </label>
                       <select
                         value={formData.faxSystem}
-                        onChange={(e) => setFormData({...formData, faxSystem: e.target.value})}
+                        onChange={(e) => setFormData({ ...formData, faxSystem: e.target.value })}
                         className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
                       >
                         <option value="">Select...</option>
                         <option value="Physical fax machine">Physical fax machine</option>
-                        <option value="Online fax service">Online fax service (e.g., eFax, RingCentral Fax)</option>
+                        <option value="Online fax service">
+                          Online fax service (e.g., eFax, RingCentral Fax)
+                        </option>
                         <option value="We don't use fax">We don&apos;t use fax</option>
                         <option value="Other">Other</option>
                       </select>
                     </div>
 
-                    {(formData.faxSystem === 'Online fax service' || formData.faxSystem === 'Other') && (
+                    {(formData.faxSystem === 'Online fax service' ||
+                      formData.faxSystem === 'Other') && (
                       <div>
                         <label className="block text-base font-semibold text-slate-900 mb-3">
                           Please specify
@@ -1100,7 +1381,9 @@ export default function UATDiscoveryPage() {
                         <input
                           type="text"
                           value={formData.faxSystemDetails}
-                          onChange={(e) => setFormData({...formData, faxSystemDetails: e.target.value})}
+                          onChange={(e) =>
+                            setFormData({ ...formData, faxSystemDetails: e.target.value })
+                          }
                           className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
                         />
                       </div>
@@ -1112,7 +1395,7 @@ export default function UATDiscoveryPage() {
                       </label>
                       <select
                         value={formData.emailSystem}
-                        onChange={(e) => setFormData({...formData, emailSystem: e.target.value})}
+                        onChange={(e) => setFormData({ ...formData, emailSystem: e.target.value })}
                         className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
                       >
                         <option value="">Select...</option>
@@ -1123,7 +1406,8 @@ export default function UATDiscoveryPage() {
                       </select>
                     </div>
 
-                    {(formData.emailSystem === 'Other email provider' || formData.emailSystem === 'Mixed systems') && (
+                    {(formData.emailSystem === 'Other email provider' ||
+                      formData.emailSystem === 'Mixed systems') && (
                       <div>
                         <label className="block text-base font-semibold text-slate-900 mb-3">
                           Please specify
@@ -1131,7 +1415,9 @@ export default function UATDiscoveryPage() {
                         <input
                           type="text"
                           value={formData.emailSystemDetails}
-                          onChange={(e) => setFormData({...formData, emailSystemDetails: e.target.value})}
+                          onChange={(e) =>
+                            setFormData({ ...formData, emailSystemDetails: e.target.value })
+                          }
                           className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
                         />
                       </div>
@@ -1143,7 +1429,9 @@ export default function UATDiscoveryPage() {
                       </label>
                       <select
                         value={formData.websiteStatus}
-                        onChange={(e) => setFormData({...formData, websiteStatus: e.target.value})}
+                        onChange={(e) =>
+                          setFormData({ ...formData, websiteStatus: e.target.value })
+                        }
                         className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
                       >
                         <option value="">Select...</option>
@@ -1158,13 +1446,14 @@ export default function UATDiscoveryPage() {
 
                     <div>
                       <label className="block text-base font-semibold text-slate-900 mb-3">
-                        What are your biggest communication pain points? <span className="text-red-600 text-xl">*</span>
+                        What are your biggest communication pain points?{' '}
+                        <span className="text-red-600 text-xl">*</span>
                       </label>
                       <textarea
                         required
                         placeholder="e.g., 'Can't track call history', 'Faxes get lost', 'Too many disconnected systems'"
                         value={formData.painPoints}
-                        onChange={(e) => setFormData({...formData, painPoints: e.target.value})}
+                        onChange={(e) => setFormData({ ...formData, painPoints: e.target.value })}
                         rows={3}
                         className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
                       />
@@ -1173,144 +1462,28 @@ export default function UATDiscoveryPage() {
                 </div>
               )}
 
-              {/* Step 6: UAT Timeline & Goals */}
+              {/* Step 6: Your Vision & Aspirations */}
               {currentStep === 6 && (
                 <div className="space-y-8">
                   <div>
-                    <h2 className="text-3xl font-semibold text-slate-900 mb-3">UAT Cohort Goals & Timeline</h2>
-                    <p className="text-lg text-slate-600">Tell us about your UAT participation goals and timeline.</p>
+                    <h2 className="text-3xl font-semibold text-slate-900 mb-3">
+                      🎯 Your Vision & Aspirations
+                    </h2>
+                    <p className="text-lg text-slate-600">
+                      Share your hopes and expectations for this UAT cohort experience.
+                    </p>
                   </div>
 
                   <div className="space-y-8">
                     <div>
                       <label className="block text-base font-semibold text-slate-900 mb-3">
-                        When would you ideally like to start UAT? <span className="text-red-600 text-xl">*</span>
-                      </label>
-                      <select
-                        required
-                        value={formData.idealStart}
-                        onChange={(e) => setFormData({...formData, idealStart: e.target.value})}
-                        className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
-                      >
-                        <option value="">Select...</option>
-                        <option value="Within 2 weeks">Within 2 weeks</option>
-                        <option value="Within 1 month">Within 1 month</option>
-                        <option value="Within 2-3 months">Within 2-3 months</option>
-                        <option value="Flexible / To be determined">Flexible / To be determined</option>
-                      </select>
-                    </div>
-
-                    <div>
-                      <label className="block text-base font-semibold text-slate-900 mb-3">
-                        Specific Target Date (if any)
-                      </label>
-                      <input
-                        type="date"
-                        value={formData.targetDate}
-                        onChange={(e) => setFormData({...formData, targetDate: e.target.value})}
-                        className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-base font-semibold text-slate-900 mb-3">
-                        Anticipated UAT Duration
-                      </label>
-                      <select
-                        value={formData.duration}
-                        onChange={(e) => setFormData({...formData, duration: e.target.value})}
-                        className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
-                      >
-                        <option value="">Select...</option>
-                        <option value="3 months (recommended minimum)">3 months (recommended minimum)</option>
-                        <option value="6 months">6 months</option>
-                        <option value="Flexible / Open-ended">Flexible / Open-ended</option>
-                        <option value="To be determined">To be determined</option>
-                      </select>
-                    </div>
-
-                    <div>
-                      <label className="block text-base font-semibold text-slate-900 mb-3">
-                        Primary Goals for UAT Participation <span className="text-red-600 text-xl">*</span>
-                      </label>
-                      <div className="space-y-3">
-                        {[
-                          'Test platform reliability and performance',
-                          'Validate cost savings vs. current systems',
-                          'Provide feedback on features and usability',
-                          'Train staff on modern communication tools',
-                          'Explore integration with existing systems',
-                          'Help improve the platform for other nonprofits',
-                          'Other'
-                        ].map(goal => (
-                          <label key={goal} className="flex items-center space-x-3 cursor-pointer">
-                            <input
-                              type="checkbox"
-                              checked={formData.primaryGoals.includes(goal)}
-                              onChange={() => handleCheckboxChange('primaryGoals', goal)}
-                              className="rounded border-2 border-slate-300 text-indigo-600 focus:ring-4 focus:ring-indigo-500 w-6 h-6"
-                            />
-                            <span className="text-lg text-slate-900">{goal}</span>
-                          </label>
-                        ))}
-                      </div>
-                    </div>
-
-                    {formData.primaryGoals.includes('Other') && (
-                      <div>
-                        <label className="block text-base font-semibold text-slate-900 mb-3">
-                          Please describe other goals
-                        </label>
-                        <input
-                          type="text"
-                          value={formData.otherGoals}
-                          onChange={(e) => setFormData({...formData, otherGoals: e.target.value})}
-                          className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
-                        />
-                      </div>
-                    )}
-
-                    <div>
-                      <label className="block text-base font-semibold text-slate-900 mb-3">
-                        Budget Approval Process
-                      </label>
-                      <select
-                        value={formData.budgetProcess}
-                        onChange={(e) => setFormData({...formData, budgetProcess: e.target.value})}
-                        className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
-                      >
-                        <option value="">Select...</option>
-                        <option value="Executive Director can approve immediately">Executive Director can approve immediately</option>
-                        <option value="Requires Board approval">Requires Board approval</option>
-                        <option value="Requires grant/funding approval">Requires grant/funding approval</option>
-                        <option value="Budget already allocated">Budget already allocated</option>
-                        <option value="Other">Other</option>
-                      </select>
-                    </div>
-
-                    {(formData.budgetProcess === 'Requires Board approval' || formData.budgetProcess === 'Requires grant/funding approval') && (
-                      <div>
-                        <label className="block text-base font-semibold text-slate-900 mb-3">
-                          Typical approval timeline
-                        </label>
-                        <input
-                          type="text"
-                          value={formData.approvalTimeline}
-                          onChange={(e) => setFormData({...formData, approvalTimeline: e.target.value})}
-                          className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
-                        />
-                      </div>
-                    )}
-
-                    <div>
-                      <label className="block text-base font-semibold text-slate-900 mb-3">
-                        Any specific features you&apos;re most excited about?
+                        Tell us about your goals, expectations, challenges, and aspirations for participating in the UAT cohort
                       </label>
                       <textarea
-                        placeholder="Optional - helps us prioritize what to demo during onboarding"
+                        placeholder="Share what you're hoping to achieve, any specific challenges you're facing, features you're excited about, or how you envision Connie transforming your organization's communications..."
                         value={formData.excitedAbout}
-                        onChange={(e) => setFormData({...formData, excitedAbout: e.target.value})}
-                        rows={2}
+                        onChange={(e) => setFormData({ ...formData, excitedAbout: e.target.value })}
+                        rows={6}
                         className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
                       />
                     </div>
@@ -1322,8 +1495,12 @@ export default function UATDiscoveryPage() {
               {currentStep === 7 && (
                 <div className="space-y-8">
                   <div>
-                    <h2 className="text-3xl font-semibold text-slate-900 mb-3">Additional Information</h2>
-                    <p className="text-lg text-slate-600">Any final details you'd like to share with us?</p>
+                    <h2 className="text-3xl font-semibold text-slate-900 mb-3">
+                      💡 Additional Information
+                    </h2>
+                    <p className="text-lg text-slate-600">
+                      Any final details you'd like to share with us?
+                    </p>
                   </div>
 
                   <div className="space-y-8">
@@ -1334,7 +1511,9 @@ export default function UATDiscoveryPage() {
                       <textarea
                         placeholder="Optional - any additional context, concerns, or questions"
                         value={formData.additionalContext}
-                        onChange={(e) => setFormData({...formData, additionalContext: e.target.value})}
+                        onChange={(e) =>
+                          setFormData({ ...formData, additionalContext: e.target.value })
+                        }
                         rows={3}
                         className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
                       />
@@ -1346,18 +1525,23 @@ export default function UATDiscoveryPage() {
                       </label>
                       <select
                         value={formData.howHeard}
-                        onChange={(e) => setFormData({...formData, howHeard: e.target.value})}
+                        onChange={(e) => setFormData({ ...formData, howHeard: e.target.value })}
                         className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
                       >
                         <option value="">Select...</option>
-                        <option value="Direct outreach from NSS/Connie team">Direct outreach from NSS/Connie team</option>
-                        <option value="Referral from another organization">Referral from another organization</option>
+                        <option value="Direct outreach from NSS/Connie team">
+                          Direct outreach from NSS/Connie team
+                        </option>
+                        <option value="Referral from another organization">
+                          Referral from another organization
+                        </option>
                         <option value="Conference/event">Conference/event</option>
                         <option value="Other">Other</option>
                       </select>
                     </div>
 
-                    {(formData.howHeard === 'Referral from another organization' || formData.howHeard === 'Other') && (
+                    {(formData.howHeard === 'Referral from another organization' ||
+                      formData.howHeard === 'Other') && (
                       <div>
                         <label className="block text-base font-semibold text-slate-900 mb-3">
                           Please specify
@@ -1365,7 +1549,9 @@ export default function UATDiscoveryPage() {
                         <input
                           type="text"
                           value={formData.referralDetails}
-                          onChange={(e) => setFormData({...formData, referralDetails: e.target.value})}
+                          onChange={(e) =>
+                            setFormData({ ...formData, referralDetails: e.target.value })
+                          }
                           className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
                         />
                       </div>
@@ -1377,15 +1563,58 @@ export default function UATDiscoveryPage() {
                       </div>
                     )}
 
-                    <div className="bg-slate-50 border-2 border-slate-300 rounded-xl p-8">
-                      <p className="text-lg text-slate-700 text-center">
-                        By submitting, you agree to receive communications from Nevada Senior Services about the Connie UAT program.
-                      </p>
+                    <div className="bg-slate-50 border-2 border-slate-300 rounded-xl p-8 space-y-4">
+                      <div>
+                        <p className="text-base text-slate-700 text-center mb-3">
+                          Please review these important documents before submitting:
+                        </p>
+                        <div className="flex flex-wrap justify-center gap-3">
+                          <a
+                            href="https://connie.one/dataroom/legal"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-indigo-600 hover:text-indigo-800 underline text-base"
+                          >
+                            Acceptable Use Policy
+                          </a>
+                          <span className="text-slate-400">•</span>
+                          <a
+                            href="https://connie.one/dataroom/legal"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-indigo-600 hover:text-indigo-800 underline text-base"
+                          >
+                            Terms of Service
+                          </a>
+                          <span className="text-slate-400">•</span>
+                          <a
+                            href="https://connie.one/dataroom/legal"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-indigo-600 hover:text-indigo-800 underline text-base"
+                          >
+                            Privacy Policy
+                          </a>
+                          <span className="text-slate-400">•</span>
+                          <a
+                            href="https://connie.one/dataroom/legal"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-indigo-600 hover:text-indigo-800 underline text-base"
+                          >
+                            UAT Cohort Team MOU
+                          </a>
+                        </div>
+                      </div>
+                      <div className="border-t border-slate-300 pt-4">
+                        <p className="text-sm text-slate-600 text-center">
+                          By submitting, you agree to receive communications from Nevada Senior Services about the Connie UAT program.
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
               )}
-
             </div>
           </div>
 
@@ -1416,9 +1645,9 @@ export default function UATDiscoveryPage() {
                   type="button"
                   onClick={goToPreviousStep}
                   disabled={currentStep === 0}
-                  className="flex items-center gap-3 px-8 py-4 bg-slate-200 text-slate-900 font-semibold text-lg rounded-xl hover:bg-slate-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed min-h-[60px]"
+                  className="flex items-center gap-2 px-5 py-2.5 bg-slate-200 text-slate-900 font-medium text-base rounded-lg hover:bg-slate-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <ChevronLeft className="w-6 h-6" />
+                  <ChevronLeft className="w-5 h-5" />
                   Back
                 </button>
 
@@ -1426,17 +1655,17 @@ export default function UATDiscoveryPage() {
                   <button
                     type="button"
                     onClick={goToNextStep}
-                    className="flex items-center gap-3 px-8 py-4 bg-indigo-600 text-white font-semibold text-lg rounded-xl hover:bg-indigo-700 transition-colors min-h-[60px]"
+                    className="flex items-center gap-2 px-5 py-2.5 bg-indigo-600 text-white font-medium text-base rounded-lg hover:bg-indigo-700 transition-colors"
                   >
                     Next
-                    <ChevronRight className="w-6 h-6" />
+                    <ChevronRight className="w-5 h-5" />
                   </button>
                 ) : (
                   <button
                     type="button"
                     onClick={handleSubmit}
                     disabled={isSubmitting}
-                    className="flex items-center gap-3 px-8 py-4 bg-green-600 text-white font-semibold text-lg rounded-xl hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed min-h-[60px]"
+                    className="flex items-center gap-2 px-5 py-2.5 bg-green-600 text-white font-medium text-base rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isSubmitting ? 'Submitting...' : 'Submit Discovery Form'}
                   </button>
@@ -1445,15 +1674,12 @@ export default function UATDiscoveryPage() {
             </div>
           </div>
 
-          {/* Back to UAT Hub Link */}
-          <div className="mt-8 text-center">
-            <Link
-              href="/dataroom/user-acceptance-testing"
-              className="inline-flex items-center gap-2 text-lg text-slate-600 hover:text-slate-900 transition-colors font-medium"
-            >
-              ← Back to UAT Hub
-            </Link>
-          </div>
+          {/* Small Logo at Bottom - Only on form steps */}
+          {currentStep > 0 && !submitSuccess && (
+            <div className="mt-8 flex justify-center opacity-40 hover:opacity-60 transition-opacity">
+              <Image src="/connie-logo-black-strong.svg" alt="Connie" width={120} height={32} />
+            </div>
+          )}
         </div>
       </div>
     </div>
