@@ -1570,7 +1570,7 @@ export default function UATDiscoveryPage() {
                         </p>
                         <div className="flex flex-wrap justify-center gap-3">
                           <a
-                            href="https://connie.one/dataroom/legal"
+                            href="https://connie.one/acceptable-use-policy"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-indigo-600 hover:text-indigo-800 underline text-base"
@@ -1579,7 +1579,7 @@ export default function UATDiscoveryPage() {
                           </a>
                           <span className="text-slate-400">•</span>
                           <a
-                            href="https://connie.one/dataroom/legal"
+                            href="https://connie.one/terms-of-service"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-indigo-600 hover:text-indigo-800 underline text-base"
@@ -1588,7 +1588,7 @@ export default function UATDiscoveryPage() {
                           </a>
                           <span className="text-slate-400">•</span>
                           <a
-                            href="https://connie.one/dataroom/legal"
+                            href="https://connie.one/privacy-policy"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-indigo-600 hover:text-indigo-800 underline text-base"

@@ -35,6 +35,9 @@ async function sendEmail({ to, organizationName, contactName }) {
     .replace(/\{\{contactName\}\}/g, contactName)
     .replace(/\{\{unsubscribeUrl\}\}/g, 'https://connie.one/unsubscribe');
 
+  // Sanitize organization name for tag (only ASCII letters, numbers, underscores, dashes)
+  const sanitizedOrgName = organizationName.replace(/[^a-zA-Z0-9_-]/g, '-');
+
   // Send via Resend API
   const response = await fetch('https://api.resend.com/emails', {
     method: 'POST',
@@ -49,7 +52,7 @@ async function sendEmail({ to, organizationName, contactName }) {
       html: htmlTemplate,
       tags: [
         { name: 'campaign', value: 'uat-invitations' },
-        { name: 'organization', value: organizationName },
+        { name: 'organization', value: sanitizedOrgName },
       ],
     }),
   });
@@ -70,8 +73,8 @@ async function sendTest() {
   console.log('📧 Sending test email...\n');
 
   const testRecipient = {
-    to: 'chris@chrisberno.dev', // Change to your email
-    organizationName: 'Sample Senior Services',
+    to: 'cberno@nevadaseniorservices.org',
+    organizationName: 'Nevada Senior Services',
     contactName: 'Chris',
   };
 

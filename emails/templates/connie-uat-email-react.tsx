@@ -47,6 +47,17 @@ export const ConnieUATInviteEmail = ({
               🧪 Connie UAT Cohort Program
             </Heading>
 
+            {/* Internal Test Alert */}
+            <Section style={alertBox}>
+              <Text style={alertTitle}>⚠️ Internal Test</Text>
+              <Text style={alertText}>
+                Please forward any feedback to Chris at{' '}
+                <Link href="mailto:cberno@nevadaseniorservices.org" style={alertLink}>
+                  cberno@nevadaseniorservices.org
+                </Link>
+              </Text>
+            </Section>
+
             <Text style={text}>Hi {organizationName} team,</Text>
 
             <Text style={text}>
@@ -122,7 +133,7 @@ export const ConnieUATInviteEmail = ({
               </Link>
             </Text>
             <Text style={footerAddress}>
-              Nevada Senior Services · Reno, NV
+              Nevada Senior Services · Las Vegas, NV
             </Text>
           </Section>
         </Container>
@@ -275,4 +286,33 @@ const footerAddress = {
   lineHeight: '1.5',
   margin: '16px 0 0',
   textAlign: 'center' as const,
+};
+
+const alertBox = {
+  backgroundColor: '#fff3cd',
+  border: '2px solid #ffc107',
+  borderRadius: '8px',
+  padding: '16px',
+  margin: '0 0 24px',
+  textAlign: 'center' as const,
+};
+
+const alertTitle = {
+  color: '#856404',
+  fontSize: '14px',
+  fontWeight: '600',
+  margin: '0 0 8px',
+};
+
+const alertText = {
+  color: '#856404',
+  fontSize: '14px',
+  lineHeight: '1.5',
+  margin: '0',
+};
+
+const alertLink = {
+  color: '#856404',
+  textDecoration: 'underline',
+  fontWeight: '600',
 };
