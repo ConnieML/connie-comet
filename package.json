@@ -64,6 +64,7 @@
     "react-email": "^4.3.2",
     "react-hook-form": "7.45.4",
     "resend": "^6.4.1",
+    "reveal.js": "^5.2.1",
     "sharp": "0.32.6",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7"
@@ -77,6 +78,7 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "22.5.4",
     "@types/react": "19.1.0",
+    "@types/reveal.js": "^5.2.2",
     "@types/react-dom": "19.1.2",
     "@vitejs/plugin-react": "4.5.2",
     "autoprefixer": "^10.4.19",
