@@ -22,10 +22,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const layoutType = await getPageLayoutType()
   const isLandingPage = layoutType === 'landing'
 
-  // Check if this is the UAT discovery page
+  // Check if this is the UAT discovery page or presentations page
   const headersList = await headers()
   const pathname = headersList.get('x-pathname') || '/'
   const isUATDiscoveryPage = pathname.includes('/user-acceptance-testing/discovery')
+  const isPresentationsPage = pathname.startsWith('/presentations')
 
   return (
     <html className={cn(GeistSans.variable, GeistMono.variable)} lang="en" suppressHydrationWarning>
@@ -42,9 +43,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             }}
           />
 
-          {!isLandingPage && !isUATDiscoveryPage && <Header />}
+          {!isLandingPage && !isUATDiscoveryPage && !isPresentationsPage && <Header />}
           {children}
-          {!isLandingPage && !isUATDiscoveryPage && <Footer />}
+          {!isLandingPage && !isUATDiscoveryPage && !isPresentationsPage && <Footer />}
         </Providers>
       </body>
     </html>
