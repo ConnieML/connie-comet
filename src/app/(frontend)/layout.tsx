@@ -27,7 +27,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const pathname = headersList.get('x-pathname') || '/'
   const isUATDiscoveryPage = pathname.includes('/user-acceptance-testing/discovery')
   const isPresentationsPage = pathname.startsWith('/presentations')
-  const isUATLandingPage = pathname.startsWith('/connie-uat-landing')
 
   return (
     <html className={cn(GeistSans.variable, GeistMono.variable)} lang="en" suppressHydrationWarning>
@@ -44,9 +43,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             }}
           />
 
-          {!isLandingPage && !isUATDiscoveryPage && !isPresentationsPage && !isUATLandingPage && <Header />}
+          {!isLandingPage && !isUATDiscoveryPage && !isPresentationsPage && <Header />}
           {children}
-          {!isLandingPage && !isUATDiscoveryPage && !isPresentationsPage && !isUATLandingPage && <Footer />}
+          {!isLandingPage && !isUATDiscoveryPage && !isPresentationsPage && <Footer />}
         </Providers>
       </body>
     </html>

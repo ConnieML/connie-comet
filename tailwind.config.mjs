@@ -27,6 +27,9 @@ const config = {
     'bg-success/30',
     'border-warning',
     'bg-warning/30',
+    'bg-twilio-blue/10',
+    'bg-twilio-teal/10',
+    'bg-twilio-muted/10',
   ],
   theme: {
     container: {
@@ -94,6 +97,12 @@ const config = {
         success: 'hsl(var(--success))',
         error: 'hsl(var(--error))',
         warning: 'hsl(var(--warning))',
+        'twilio-blue': '#0263E0',
+        'twilio-navy': '#121C2D',
+        'twilio-muted': '#606B85',
+        'twilio-bg-subtle': '#F4F4F6',
+        'twilio-border': '#E1E3EA',
+        'twilio-teal': '#0E8A6E',
       },
       fontFamily: {
         mono: ['var(--font-geist-mono)'],
