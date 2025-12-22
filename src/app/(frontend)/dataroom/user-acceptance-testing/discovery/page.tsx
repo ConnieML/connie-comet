@@ -13,7 +13,6 @@ import {
   Share2,
   ChevronLeft,
   ChevronRight,
-  HelpCircle,
 } from 'lucide-react'
 
 export default function UATDiscoveryPage() {
@@ -399,7 +398,7 @@ export default function UATDiscoveryPage() {
                       The following intake wizard will ask you a series of business operations
                       questions. The information provided will be used to define your organizations
                       requirements, estimate costs and and set up your new Connie environment for
-                      quick and easy onboarding process and adoption by your staff. Click "Next" to
+                      quick and easy onboarding process and adoption by your staff. Click &ldquo;Next&rdquo; to
                       get
                     </p>
                     <div className="bg-slate-100 border-2 border-slate-300 rounded-lg p-4 mb-8 max-w-2xl mx-auto">
@@ -433,7 +432,7 @@ export default function UATDiscoveryPage() {
                         <span className="text-indigo-600 text-2xl flex-shrink-0">3</span>
                         <span>
                           <strong className="text-slate-900">Best estimates are fine</strong> -
-                          we're looking for general understanding, not exact numbers
+                          we&apos;re looking for general understanding, not exact numbers
                         </span>
                       </li>
                       <li className="flex items-start gap-4">
@@ -464,7 +463,7 @@ export default function UATDiscoveryPage() {
                       🏢 Organization Information
                     </h2>
                     <p className="text-lg text-slate-600">
-                      Tell us about your organization and who we'll be working with.
+                      Tell us about your organization and who we&apos;ll be working with.
                     </p>
                   </div>
 
@@ -1499,7 +1498,7 @@ export default function UATDiscoveryPage() {
                       💡 Additional Information
                     </h2>
                     <p className="text-lg text-slate-600">
-                      Any final details you'd like to share with us?
+                      Any final details you&apos;d like to share with us?
                     </p>
                   </div>
 

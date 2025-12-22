@@ -30,13 +30,13 @@ export default function AcceptableUsePolicyPage() {
           {/* Introduction */}
           <div className="mb-12">
             <p className="text-lg text-slate-700 leading-relaxed">
-              This Acceptable Use Policy ("AUP") describes rules that apply to any party ("you", "your", "yours", or "Customer") using any products and services provided by ConnieML, Inc. or any of its affiliates ("Services") and any user of the Services, including via any products and services provided by Customer ("End User"). ConnieML, Inc. together with its affiliates will be referred to as "Connie" in this AUP.
+              This Acceptable Use Policy (&ldquo;AUP&rdquo;) describes rules that apply to any party (&ldquo;you&rdquo;, &ldquo;your&rdquo;, &ldquo;yours&rdquo;, or &ldquo;Customer&rdquo;) using any products and services provided by ConnieML, Inc. or any of its affiliates (&ldquo;Services&rdquo;) and any user of the Services, including via any products and services provided by Customer (&ldquo;End User&rdquo;). ConnieML, Inc. together with its affiliates will be referred to as &ldquo;Connie&rdquo; in this AUP.
             </p>
             <p className="text-lg text-slate-700 leading-relaxed mt-4">
-              The prohibited conduct in this AUP is not exhaustive. Customer is responsible for its End Users' compliance with this AUP and making its End Users aware of this AUP. If Customer or any End User violates this AUP, Connie may suspend Customer's use of the Services.
+              The prohibited conduct in this AUP is not exhaustive. Customer is responsible for its End Users&apos; compliance with this AUP and making its End Users aware of this AUP. If Customer or any End User violates this AUP, Connie may suspend Customer&apos;s use of the Services.
             </p>
             <p className="text-lg text-slate-700 leading-relaxed mt-4">
-              This AUP may be updated by Connie from time to time upon reasonable notice, which may be provided via Customer's account, email, or by posting an updated version of this AUP at{' '}
+              This AUP may be updated by Connie from time to time upon reasonable notice, which may be provided via Customer&apos;s account, email, or by posting an updated version of this AUP at{' '}
               <Link href="/acceptable-use-policy" className="text-indigo-600 hover:text-indigo-800 underline">
                 connie.one/acceptable-use-policy
               </Link>.
@@ -49,7 +49,7 @@ export default function AcceptableUsePolicyPage() {
               Prohibited Activities
             </h2>
             <p className="text-lg text-slate-700 leading-relaxed mb-6">
-              Do not use the Services to engage in or encourage any activity that is illegal, deceptive, harmful, a violation of others' rights, or harmful to Connie's business operations or reputation, including:
+              Do not use the Services to engage in or encourage any activity that is illegal, deceptive, harmful, a violation of others&apos; rights, or harmful to Connie&apos;s business operations or reputation, including:
             </p>
 
             {/* Violations of Laws */}
@@ -58,7 +58,7 @@ export default function AcceptableUsePolicyPage() {
                 Violations of Laws or Standards
               </h3>
               <p className="text-slate-700 leading-relaxed">
-                Violating laws, regulations, governmental orders, industry standards, or telecommunications providers' requirements or guidance in any applicable jurisdiction, including any of the foregoing that require:
+                Violating laws, regulations, governmental orders, industry standards, or telecommunications providers&apos; requirements or guidance in any applicable jurisdiction, including any of the foregoing that require:
               </p>
               <ul className="list-disc pl-6 mt-3 space-y-2 text-slate-700">
                 <li>Consent be obtained prior to transmitting, recording, collecting, or monitoring data or communications</li>
@@ -163,7 +163,7 @@ export default function AcceptableUsePolicyPage() {
               Data Safeguards
             </h2>
             <p className="text-slate-700 leading-relaxed">
-              Customer is responsible for determining whether the Services offer appropriate safeguards for Customer's use of the Services, including, but not limited to, any safeguards required by applicable law or regulation, prior to transmitting or processing, or prior to permitting End Users to transmit or process, any data or communications via the Services.
+              Customer is responsible for determining whether the Services offer appropriate safeguards for Customer&apos;s use of the Services, including, but not limited to, any safeguards required by applicable law or regulation, prior to transmitting or processing, or prior to permitting End Users to transmit or process, any data or communications via the Services.
             </p>
           </section>
 
@@ -173,7 +173,7 @@ export default function AcceptableUsePolicyPage() {
               Special Considerations for Nonprofit Organizations
             </h2>
             <p className="text-slate-700 leading-relaxed mb-4">
-              Given Connie's focus on serving nonprofit and community-based organizations, additional care must be taken to:
+              Given Connie&apos;s focus on serving nonprofit and community-based organizations, additional care must be taken to:
             </p>
             <ul className="list-disc pl-6 space-y-2 text-slate-700">
               <li>Ensure all communications comply with nonprofit regulations and ethical standards</li>

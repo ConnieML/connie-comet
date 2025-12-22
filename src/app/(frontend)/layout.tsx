@@ -9,6 +9,7 @@ import { AdminBar } from '@/components/AdminBar'
 import { Footer } from '@/Footer/Component'
 import { Header } from '@/Header/Component'
 import { Providers } from '@/providers'
+import { WebchatWidget } from '@/components/WebchatWidget'
 import { InitTheme } from '@/providers/Theme/InitTheme'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import { draftMode, headers } from 'next/headers'
@@ -46,6 +47,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           {!isLandingPage && !isUATDiscoveryPage && !isPresentationsPage && <Header />}
           {children}
           {!isLandingPage && !isUATDiscoveryPage && !isPresentationsPage && <Footer />}
+          <WebchatWidget />
         </Providers>
       </body>
     </html>

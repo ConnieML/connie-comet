@@ -24,6 +24,11 @@ frontend:
         - echo "GOOGLE_PRIVATE_KEY=${GOOGLE_PRIVATE_KEY:-default}" >> .env.production
         # Resend Email Service Configuration
         - echo "RESEND_API_KEY=${RESEND_API_KEY:-default}" >> .env.production
+        # Twilio Flex Webchat Configuration
+        - echo "NEXT_PUBLIC_TWILIO_ACCOUNT_SID=${NEXT_PUBLIC_TWILIO_ACCOUNT_SID:-default}" >> .env.production
+        - echo "NEXT_PUBLIC_WEBCHAT_DEPLOYMENT_KEY=${NEXT_PUBLIC_WEBCHAT_DEPLOYMENT_KEY:-default}" >> .env.production
+        - echo "NEXT_PUBLIC_WEBCHAT_FLEX_FLOW_SID=${NEXT_PUBLIC_WEBCHAT_FLEX_FLOW_SID:-default}" >> .env.production
+        - echo "NEXT_PUBLIC_WEBCHAT_AVAILABILITY_URL=${NEXT_PUBLIC_WEBCHAT_AVAILABILITY_URL:-default}" >> .env.production
         # Create media directory and setup
         - mkdir -p public/media
         - nvm use 20
