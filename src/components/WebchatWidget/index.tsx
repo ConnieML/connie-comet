@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState, useCallback, useRef } from 'react'
 import Link from 'next/link'
 
 // Connie Care Team Webchat Configuration - loaded from environment variables
@@ -14,11 +14,15 @@ interface AvailabilityResponse {
   agentCount: number
 }
 
+interface WebchatManager {
+  init: () => void
+}
+
 declare global {
   interface Window {
     Twilio?: {
       FlexWebChat?: {
-        createWebChat: (config: unknown) => Promise<unknown>
+        createWebChat: (config: unknown) => Promise<WebchatManager>
         Actions?: {
           invokeAction: (action: string, payload?: unknown) => void
         }
@@ -33,9 +37,17 @@ export const WebchatWidget: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [webchatLoaded, setWebchatLoaded] = useState(false)
   const [showUnavailableMessage, setShowUnavailableMessage] = useState(false)
+  const webchatManagerRef = useRef<WebchatManager | null>(null)
 
   // Check agent availability
   const checkAvailability = useCallback(async () => {
+    if (!AVAILABILITY_URL) {
+      console.warn('Webchat: AVAILABILITY_URL not configured')
+      setIsLoading(false)
+      setIsAvailable(false)
+      return false
+    }
+
     try {
       const response = await fetch(AVAILABILITY_URL, {
         method: 'POST',
@@ -66,7 +78,10 @@ export const WebchatWidget: React.FC = () => {
       const script = document.createElement('script')
       script.src = 'https://assets.flex.twilio.com/releases/flex-webchat-ui/2.9.1/twilio-flex-webchat.min.js'
       script.async = true
-      script.onload = () => resolve()
+      script.onload = () => {
+        console.log('Twilio Webchat script loaded')
+        resolve()
+      }
       script.onerror = () => reject(new Error('Failed to load Twilio Webchat'))
       document.head.appendChild(script)
 
@@ -80,15 +95,29 @@ export const WebchatWidget: React.FC = () => {
 
   // Initialize webchat
   const initializeWebchat = useCallback(async () => {
-    if (!window.Twilio?.FlexWebChat) return
+    if (!window.Twilio?.FlexWebChat) {
+      console.error('Twilio FlexWebChat not available')
+      return false
+    }
+
+    // Log config for debugging (without sensitive data)
+    console.log('Initializing webchat with:', {
+      hasAccountSid: !!ACCOUNT_SID,
+      hasFlexFlowSid: !!FLEX_FLOW_SID,
+      hasDeploymentKey: !!DEPLOYMENT_KEY,
+    })
+
+    if (!ACCOUNT_SID || !FLEX_FLOW_SID) {
+      console.error('Missing required webchat configuration')
+      return false
+    }
 
     const webchatConfig = {
       accountSid: ACCOUNT_SID,
       flexFlowSid: FLEX_FLOW_SID,
-      deploymentKey: DEPLOYMENT_KEY,
       startEngagementOnInit: false,
       preEngagementConfig: {
-        description: "Hello There, Welcome to the Wonderful World of Connie! Please fill out the form below to start chatting with our team.",
+        description: "Welcome to Connie! Please fill out the form below to start chatting with our team.",
         fields: [
           {
             label: "Your Name",
@@ -156,6 +185,11 @@ export const WebchatWidget: React.FC = () => {
           },
           MainContainer: {
             background: "#ffffff"
+          },
+          EntryPoint: {
+            Container: {
+              display: "none" // Hide Twilio's default entry point since we have our own
+            }
           }
         }
       },
@@ -166,10 +200,20 @@ export const WebchatWidget: React.FC = () => {
     }
 
     try {
-      await window.Twilio.FlexWebChat.createWebChat(webchatConfig)
+      console.log('Creating webchat...')
+      const webchatManager = await window.Twilio.FlexWebChat.createWebChat(webchatConfig)
+      console.log('Webchat created, initializing...')
+
+      // IMPORTANT: Must call init() to render the webchat widget
+      webchatManager.init()
+
+      webchatManagerRef.current = webchatManager
       setWebchatLoaded(true)
+      console.log('Webchat initialized successfully')
+      return true
     } catch (error) {
       console.error('Failed to initialize webchat:', error)
+      return false
     }
   }, [])
 
@@ -195,18 +239,28 @@ export const WebchatWidget: React.FC = () => {
     if (!webchatLoaded) {
       try {
         await loadWebchatScript()
-        await initializeWebchat()
+        const success = await initializeWebchat()
+        if (!success) {
+          console.error('Webchat initialization failed')
+          return
+        }
       } catch (error) {
         console.error('Failed to load webchat:', error)
         return
       }
     }
 
-    // Toggle the webchat
-    if (window.Twilio?.FlexWebChat?.Actions) {
-      window.Twilio.FlexWebChat.Actions.invokeAction(isOpen ? 'MinimizeChat' : 'ToggleChatVisibility')
-      setIsOpen(!isOpen)
-    }
+    // Toggle the webchat visibility
+    // Small delay to ensure webchat is fully rendered
+    setTimeout(() => {
+      if (window.Twilio?.FlexWebChat?.Actions) {
+        console.log('Toggling webchat visibility, isOpen:', isOpen)
+        window.Twilio.FlexWebChat.Actions.invokeAction(isOpen ? 'MinimizeChat' : 'ToggleChatVisibility')
+        setIsOpen(!isOpen)
+      } else {
+        console.error('FlexWebChat Actions not available')
+      }
+    }, 100)
   }
 
   // Close unavailable message
