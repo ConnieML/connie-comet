@@ -1,32 +1,58 @@
 'use client'
 
-import React, { useEffect, useState, useCallback, useRef } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import Link from 'next/link'
 
 // Connie Care Team Webchat Configuration - loaded from environment variables
+// Webchat 3.x.x uses deploymentKey only (no accountSid/flexFlowSid needed)
 const DEPLOYMENT_KEY = process.env.NEXT_PUBLIC_WEBCHAT_DEPLOYMENT_KEY || ''
-const ACCOUNT_SID = process.env.NEXT_PUBLIC_TWILIO_ACCOUNT_SID || ''
 const AVAILABILITY_URL = process.env.NEXT_PUBLIC_WEBCHAT_AVAILABILITY_URL || ''
-const FLEX_FLOW_SID = process.env.NEXT_PUBLIC_WEBCHAT_FLEX_FLOW_SID || ''
 
 interface AvailabilityResponse {
   available: boolean
   agentCount: number
 }
 
-interface WebchatManager {
-  init: () => void
+// Webchat 3.x.x appConfig structure (per Twilio documentation)
+interface WebchatAppConfig {
+  deploymentKey: string
+  appStatus?: 'open' | 'closed'
+  theme?: {
+    isLight?: boolean
+  }
+  context?: Record<string, unknown>
+  disablePreEngagementForm?: boolean
+  preEngagementConfig?: {
+    title?: string
+    description?: string
+    submitLabel?: string
+    footerLabel?: string
+    fields?: Array<{
+      label: string
+      type: 'InputItem' | 'TextareaItem' | 'SelectItem' | 'CheckboxItem'
+      attributes: {
+        name: string
+        type?: string
+        placeholder?: string
+        required?: boolean
+        pattern?: string
+        readOnly?: boolean
+        value?: string
+      }
+      options?: Array<{
+        value: string
+        label: string
+        selected?: boolean
+      }>
+    }>
+  }
 }
 
 declare global {
   interface Window {
     Twilio?: {
-      FlexWebChat?: {
-        createWebChat: (config: unknown) => Promise<WebchatManager>
-        Actions?: {
-          invokeAction: (action: string, payload?: unknown) => void
-        }
-      }
+      // Webchat 3.x.x uses initWebchat
+      initWebchat: (config: WebchatAppConfig) => void
     }
   }
 }
@@ -34,10 +60,8 @@ declare global {
 export const WebchatWidget: React.FC = () => {
   const [isAvailable, setIsAvailable] = useState<boolean | null>(null)
   const [isLoading, setIsLoading] = useState(true)
-  const [isOpen, setIsOpen] = useState(false)
   const [webchatLoaded, setWebchatLoaded] = useState(false)
   const [showUnavailableMessage, setShowUnavailableMessage] = useState(false)
-  const webchatManagerRef = useRef<WebchatManager | null>(null)
 
   // Check agent availability
   const checkAvailability = useCallback(async () => {
@@ -67,152 +91,143 @@ export const WebchatWidget: React.FC = () => {
     }
   }, [])
 
-  // Load Twilio Flex Webchat script
+  // Load Twilio Webchat 3.x.x stylesheet
+  const loadWebchatStylesheet = useCallback(() => {
+    const stylesheetId = 'twilio-webchat-stylesheet'
+    // Guard against duplicate injection
+    if (document.getElementById(stylesheetId)) {
+      return
+    }
+
+    const link = document.createElement('link')
+    link.id = stylesheetId
+    link.rel = 'stylesheet'
+    link.href = 'https://media.twiliocdn.com/sdk/js/webchat-v3/releases/3.3.0/assets/styles.css'
+    document.head.appendChild(link)
+    console.log('Twilio Webchat 3.x.x stylesheet loaded')
+  }, [])
+
+  // Load Twilio Webchat 3.x.x script from Twilio CDN
   const loadWebchatScript = useCallback(() => {
     return new Promise<void>((resolve, reject) => {
-      if (window.Twilio?.FlexWebChat) {
+      // Check if Webchat 3.x is already loaded
+      if (window.Twilio?.initWebchat) {
         resolve()
         return
       }
 
+      // Load Webchat 3.x.x script from Twilio CDN
       const script = document.createElement('script')
-      script.src = 'https://assets.flex.twilio.com/releases/flex-webchat-ui/2.9.1/twilio-flex-webchat.min.js'
-      script.async = true
+      script.src = 'https://media.twiliocdn.com/sdk/js/webchat-v3/releases/3.3.0/webchat.min.js'
+      script.defer = true
       script.onload = () => {
-        console.log('Twilio Webchat script loaded')
+        console.log('Twilio Webchat 3.x.x script loaded')
         resolve()
       }
-      script.onerror = () => reject(new Error('Failed to load Twilio Webchat'))
+      script.onerror = () => reject(new Error('Failed to load Twilio Webchat 3.x.x'))
       document.head.appendChild(script)
-
-      // Also load the CSS
-      const link = document.createElement('link')
-      link.rel = 'stylesheet'
-      link.href = 'https://assets.flex.twilio.com/releases/flex-webchat-ui/2.9.1/twilio-flex-webchat.min.css'
-      document.head.appendChild(link)
     })
   }, [])
 
-  // Initialize webchat
+  // Initialize Webchat 3.x.x
   const initializeWebchat = useCallback(async () => {
-    if (!window.Twilio?.FlexWebChat) {
-      console.error('Twilio FlexWebChat not available')
+    if (!window.Twilio?.initWebchat) {
+      console.error('Twilio.initWebchat not available')
       return false
     }
 
     // Log config for debugging (without sensitive data)
-    console.log('Initializing webchat with:', {
-      hasAccountSid: !!ACCOUNT_SID,
-      hasFlexFlowSid: !!FLEX_FLOW_SID,
+    console.log('Initializing Webchat 3.x.x with:', {
       hasDeploymentKey: !!DEPLOYMENT_KEY,
     })
 
-    if (!ACCOUNT_SID || !FLEX_FLOW_SID) {
-      console.error('Missing required webchat configuration')
+    if (!DEPLOYMENT_KEY) {
+      console.error('Missing required webchat deploymentKey')
       return false
     }
 
-    const webchatConfig = {
-      accountSid: ACCOUNT_SID,
-      flexFlowSid: FLEX_FLOW_SID,
-      startEngagementOnInit: false,
-      preEngagementConfig: {
-        description: "Welcome to Connie! Please fill out the form below to start chatting with our team.",
-        fields: [
-          {
-            label: "Your Name",
-            type: "InputItem",
-            attributes: {
-              name: "friendlyName",
-              type: "text",
-              required: true,
-              placeholder: "Enter your name"
-            }
-          },
-          {
-            label: "Work Email",
-            type: "InputItem",
-            attributes: {
-              name: "email",
-              type: "email",
-              required: true,
-              placeholder: "you@company.com"
-            }
-          },
-          {
-            label: "Company",
-            type: "InputItem",
-            attributes: {
-              name: "company",
-              type: "text",
-              required: true,
-              placeholder: "Your organization"
-            }
-          },
-          {
-            label: "Phone (Optional)",
-            type: "InputItem",
-            attributes: {
-              name: "phone",
-              type: "tel",
-              required: false,
-              placeholder: "+1 (555) 123-4567"
-            }
-          }
-        ],
-        submitLabel: "Start Chat"
-      },
-      mainHeader: {
-        titleText: "Connie Sales",
-        showImage: true,
-        imageUrl: "https://docs.connie.one/img/logos/connie-rtc-docs-logo.png"
-      },
-      colorTheme: {
-        overrides: {
-          MainHeader: {
-            Container: {
-              background: "linear-gradient(90deg, #ec4899, #8b5cf6)"
-            }
-          },
-          Chat: {
-            MessageListItem: {
-              FromOthers: {
-                Avatar: {
-                  background: "#8b5cf6"
-                }
-              }
-            }
-          },
-          MainContainer: {
-            background: "#ffffff"
-          },
-          EntryPoint: {
-            Container: {
-              display: "none" // Hide Twilio's default entry point since we have our own
-            }
-          }
-        }
+    // Webchat 3.x configuration uses deploymentKey + optional preEngagementConfig
+    // IMPORTANT: Pre-engagement form requires both 'friendlyName' and 'query' fields
+    const webchatConfig: WebchatAppConfig = {
+      deploymentKey: DEPLOYMENT_KEY,
+      appStatus: 'open',
+      theme: {
+        isLight: true,
       },
       context: {
-        channel: "connie.one",
-        taskType: "sales"
-      }
+        locationOrigin: typeof window !== 'undefined' ? window.location.origin : '',
+        channel: 'connie.one',
+        taskType: 'sales',
+      },
+      disablePreEngagementForm: false,
+      preEngagementConfig: {
+        title: 'Connie Sales',
+        description: 'Welcome to Connie! Please fill out the form below to start chatting with our team.',
+        submitLabel: 'Start Chat',
+        footerLabel: 'Powered by Connie',
+        fields: [
+          {
+            label: 'Your Name',
+            type: 'InputItem',
+            attributes: {
+              name: 'friendlyName',
+              type: 'text',
+              required: true,
+              placeholder: 'Enter your name',
+            },
+          },
+          {
+            label: 'Work Email',
+            type: 'InputItem',
+            attributes: {
+              name: 'email',
+              type: 'email',
+              required: true,
+              placeholder: 'you@company.com',
+            },
+          },
+          {
+            label: 'Company',
+            type: 'InputItem',
+            attributes: {
+              name: 'company',
+              type: 'text',
+              required: true,
+              placeholder: 'Your organization',
+            },
+          },
+          {
+            label: 'Phone (Optional)',
+            type: 'InputItem',
+            attributes: {
+              name: 'phone',
+              type: 'tel',
+              required: false,
+              placeholder: '+1 (555) 123-4567',
+            },
+          },
+          {
+            label: 'How can we help?',
+            type: 'TextareaItem',
+            attributes: {
+              name: 'query',
+              type: 'text',
+              required: true,
+              placeholder: 'Tell us what you need help with...',
+            },
+          },
+        ],
+      },
     }
 
     try {
-      console.log('Creating webchat...')
-      const webchatManager = await window.Twilio.FlexWebChat.createWebChat(webchatConfig)
-      console.log('Webchat created, initializing...')
-
-      // IMPORTANT: Must call init() to render the webchat widget
-      webchatManager.init()
-
-      webchatManagerRef.current = webchatManager
+      console.log('Initializing Webchat 3.x.x...')
+      window.Twilio.initWebchat(webchatConfig)
       setWebchatLoaded(true)
-      console.log('Webchat initialized successfully')
+      console.log('Webchat 3.x.x initialized successfully')
       return true
     } catch (error) {
-      console.error('Failed to initialize webchat:', error)
+      console.error('Failed to initialize Webchat 3.x.x:', error)
       return false
     }
   }, [])
@@ -238,6 +253,8 @@ export const WebchatWidget: React.FC = () => {
 
     if (!webchatLoaded) {
       try {
+        // Load stylesheet before initializing widget
+        loadWebchatStylesheet()
         await loadWebchatScript()
         const success = await initializeWebchat()
         if (!success) {
@@ -250,17 +267,8 @@ export const WebchatWidget: React.FC = () => {
       }
     }
 
-    // Toggle the webchat visibility
-    // Small delay to ensure webchat is fully rendered
-    setTimeout(() => {
-      if (window.Twilio?.FlexWebChat?.Actions) {
-        console.log('Toggling webchat visibility, isOpen:', isOpen)
-        window.Twilio.FlexWebChat.Actions.invokeAction(isOpen ? 'MinimizeChat' : 'ToggleChatVisibility')
-        setIsOpen(!isOpen)
-      } else {
-        console.error('FlexWebChat Actions not available')
-      }
-    }, 100)
+    // Webchat 3.x handles its own UI toggle via the built-in entry point
+    // Once initialized, Twilio's widget appears and manages itself
   }
 
   // Close unavailable message
@@ -290,6 +298,7 @@ export const WebchatWidget: React.FC = () => {
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <Link
                   href="/contact"
+                  onClick={closeUnavailableMessage}
                   className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-gradient-to-r from-pink-500 to-purple-500 text-white font-medium hover:opacity-90 transition-opacity"
                 >
                   Contact Us
@@ -306,31 +315,29 @@ export const WebchatWidget: React.FC = () => {
         </div>
       )}
 
-      {/* Chat Button */}
-      <button
-        onClick={handleClick}
-        disabled={isLoading}
-        aria-label={isLoading ? 'Loading chat...' : isOpen ? 'Close chat' : 'Open chat'}
-        className="fixed bottom-6 right-6 z-[9999] w-16 h-16 rounded-full bg-gradient-to-r from-pink-500 to-purple-500 text-white shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 flex items-center justify-center disabled:opacity-50 disabled:cursor-wait"
-      >
+      {/* Chat Button - hidden once Twilio's widget is loaded (it has its own button) */}
+      {!webchatLoaded && (
+        <button
+          onClick={handleClick}
+          disabled={isLoading}
+          aria-label={isLoading ? 'Loading chat...' : 'Open chat'}
+          className="fixed bottom-6 right-6 z-[9999] w-16 h-16 rounded-full bg-gradient-to-r from-pink-500 to-purple-500 text-white shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 flex items-center justify-center disabled:opacity-50 disabled:cursor-wait"
+        >
         {isLoading ? (
           <svg className="w-6 h-6 animate-spin" fill="none" viewBox="0 0 24 24">
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-          </svg>
-        ) : isOpen ? (
-          <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
           </svg>
         ) : (
           <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
           </svg>
         )}
-      </button>
+        </button>
+      )}
 
-      {/* Availability indicator dot */}
-      {!isLoading && (
+      {/* Availability indicator dot - only show when our button is visible */}
+      {!isLoading && !webchatLoaded && (
         <span
           className={`fixed bottom-6 right-6 z-[10000] w-4 h-4 rounded-full border-2 border-white transform translate-x-10 -translate-y-10 ${
             isAvailable ? 'bg-green-500' : 'bg-gray-400'
@@ -338,6 +345,9 @@ export const WebchatWidget: React.FC = () => {
           aria-hidden="true"
         />
       )}
+
+      {/* Twilio Webchat 3.x container - required for widget rendering */}
+      <div id="twilio-webchat-widget-root" />
     </>
   )
 }

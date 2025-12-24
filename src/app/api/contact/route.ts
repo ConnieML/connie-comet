@@ -27,8 +27,9 @@ export async function POST(request: Request) {
 
     // Send email notification
     await resend.emails.send({
-      from: 'Connie Contact <contact@send.connie.one>',
-      to: 'admin@connie.direct',
+      from: `${formData.name} via Connie <contact@connie.one>`,
+      replyTo: formData.email,
+      to: ['admin@connie.direct', 'careteam@connie.support'],
       subject: `New Contact Form Submission - ${formData.company}`,
       react: ConnieContactSubmission({
         name: formData.name,
