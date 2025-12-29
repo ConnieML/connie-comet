@@ -232,7 +232,7 @@ export default function VoiceInterfacePage() {
             </div>
             <div className="text-sm text-blue-800">
               <p className="font-medium mb-1">Voice Preview</p>
-              <p className="text-blue-700">Click the preview button to hear a sample of each voice agent. Click select to apply selected voice to your application.</p>
+              <p className="text-blue-700">Click the preview button to hear a sample of each voice agent.</p>
             </div>
           </div>
         </div>
