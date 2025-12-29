@@ -218,7 +218,7 @@ export default function VoiceInterfacePage() {
             Voice Interface
           </h1>
           <p className="text-xl text-slate-600">
-            Available text-to-speech voices for your IVR and contact center applications
+            Available voice agents for your Connie contact center applications
           </p>
         </div>
 
@@ -232,7 +232,7 @@ export default function VoiceInterfacePage() {
             </div>
             <div className="text-sm text-blue-800">
               <p className="font-medium mb-1">Voice Preview</p>
-              <p className="text-blue-700">Click the play button to hear a sample of each voice. Voices are powered by AWS Polly via the Doppel Center API.</p>
+              <p className="text-blue-700">Click the preview button to hear a sample of each voice agent. Click select to apply selected voice to your application.</p>
             </div>
           </div>
         </div>
