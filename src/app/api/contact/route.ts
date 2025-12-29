@@ -2,7 +2,13 @@ import { NextResponse } from 'next/server'
 import { Resend } from 'resend'
 import ConnieContactSubmission from '../../../../emails/templates/connie-contact-submission'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+// Lazy initialization to prevent build-time errors when env var is missing
+const getResendClient = () => {
+  if (!process.env.RESEND_API_KEY) {
+    throw new Error('RESEND_API_KEY environment variable is not configured')
+  }
+  return new Resend(process.env.RESEND_API_KEY)
+}
 
 export async function POST(request: Request) {
   try {
@@ -26,6 +32,7 @@ export async function POST(request: Request) {
     }
 
     // Send email notification
+    const resend = getResendClient()
     await resend.emails.send({
       from: `${formData.name} via Connie <contact@connie.one>`,
       replyTo: formData.email,

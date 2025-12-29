@@ -3,7 +3,13 @@ import { google } from 'googleapis'
 import { Resend } from 'resend'
 import ConnieUATSubmissionNotification from '../../../../emails/templates/connie-uat-submission-notification'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+// Lazy initialization to prevent build-time errors when env var is missing
+const getResendClient = () => {
+  if (!process.env.RESEND_API_KEY) {
+    throw new Error('RESEND_API_KEY environment variable is not configured')
+  }
+  return new Resend(process.env.RESEND_API_KEY)
+}
 
 export async function POST(request: Request) {
   try {
@@ -99,6 +105,7 @@ export async function POST(request: Request) {
 
     try {
       // Send to both admin emails
+      const resend = getResendClient()
       await resend.emails.send({
         from: 'Connie Team <uat@send.connie.one>',
         to: ['cberno@nevadaseniorservices.org', 'admin@connie.direct'],

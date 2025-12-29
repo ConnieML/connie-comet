@@ -21,6 +21,146 @@ interface Voice {
   }
 }
 
+// Audio-reactive avatar component with glow pulse animation
+function VoiceAvatar({ gender, isPlaying }: { gender: string; isPlaying: boolean }) {
+  const genderColor = gender === 'female' ? '#9333ea' : '#2563eb' // purple for female, blue for male
+
+  return (
+    <div
+      className={`relative flex-shrink-0 transition-all duration-200 ${isPlaying ? 'scale-105' : ''}`}
+      style={{ width: '40px', height: '40px' }}
+    >
+      {/* Glow halo - uses Tailwind animate-pulse when playing */}
+      <div
+        className={`absolute inset-[-4px] rounded-full transition-all duration-200 ${
+          isPlaying ? 'opacity-100 animate-pulse' : 'opacity-30'
+        }`}
+        style={{
+          border: '2px solid transparent',
+          boxShadow: isPlaying
+            ? `0 0 14px 5px ${genderColor}, inset 0 0 6px 2px ${genderColor}`
+            : `0 0 6px 1px ${genderColor}, inset 0 0 3px 1px ${genderColor}`,
+        }}
+      />
+      {/* Avatar circle */}
+      <div
+        className="absolute inset-0 rounded-full flex items-center justify-center"
+        style={{
+          background: gender === 'female'
+            ? 'linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%)'
+            : 'linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%)',
+          border: `2px solid ${genderColor}40`,
+        }}
+      >
+        <svg viewBox="0 0 24 24" className="w-5 h-5" style={{ fill: genderColor }}>
+          <path d="M12 2C9.79 2 8 3.79 8 6s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 10c-3.25 0-6 1.34-6 3v2h12v-2c0-1.66-2.75-3-6-3z"/>
+        </svg>
+      </div>
+    </div>
+  )
+}
+
+// Language flag icons
+function LanguageIcon({ language }: { language: string }) {
+  const flags: Record<string, { emoji: string; label: string }> = {
+    'en-US': { emoji: '🇺🇸', label: 'US' },
+    'en-GB': { emoji: '🇬🇧', label: 'UK' },
+    'es-US': { emoji: '🇺🇸', label: 'ES' },
+    'es-MX': { emoji: '🇲🇽', label: 'MX' },
+    'pt-BR': { emoji: '🇧🇷', label: 'BR' },
+    'fr-FR': { emoji: '🇫🇷', label: 'FR' },
+  }
+  const flag = flags[language] || { emoji: '🌐', label: language }
+
+  return (
+    <div className="flex items-center gap-1.5" title={language}>
+      <span className="text-lg">{flag.emoji}</span>
+      <span className="text-xs text-slate-500 font-medium">{flag.label}</span>
+    </div>
+  )
+}
+
+// Gender icon
+function GenderIcon({ gender }: { gender: string }) {
+  if (gender === 'female') {
+    return (
+      <div className="flex items-center justify-center w-7 h-7 rounded-full bg-pink-100" title="Female">
+        <svg viewBox="0 0 24 24" className="w-4 h-4 text-pink-600" fill="currentColor">
+          <path d="M12 2a6 6 0 016 6c0 2.97-2.16 5.44-5 5.92V16h2v2h-2v2h-2v-2H9v-2h2v-2.08C8.16 13.44 6 10.97 6 8a6 6 0 016-6zm0 2a4 4 0 00-4 4 4 4 0 004 4 4 4 0 004-4 4 4 0 00-4-4z"/>
+        </svg>
+      </div>
+    )
+  }
+  return (
+    <div className="flex items-center justify-center w-7 h-7 rounded-full bg-blue-100" title="Male">
+      <svg viewBox="0 0 24 24" className="w-4 h-4 text-blue-600" fill="currentColor">
+        <path d="M9.5 11c1.93 0 3.5 1.57 3.5 3.5S11.43 18 9.5 18 6 16.43 6 14.5 7.57 11 9.5 11m0-2C6.46 9 4 11.46 4 14.5S6.46 20 9.5 20s5.5-2.46 5.5-5.5c0-1.16-.36-2.24-.97-3.12L18 7.42V10h2V4h-6v2h2.58l-3.97 3.97C11.73 9.36 10.65 9 9.5 9z"/>
+      </svg>
+    </div>
+  )
+}
+
+// Engine icon (neural vs generative)
+function EngineIcon({ engine }: { engine: string }) {
+  if (engine === 'neural') {
+    return (
+      <div className="flex items-center justify-center w-7 h-7 rounded-full bg-purple-100" title="Neural Engine">
+        <svg viewBox="0 0 24 24" className="w-4 h-4 text-purple-600" fill="currentColor">
+          <path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/>
+        </svg>
+      </div>
+    )
+  }
+  return (
+    <div className="flex items-center justify-center w-7 h-7 rounded-full bg-emerald-100" title="Generative Engine">
+      <svg viewBox="0 0 24 24" className="w-4 h-4 text-emerald-600" fill="currentColor">
+        <path d="M7.5 5.6L10 7 8.6 4.5 10 2 7.5 3.4 5 2l1.4 2.5L5 7zm12 9.8L17 14l1.4 2.5L17 19l2.5-1.4L22 19l-1.4-2.5L22 14zM22 2l-2.5 1.4L17 2l1.4 2.5L17 7l2.5-1.4L22 7l-1.4-2.5zm-7.63 5.29a.996.996 0 00-1.41 0L1.29 18.96a.996.996 0 000 1.41l2.34 2.34c.39.39 1.02.39 1.41 0L16.7 11.05a.996.996 0 000-1.41l-2.33-2.35zm-1.03 5.49l-2.12-2.12 2.44-2.44 2.12 2.12-2.44 2.44z"/>
+      </svg>
+    </div>
+  )
+}
+
+// Tone icon
+function ToneIcon({ tone }: { tone: string }) {
+  const toneConfig: Record<string, { icon: JSX.Element; bg: string; color: string }> = {
+    professional: {
+      icon: <path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/>,
+      bg: 'bg-slate-100',
+      color: 'text-slate-600',
+    },
+    friendly: {
+      icon: <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/>,
+      bg: 'bg-amber-100',
+      color: 'text-amber-600',
+    },
+    warm: {
+      icon: <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>,
+      bg: 'bg-rose-100',
+      color: 'text-rose-600',
+    },
+    authoritative: {
+      icon: <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/>,
+      bg: 'bg-indigo-100',
+      color: 'text-indigo-600',
+    },
+    conversational: {
+      icon: <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/>,
+      bg: 'bg-cyan-100',
+      color: 'text-cyan-600',
+    },
+  }
+
+  const config = toneConfig[tone] || toneConfig.professional
+
+  return (
+    <div className={`flex items-center justify-center w-7 h-7 rounded-full ${config.bg}`} title={tone}>
+      <svg viewBox="0 0 24 24" className={`w-4 h-4 ${config.color}`} fill="currentColor">
+        {config.icon}
+      </svg>
+    </div>
+  )
+}
+
 export default function VoiceInterfacePage() {
   const [voices, setVoices] = useState<Voice[]>([])
   const [loading, setLoading] = useState(true)
@@ -67,17 +207,6 @@ export default function VoiceInterfacePage() {
     }
   }
 
-  const formatLanguage = (lang: string) => {
-    const map: Record<string, string> = {
-      'en-US': 'English (US)',
-      'en-GB': 'English (UK)',
-      'es-US': 'Spanish (US)',
-      'es-MX': 'Spanish (MX)',
-      'pt-BR': 'Portuguese (BR)',
-      'fr-FR': 'French (FR)',
-    }
-    return map[lang] || lang
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100">
@@ -134,76 +263,96 @@ export default function VoiceInterfacePage() {
         {/* Voice Table */}
         {!loading && !error && (
           <div className="bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="bg-slate-50 border-b border-slate-200">
-                    <th className="text-left px-6 py-4 text-sm font-semibold text-slate-700">Voice</th>
-                    <th className="text-left px-6 py-4 text-sm font-semibold text-slate-700">Language</th>
-                    <th className="text-left px-6 py-4 text-sm font-semibold text-slate-700">Gender</th>
-                    <th className="text-left px-6 py-4 text-sm font-semibold text-slate-700">Engine</th>
-                    <th className="text-left px-6 py-4 text-sm font-semibold text-slate-700">Tone</th>
-                    <th className="text-center px-6 py-4 text-sm font-semibold text-slate-700">Preview</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100">
-                  {voices.map((voice) => (
-                    <tr key={voice.id} className="hover:bg-slate-50 transition-colors">
-                      <td className="px-6 py-4">
-                        <div className="font-medium text-slate-800">{voice.name}</div>
-                        <div className="text-xs text-slate-500">{voice.providerVoiceId}</div>
-                      </td>
-                      <td className="px-6 py-4 text-slate-600">
-                        {formatLanguage(voice.language)}
-                      </td>
-                      <td className="px-6 py-4">
-                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                          voice.gender === 'female'
-                            ? 'bg-pink-100 text-pink-700'
-                            : 'bg-blue-100 text-blue-700'
-                        }`}>
-                          {voice.gender}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4">
-                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                          voice.engine === 'neural'
-                            ? 'bg-purple-100 text-purple-700'
-                            : 'bg-green-100 text-green-700'
-                        }`}>
-                          {voice.engine}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 text-slate-600 capitalize">
-                        {voice.tone}
-                      </td>
-                      <td className="px-6 py-4 text-center">
-                        <button
-                          onClick={() => playAudio(voice)}
-                          className={`inline-flex items-center justify-center w-10 h-10 rounded-full transition-all ${
-                            playingId === voice.id
-                              ? 'bg-blue-600 text-white'
-                              : 'bg-slate-100 text-slate-600 hover:bg-blue-100 hover:text-blue-600'
-                          }`}
-                          title={playingId === voice.id ? 'Stop' : 'Play sample'}
-                        >
-                          {playingId === voice.id ? (
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                              <rect x="6" y="5" width="3" height="10" rx="1" />
-                              <rect x="11" y="5" width="3" height="10" rx="1" />
-                            </svg>
-                          ) : (
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
-                            </svg>
-                          )}
-                        </button>
-                      </td>
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="bg-slate-50 border-b border-slate-200">
+                      <th className="text-left px-4 py-4 text-sm font-semibold text-slate-700 w-12"></th>
+                      <th className="text-left px-4 py-4 text-sm font-semibold text-slate-700">Voice</th>
+                      <th className="text-center px-4 py-4 text-sm font-semibold text-slate-700 w-20">
+                        <span title="Language">Lang</span>
+                      </th>
+                      <th className="text-center px-4 py-4 text-sm font-semibold text-slate-700 w-16">
+                        <span title="Gender">Gen</span>
+                      </th>
+                      <th className="text-center px-4 py-4 text-sm font-semibold text-slate-700 w-16">
+                        <span title="Engine">Eng</span>
+                      </th>
+                      <th className="text-center px-4 py-4 text-sm font-semibold text-slate-700 w-16">
+                        <span title="Tone">Tone</span>
+                      </th>
+                      <th className="text-center px-4 py-4 text-sm font-semibold text-slate-700 w-28"></th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {voices.map((voice) => (
+                      <tr key={voice.id} className="hover:bg-slate-50 transition-colors">
+                        {/* Avatar column */}
+                        <td className="px-4 py-3">
+                          <VoiceAvatar gender={voice.gender} isPlaying={playingId === voice.id} />
+                        </td>
+                        {/* Voice name */}
+                        <td className="px-4 py-3">
+                          <div className="font-medium text-slate-800">{voice.name}</div>
+                          <div className="text-xs text-slate-500">{voice.providerVoiceId}</div>
+                        </td>
+                        {/* Language icon */}
+                        <td className="px-4 py-3 text-center">
+                          <div className="flex justify-center">
+                            <LanguageIcon language={voice.language} />
+                          </div>
+                        </td>
+                        {/* Gender icon */}
+                        <td className="px-4 py-3 text-center">
+                          <div className="flex justify-center">
+                            <GenderIcon gender={voice.gender} />
+                          </div>
+                        </td>
+                        {/* Engine icon */}
+                        <td className="px-4 py-3 text-center">
+                          <div className="flex justify-center">
+                            <EngineIcon engine={voice.engine} />
+                          </div>
+                        </td>
+                        {/* Tone icon */}
+                        <td className="px-4 py-3 text-center">
+                          <div className="flex justify-center">
+                            <ToneIcon tone={voice.tone} />
+                          </div>
+                        </td>
+                        {/* Preview button - Twilio "Buy" style */}
+                        <td className="px-4 py-3 text-center">
+                          <button
+                            onClick={() => playAudio(voice)}
+                            className={`inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-md text-sm font-medium transition-all ${
+                              playingId === voice.id
+                                ? 'bg-red-600 text-white hover:bg-red-700 shadow-sm'
+                                : 'bg-blue-600 text-white hover:bg-blue-700 shadow-sm'
+                            }`}
+                          >
+                            {playingId === voice.id ? (
+                              <>
+                                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                                  <rect x="6" y="5" width="4" height="14" rx="1" />
+                                  <rect x="14" y="5" width="4" height="14" rx="1" />
+                                </svg>
+                                <span>Stop</span>
+                              </>
+                            ) : (
+                              <>
+                                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                                  <polygon points="5,3 19,12 5,21" />
+                                </svg>
+                                <span>Preview</span>
+                              </>
+                            )}
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
 
             {/* Footer */}
             <div className="bg-slate-50 border-t border-slate-200 px-6 py-4">
