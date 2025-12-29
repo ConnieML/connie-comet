@@ -187,9 +187,10 @@ export default function VoiceInterfacePage() {
     fetchVoices()
   }, [])
 
-  const playAudio = (voice: Voice) => {
+  const playAudio = async (voice: Voice) => {
     if (audioRef.current) {
       audioRef.current.pause()
+      audioRef.current = null
     }
 
     if (playingId === voice.id) {
@@ -198,11 +199,29 @@ export default function VoiceInterfacePage() {
     }
 
     const audioUrl = `https://doppel.center${voice.sampleAudioUrl}`
-    audioRef.current = new Audio(audioUrl)
-    audioRef.current.play()
-    setPlayingId(voice.id)
+    console.log('Playing audio:', audioUrl)
 
-    audioRef.current.onended = () => {
+    const audio = new Audio(audioUrl)
+    audioRef.current = audio
+
+    audio.onerror = (e) => {
+      console.error('Audio error:', e, audio.error)
+      setPlayingId(null)
+    }
+
+    audio.onended = () => {
+      setPlayingId(null)
+    }
+
+    audio.oncanplaythrough = () => {
+      console.log('Audio can play through')
+    }
+
+    try {
+      await audio.play()
+      setPlayingId(voice.id)
+    } catch (err) {
+      console.error('Play failed:', err)
       setPlayingId(null)
     }
   }
