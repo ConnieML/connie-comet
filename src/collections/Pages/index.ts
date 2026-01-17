@@ -12,6 +12,7 @@ import { RawHTML } from '../../blocks/RawHTML/config'
 import { WaitlistLanding } from '../../blocks/WaitlistLanding/config'
 import { WaitlistStatic } from '../../blocks/WaitlistStatic/config'
 import { Hero } from '../../blocks/Hero/config'
+import { BrandPortal } from '../../blocks/BrandPortal/config'
 import { hero } from '@/heros/config'
 import { slugField } from '@/fields/slug'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
@@ -94,7 +95,18 @@ export const Pages: CollectionConfig<'pages'> = {
             {
               name: 'layout',
               type: 'blocks',
-              blocks: [Hero, CallToAction, Content, MediaBlock, Archive, FormBlock, /* CardGrid, */ RawHTML, WaitlistLanding, WaitlistStatic],
+              blocks: [
+                Hero,
+                CallToAction,
+                Content,
+                MediaBlock,
+                Archive,
+                FormBlock,
+                /* CardGrid, */ RawHTML,
+                WaitlistLanding,
+                WaitlistStatic,
+                BrandPortal,
+              ],
               required: true,
               admin: {
                 initCollapsed: true,

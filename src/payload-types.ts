@@ -73,6 +73,7 @@ export interface Config {
     categories: Category;
     users: User;
     'external-documents': ExternalDocument;
+    'brand-assets': BrandAsset;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -90,6 +91,7 @@ export interface Config {
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     'external-documents': ExternalDocumentsSelect<false> | ExternalDocumentsSelect<true>;
+    'brand-assets': BrandAssetsSelect<false> | BrandAssetsSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -207,6 +209,7 @@ export interface Page {
     | RawHTMLBlock
     | WaitlistLandingBlock
     | WaitlistStaticBlock
+    | BrandPortalBlock
   )[];
   meta?: {
     title?: string | null;
@@ -849,6 +852,40 @@ export interface WaitlistStaticBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "BrandPortalBlock".
+ */
+export interface BrandPortalBlock {
+  heading?: string | null;
+  description?: string | null;
+  /**
+   * Leave empty to show all categories
+   */
+  showCategories?:
+    | (
+        | 'logos'
+        | 'colors'
+        | 'fonts'
+        | 'templates'
+        | 'photos'
+        | 'video'
+        | 'audio'
+        | 'presentations'
+        | 'developer'
+        | 'social'
+        | 'packages'
+        | 'guidelines'
+      )[]
+    | null;
+  /**
+   * Which usage rights levels to display
+   */
+  usageFilter?: ('public' | 'partners' | 'internal')[] | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'brandPortal';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "external-documents".
  */
 export interface ExternalDocument {
@@ -887,6 +924,93 @@ export interface ExternalDocument {
   documentDescription?: string | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * Centralized brand assets for internal teams and external partners
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "brand-assets".
+ */
+export interface BrandAsset {
+  id: string;
+  /**
+   * Descriptive name for this asset
+   */
+  name: string;
+  /**
+   * Brief description of the asset and its intended use
+   */
+  description?: string | null;
+  category:
+    | 'logos'
+    | 'colors'
+    | 'fonts'
+    | 'templates'
+    | 'photos'
+    | 'video'
+    | 'audio'
+    | 'presentations'
+    | 'developer'
+    | 'social'
+    | 'packages'
+    | 'guidelines';
+  assetType: 'primary' | 'secondary' | 'variant' | 'template' | 'archive';
+  /**
+   * Comma-separated tags (e.g., "dark-mode, square, animated")
+   */
+  tags?: string | null;
+  /**
+   * Who can access and use this asset
+   */
+  usageRights: 'public' | 'partners' | 'internal' | 'restricted';
+  /**
+   * Specific usage instructions or restrictions
+   */
+  usageNotes?: string | null;
+  /**
+   * Version number (e.g., v2.1)
+   */
+  version?: string | null;
+  /**
+   * Link to editable source (Figma, Google Drive, etc.)
+   */
+  sourceFile?: string | null;
+  /**
+   * Link to related assets (variants, packages)
+   */
+  relatedAssets?: (string | BrandAsset)[] | null;
+  publishedAt?: string | null;
+  prefix?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+  sizes?: {
+    thumbnail?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    preview?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+  };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1086,6 +1210,10 @@ export interface PayloadLockedDocument {
         value: string | ExternalDocument;
       } | null)
     | ({
+        relationTo: 'brand-assets';
+        value: string | BrandAsset;
+      } | null)
+    | ({
         relationTo: 'redirects';
         value: string | Redirect;
       } | null)
@@ -1188,6 +1316,7 @@ export interface PagesSelect<T extends boolean = true> {
         rawHTML?: T | RawHTMLBlockSelect<T>;
         waitlistLanding?: T | WaitlistLandingBlockSelect<T>;
         waitlistStatic?: T | WaitlistStaticBlockSelect<T>;
+        brandPortal?: T | BrandPortalBlockSelect<T>;
       };
   meta?:
     | T
@@ -1324,6 +1453,18 @@ export interface WaitlistLandingBlockSelect<T extends boolean = true> {
  * via the `definition` "WaitlistStaticBlock_select".
  */
 export interface WaitlistStaticBlockSelect<T extends boolean = true> {
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "BrandPortalBlock_select".
+ */
+export interface BrandPortalBlockSelect<T extends boolean = true> {
+  heading?: T;
+  description?: T;
+  showCategories?: T;
+  usageFilter?: T;
   id?: T;
   blockName?: T;
 }
@@ -1514,6 +1655,60 @@ export interface ExternalDocumentsSelect<T extends boolean = true> {
   documentDescription?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "brand-assets_select".
+ */
+export interface BrandAssetsSelect<T extends boolean = true> {
+  name?: T;
+  description?: T;
+  category?: T;
+  assetType?: T;
+  tags?: T;
+  usageRights?: T;
+  usageNotes?: T;
+  version?: T;
+  sourceFile?: T;
+  relatedAssets?: T;
+  publishedAt?: T;
+  prefix?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
+  sizes?:
+    | T
+    | {
+        thumbnail?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        preview?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1939,6 +2134,10 @@ export interface TaskSchedulePublish {
       | ({
           relationTo: 'posts';
           value: string | Post;
+        } | null)
+      | ({
+          relationTo: 'brand-assets';
+          value: string | BrandAsset;
         } | null);
     global?: string | null;
     user?: (string | null) | User;

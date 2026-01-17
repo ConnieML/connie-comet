@@ -12,6 +12,7 @@ import { RawHTMLBlock } from '@/blocks/RawHTML/Component'
 import { WaitlistLanding } from '@/blocks/WaitlistLanding/Component'
 import { WaitlistStatic } from '@/blocks/WaitlistStatic/Component'
 import { HeroBlock } from '@/blocks/Hero/Component'
+import { BrandPortalBlock } from '@/blocks/BrandPortal/Component'
 
 const blockComponents = {
   archive: ArchiveBlock,
@@ -24,6 +25,7 @@ const blockComponents = {
   waitlistLanding: WaitlistLanding,
   waitlistStatic: WaitlistStatic,
   hero: HeroBlock,
+  brandPortal: BrandPortalBlock,
 }
 
 export const RenderBlocks: React.FC<{
@@ -44,7 +46,13 @@ export const RenderBlocks: React.FC<{
 
             if (Block) {
               // Hero, RawHTML, and Waitlist blocks should be full-screen without margin
-              if (blockType === 'hero' || blockType === 'rawHTML' || blockType === 'waitlistLanding' || blockType === 'waitlistStatic') {
+              if (
+                blockType === 'hero' ||
+                blockType === 'rawHTML' ||
+                blockType === 'waitlistLanding' ||
+                blockType === 'waitlistStatic' ||
+                blockType === 'brandPortal'
+              ) {
                 return (
                   <div key={index}>
                     {/* @ts-expect-error there may be some mismatch between the expected types here */}

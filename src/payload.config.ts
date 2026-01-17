@@ -7,6 +7,7 @@ import { buildConfig, PayloadRequest } from 'payload'
 import { fileURLToPath } from 'url'
 
 import { Categories } from './collections/Categories'
+import { BrandAssets } from './collections/BrandAssets'
 import { ExternalDocuments } from './collections/ExternalDocuments'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
@@ -80,7 +81,7 @@ export default buildConfig({
   db: mongooseAdapter({
     url: process.env.DATABASE_URI || '',
   }),
-  collections: [Pages, Posts, Media, Categories, Users, ExternalDocuments],
+  collections: [Pages, Posts, Media, Categories, Users, ExternalDocuments, BrandAssets],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
   plugins: [
@@ -91,6 +92,12 @@ export default buildConfig({
           generateFileURL: ({ filename }) => {
             return `https://${process.env.S3_BUCKET_UPLOADS || 'admin-connie-one-uploads'}.s3.${process.env.S3_REGION || 'us-east-1'}.amazonaws.com/${filename}`
           },
+        },
+        'brand-assets': {
+          generateFileURL: ({ filename }) => {
+            return `https://${process.env.S3_BUCKET_UPLOADS || 'admin-connie-one-uploads'}.s3.${process.env.S3_REGION || 'us-east-1'}.amazonaws.com/brand/${filename}`
+          },
+          prefix: 'brand/',
         },
       },
       bucket: process.env.S3_BUCKET_UPLOADS || 'admin-connie-one-uploads',
