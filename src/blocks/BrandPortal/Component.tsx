@@ -324,11 +324,9 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
               setSelectedSubcategory(null)
               setSearchQuery('')
             }}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-all mb-6 group border border-white/10"
+            className="flex items-center gap-2 text-zinc-400 hover:text-white transition-colors mb-6 group"
           >
-            <svg className="w-4 h-4 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
+            <span className="text-xl group-hover:-translate-x-1 transition-transform">←</span>
             <span>Back to Categories</span>
           </button>
 
@@ -512,9 +510,7 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
                         download
                         className="flex items-center gap-1.5 bg-pink-500 hover:bg-pink-400 text-white text-sm font-medium py-2 px-4 rounded-lg transition-colors"
                       >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                        </svg>
+                        <span>↓</span>
                         <span className="hidden lg:inline">Download</span>
                       </a>
                       <button
