@@ -142,6 +142,33 @@ export const BrandAssets: CollectionConfig<'brand-assets'> = {
     },
 
     // ============================================
+    // SUBCATEGORY & ORGANIZATION
+    // ============================================
+    {
+      type: 'row',
+      fields: [
+        {
+          name: 'subcategory',
+          type: 'text',
+          admin: {
+            width: '50%',
+            description: 'Group within category (e.g., "Contributors", "Stock Photos", "Backgrounds")',
+            placeholder: 'e.g., Contributors, Stock, Backgrounds',
+          },
+        },
+        {
+          name: 'isCategoryHero',
+          type: 'checkbox',
+          defaultValue: false,
+          admin: {
+            width: '50%',
+            description: 'Use this image as the category hero on the brand landing page',
+          },
+        },
+      ],
+    },
+
+    // ============================================
     // TAGS (as text field for simplicity)
     // ============================================
     {
