@@ -277,9 +277,7 @@ export const BrandAssets: CollectionConfig<'brand-assets'> = {
   // This ensures authenticatedOrPublished access control works correctly
   versions: {
     drafts: {
-      autosave: {
-        interval: 300,
-      },
+      autosave: false, // Disabled - was causing 500 errors
       schedulePublish: true,
     },
     maxPerDoc: 10,
