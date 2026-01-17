@@ -1,7 +1,6 @@
 import type { CollectionConfig } from 'payload'
 
 import { authenticated } from '../../access/authenticated'
-import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
 
 export const BrandAssets: CollectionConfig<'brand-assets'> = {
   slug: 'brand-assets',
@@ -12,7 +11,7 @@ export const BrandAssets: CollectionConfig<'brand-assets'> = {
   access: {
     create: authenticated,
     delete: authenticated,
-    read: authenticatedOrPublished,
+    read: () => true, // Public read for brand assets (no drafts/versions)
     update: authenticated,
   },
   defaultPopulate: {
@@ -242,7 +241,7 @@ export const BrandAssets: CollectionConfig<'brand-assets'> = {
     },
 
     // ============================================
-    // PUBLISHING (Sidebar) - managed by versions system
+    // PUBLISHING (Sidebar)
     // ============================================
     {
       name: 'publishedAt',
@@ -252,16 +251,6 @@ export const BrandAssets: CollectionConfig<'brand-assets'> = {
         date: {
           pickerAppearance: 'dayAndTime',
         },
-      },
-      hooks: {
-        beforeChange: [
-          ({ siblingData, value }) => {
-            if (siblingData._status === 'published' && !value) {
-              return new Date()
-            }
-            return value
-          },
-        ],
       },
     },
   ],
@@ -273,13 +262,12 @@ export const BrandAssets: CollectionConfig<'brand-assets'> = {
       },
     ],
   },
-  // CTO FIX: Use Payload's built-in versioning system instead of custom _status field
-  // This ensures authenticatedOrPublished access control works correctly
-  versions: {
-    drafts: {
-      autosave: false, // Disabled - was causing 500 errors
-      schedulePublish: true,
-    },
-    maxPerDoc: 10,
-  },
+  // Versioning disabled - was causing 500 errors with locale handling
+  // versions: {
+  //   drafts: {
+  //     autosave: false,
+  //     schedulePublish: true,
+  //   },
+  //   maxPerDoc: 10,
+  // },
 }
