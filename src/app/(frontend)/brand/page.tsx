@@ -18,7 +18,7 @@ export default function BrandPage() {
       <BrandPortalBlock
         heading="Connie Brand Assets"
         description="Official logos, templates, and brand materials for partners, developers, and team members. Download what you need or copy hotlink URLs for direct embedding."
-        usageFilter={['public', 'partners']}
+        usageFilter={['public', 'partners', 'internal', 'restricted']}
       />
     </main>
   )
