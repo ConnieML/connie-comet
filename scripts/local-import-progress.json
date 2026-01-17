@@ -1,0 +1,119 @@
+{
+  "completed": [
+    "helloworld-v1_3.pdf",
+    "240617-FCA -demoday.pdf",
+    "240617-FCA.pdf",
+    "connie-mvp-board-061824.pdf",
+    "240617-FCA.pdf",
+    "240426-connie-mvp.pdf",
+    "connie-1pager-FINALDRAFT.pdf",
+    "211115-cbo-tech-needs-assessment.pdf",
+    "220413-connie-neworleans-pitch.pdf",
+    "connie-1page-V2-1-comp.pdf",
+    "connie-saas-awsmodel-DRAFTv0-1.pdf",
+    "Building-a-multi-tenant-SaaS-solution (1).pdf",
+    "Building-a-multi-tenant-SaaS-solution.pdf",
+    "220801-connie-1pager-v2.pdf",
+    "2301310-connie-public-dev-deck.pdf",
+    "221027-connie-pitch-final.pdf"
+  ],
+  "failed": [
+    {
+      "name": "230501-Prototype-phase1-kickoff-v0.pdf",
+      "error": "Parse error: "
+    },
+    {
+      "name": "231112-Prototype-phase2-kickoff-v0.pdf",
+      "error": "Parse error: "
+    },
+    {
+      "name": "251210-Connie_EWA-VegasStage-FINAL-Script.pdf",
+      "error": "Parse error: "
+    },
+    {
+      "name": "251210-Connie_EWA-VegasStage-FINALpdf.pdf",
+      "error": "Parse error: "
+    },
+    {
+      "name": "connie-ewa-111124.pptx.pdf",
+      "error": "Parse error: "
+    },
+    {
+      "name": "Provider-PitchConnie-Final.pptx.pdf",
+      "error": "Parse error: "
+    },
+    {
+      "name": "⚠️⚠️FINALDRAFT-OnAging-StageSession-April2025.pptx.pdf",
+      "error": "Parse error: "
+    },
+    {
+      "name": "⚠️DRAFT-OnAging-StageSession-April2025.pptx.pdf",
+      "error": "Parse error: "
+    },
+    {
+      "name": "connie-mvp-EWA-111124.pdf",
+      "error": "Parse error: "
+    },
+    {
+      "name": "connie2mvp-finaldraft.pdf",
+      "error": "Parse error: "
+    },
+    {
+      "name": "connie2mvp-finaldraft (1).pdf",
+      "error": "Parse error: "
+    },
+    {
+      "name": "connie2mvp-finaldraft.pdf",
+      "error": "Parse error: "
+    },
+    {
+      "name": "connie-mvp-pitch-v4-FINALDRAFY.pdf",
+      "error": "Parse error: "
+    },
+    {
+      "name": "231112-Prototype-phase2-kickoff-v0.pdf",
+      "error": "Parse error: "
+    },
+    {
+      "name": "230501-Prototype-phase1-kickoff-v0.pdf",
+      "error": "Parse error: "
+    },
+    {
+      "name": "Gobloominghealth Deck.pdf",
+      "error": "Parse error: "
+    },
+    {
+      "name": "connie-dev-deck-public-v1-4.pdf",
+      "error": "Parse error: "
+    },
+    {
+      "name": "cohort1-meeting4.pdf",
+      "error": "Parse error: "
+    },
+    {
+      "name": "cohort1-meeting3.pdf",
+      "error": "Parse error: "
+    },
+    {
+      "name": "cohort-1-meeting1.pdf",
+      "error": "Parse error: "
+    },
+    {
+      "name": "cohort-1-meeting2.pdf",
+      "error": "Parse error: "
+    },
+    {
+      "name": "cohort1-meeting3.pdf",
+      "error": "Parse error: "
+    },
+    {
+      "name": "cohrot1-meeting2.pdf",
+      "error": "Parse error: "
+    },
+    {
+      "name": "cohort1-meeting1.pdf",
+      "error": "Parse error: "
+    }
+  ],
+  "lastRun": "2026-01-17T03:04:47.582Z"
+}

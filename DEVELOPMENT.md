@@ -109,4 +109,36 @@ Currently marked with "TEMP: Auth disabled for content setup" comments.
 └── docs/               ← Email documentation
 ```
 
-Last updated: 2025-11-03
+### UAT Discovery Form System (Nov 7, 2025)
+- **Production URL**: https://connie.one/dataroom/user-acceptance-testing/discovery
+- **Status**: ✅ Complete and deployed
+- **Components**:
+  - Multi-step discovery form (6 sections)
+  - Google Sheets integration for data storage
+  - Resend email notifications on submission
+  - Batch invitation system for cohort outreach
+  - Legal pages (AUP, Terms of Service, Privacy Policy)
+  - Simple homepage for connie.one
+- **Documentation**:
+  - **Technical Guide**: [/UAT-Intake-form/DEVELOPMENT-GUIDE.md](/UAT-Intake-form/DEVELOPMENT-GUIDE.md)
+  - **Quick Reference**: [/UAT-Intake-form/README.md](/UAT-Intake-form/README.md)
+  - **Workflow Process**: [connie.center/forms/UAT-Intake/UAT-WORKFLOW.md](../../connie.center/forms/UAT-Intake/UAT-WORKFLOW.md)
+
+**Key Features**:
+- **Data Collection**: Captures organization info, contact details, communication workflows, technical environment, and UAT participation preferences
+- **Storage**: Automated submission to Google Sheets "Connie UAT Discovery Form - Submissions"
+- **Notifications**: Email alerts to cberno@nevadaseniorservices.org and admin@connie.direct
+- **Batch Invitations**: Script-based personalized email sending with campaign tracking
+- **Legal Compliance**: Acceptance of AUP, Terms, Privacy Policy, and UAT MOU
+- **Professional Design**: Responsive, accessible, multi-step form with progress indicator
+
+**Technical Stack**:
+- Frontend: Next.js 15.3.3 + Tailwind CSS
+- Backend: Next.js API Routes + Google Sheets API v4
+- Email: Resend (send.connie.one)
+- Deployment: AWS Amplify with auto-deployment from GitHub
+
+**Team Impact**:
+This system establishes a scalable, repeatable process for UAT cohort onboarding that can be used for future testing programs across the Connie platform.
+
+Last updated: 2025-11-07

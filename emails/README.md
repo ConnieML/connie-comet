@@ -9,10 +9,11 @@
 
 ```
 /emails/
-├── templates/          ← Email templates (HTML, React, etc.)
+├── templates/          ← Email templates (HTML, React Email)
 ├── scripts/            ← Sending scripts and automation
 ├── data/               ← Example recipients, test data, configurations
 ├── docs/               ← Email-specific documentation
+├── package.json        ← Email-specific dependencies and scripts
 └── README.md           ← This file
 ```
 
@@ -20,16 +21,37 @@
 
 ## Quick Start
 
-### 1. UAT Invitation Emails
+### Preview Email Templates
+
+```bash
+cd /Users/cjberno/projects/connie/connie.one/emails
+pnpm install
+pnpm dev
+```
+
+Opens React Email preview at **http://localhost:3001** - live reload as you edit templates.
+
+### Available Scripts
+
+| Command | Description |
+|---------|-------------|
+| `pnpm dev` | Start email preview server (port 3001) |
+| `pnpm preview` | Alias for dev |
+| `pnpm export` | Export templates to static HTML |
+| `pnpm build` | Build templates for production |
+
+---
+
+## UAT Invitation Emails
 
 **Template:** `templates/connie-uat-email.html`
-**Script:** `scripts/send-uat-invites.js`
+**Script:** `scripts/send-uat-invites.cjs`
 **Documentation:** `docs/CONNIE-UAT-EMAIL-SETUP.md`
 
 **Send UAT invitations:**
 ```bash
 cd /Users/cjberno/projects/connie/connie.one/emails/scripts
-node send-uat-invites.js
+node send-uat-invites.cjs
 ```
 
 See full setup instructions: [UAT Email Setup Guide](./docs/CONNIE-UAT-EMAIL-SETUP.md)
@@ -44,6 +66,18 @@ See full setup instructions: [UAT Email Setup Guide](./docs/CONNIE-UAT-EMAIL-SET
 - **Purpose:** Invite customers to participate in UAT for new Connie features
 - **Sending Domain:** `send.connie.one` (via Resend)
 - **Created:** November 3, 2025
+
+### UAT Submission Notification (Admin)
+- **React Version:** `templates/connie-uat-submission-notification.tsx`
+- **Purpose:** Notify admins when a new org submits UAT discovery form
+- **Sending Domain:** `send.connie.one` (via Resend)
+- **Created:** November 3, 2025
+
+### Welcome Email (New User Onboarding)
+- **React Version:** `templates/connie-welcome-email.tsx`
+- **Purpose:** Welcome new users with login credentials and getting started steps
+- **Sending Domain:** `send.connie.one` (via Resend)
+- **Created:** November 25, 2025
 
 ---
 

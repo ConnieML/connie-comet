@@ -17,7 +17,7 @@ export default function ConnieUATLandingPage() {
               Help Us Build a More Connected<br />Future for Aging
             </h1>
             <p className="text-xl text-twilio-muted max-w-2xl mx-auto leading-relaxed">
-              Thank you for your interest in Connie. We're seeking strategic partners to help scale this proven model and transform community-based care.
+              Thank you for your interest in Connie. We&apos;re seeking strategic partners to help scale this proven model and transform community-based care.
             </p>
           </div>
         </div>
@@ -98,7 +98,7 @@ export default function ConnieUATLandingPage() {
                     </li>
                   </ul>
                   <p className="text-xs italic text-twilio-muted pt-3 border-t border-twilio-border">
-                    "Start small. One team, one or two workflows, one shared screen."
+                    &ldquo;Start small. One team, one or two workflows, one shared screen.&rdquo;
                   </p>
                 </div>
               </div>
@@ -126,7 +126,7 @@ export default function ConnieUATLandingPage() {
                     </li>
                   </ul>
                   <p className="text-xs italic text-twilio-muted pt-3 border-t border-twilio-border">
-                    "Move from chaos to visibility. See what's really happening in real time."
+                    &ldquo;Move from chaos to visibility. See what&apos;s really happening in real time.&rdquo;
                   </p>
                 </div>
               </div>
@@ -154,7 +154,7 @@ export default function ConnieUATLandingPage() {
                     </li>
                   </ul>
                   <p className="text-xs italic text-twilio-muted pt-3 border-t border-twilio-border">
-                    "You control the next step. Data-driven, not faith-based."
+                    &ldquo;You control the next step. Data-driven, not faith-based.&rdquo;
                   </p>
                 </div>
               </div>

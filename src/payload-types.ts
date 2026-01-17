@@ -956,6 +956,14 @@ export interface BrandAsset {
     | 'guidelines';
   assetType: 'primary' | 'secondary' | 'variant' | 'template' | 'archive';
   /**
+   * Group within category (e.g., "Contributors", "Stock Photos", "Backgrounds")
+   */
+  subcategory?: string | null;
+  /**
+   * Use this image as the category hero on the brand landing page
+   */
+  isCategoryHero?: boolean | null;
+  /**
    * Comma-separated tags (e.g., "dark-mode, square, animated")
    */
   tags?: string | null;
@@ -1665,6 +1673,8 @@ export interface BrandAssetsSelect<T extends boolean = true> {
   description?: T;
   category?: T;
   assetType?: T;
+  subcategory?: T;
+  isCategoryHero?: T;
   tags?: T;
   usageRights?: T;
   usageNotes?: T;

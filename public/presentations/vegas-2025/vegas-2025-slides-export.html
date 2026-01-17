@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connie - Helping Nonprofits Weather The Digital Storm</title>
+  <style>
+    /* Base styles for Google Slides import */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #FFFFFF;
+      color: #0F0F0F;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    .slide {
+      width: 960px;
+      min-height: 540px;
+      padding: 60px 80px;
+      margin: 40px auto;
+      background: #FFFFFF;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      page-break-after: always;
+      position: relative;
+    }
+
+    h1 {
+      font-size: 32px;
+      font-weight: 600;
+      color: #0F0F0F;
+      margin-bottom: 16px;
+      letter-spacing: -0.02em;
+    }
+
+    h2 {
+      font-size: 18px;
+      font-weight: 500;
+      color: rgba(15,15,15,0.6);
+      margin-bottom: 24px;
+    }
+
+    h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #0F0F0F;
+      margin-bottom: 12px;
+    }
+
+    p {
+      font-size: 14px;
+      color: rgba(15,15,15,0.7);
+      line-height: 1.6;
+    }
+
+    .section-tag {
+      display: inline-block;
+      background: #4F46E5;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 16px;
+    }
+
+    /* Title Slide */
+    .title-slide {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .title-slide h1 {
+      font-size: 42px;
+    }
+
+    /* Grid layouts */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+    .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; }
+
+    /* Stats */
+    .stat-big {
+      font-size: 64px;
+      font-weight: 700;
+      color: #4F46E5;
+    }
+
+    .stat-card {
+      background: rgba(79,70,229,0.05);
+      border: 1px solid rgba(79,70,229,0.2);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .stat-card .stat {
+      font-size: 36px;
+      font-weight: 700;
+      color: #4F46E5;
+    }
+
+    .stat-card .desc {
+      font-size: 13px;
+      color: rgba(15,15,15,0.6);
+      margin-top: 8px;
+    }
+
+    /* Pills/Tags */
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(79,70,229,0.1);
+      color: #4F46E5;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+      margin: 4px;
+    }
+
+    /* Feature list */
+    .feature-item {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .feature-icon {
+      width: 24px;
+      height: 24px;
+      background: #10b981;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .feature-content h4 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .feature-content p {
+      font-size: 12px;
+    }
+
+    /* Cards */
+    .card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .card.highlighted {
+      background: linear-gradient(135deg, rgba(79,70,229,0.1), rgba(236,72,153,0.1));
+      border-color: #4F46E5;
+    }
+
+    /* Pricing */
+    .pricing-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .pricing-card.highlighted {
+      background: linear-gradient(135deg, #4F46E5, #7c3aed);
+      color: white;
+    }
+
+    .pricing-card .plan {
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+    }
+
+    .pricing-card .price {
+      font-size: 32px;
+      font-weight: 700;
+    }
+
+    .pricing-card ul {
+      list-style: none;
+      margin-top: 16px;
+      font-size: 13px;
+    }
+
+    .pricing-card ul li {
+      padding: 6px 0;
+      border-top: 1px solid rgba(0,0,0,0.1);
+    }
+
+    /* Timeline */
+    .timeline-item {
+      text-align: center;
+    }
+
+    .timeline-year {
+      font-size: 24px;
+      font-weight: 700;
+      margin: 12px 0 4px;
+    }
+
+    .timeline-year.year-2022 { color: #06b6d4; }
+    .timeline-year.year-2024 { color: #ec4899; }
+    .timeline-year.year-2025 { color: #4F46E5; }
+
+    .timeline-desc {
+      font-size: 12px;
+      color: rgba(15,15,15,0.6);
+    }
+
+    /* Storm stats */
+    .storm-stat {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
+      align-items: flex-start;
+    }
+
+    .storm-x {
+      color: #ef4444;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .storm-number {
+      font-size: 24px;
+      font-weight: 700;
+      color: #4F46E5;
+    }
+
+    .storm-desc {
+      font-size: 12px;
+      color: rgba(15,15,15,0.6);
+    }
+
+    /* Callout box */
+    .callout {
+      background: linear-gradient(135deg, rgba(79,70,229,0.9), rgba(124,58,237,0.9));
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      margin-top: 24px;
+    }
+
+    /* Footer logos placeholder */
+    .footer-logos {
+      position: absolute;
+      bottom: 20px;
+      left: 40px;
+      display: flex;
+      gap: 16px;
+      font-size: 10px;
+      color: rgba(15,15,15,0.4);
+    }
+
+    /* QR Code */
+    .qr-placeholder {
+      width: 200px;
+      height: 200px;
+      margin: 24px auto;
+      border: 2px dashed #e2e8f0;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: rgba(15,15,15,0.4);
+    }
+
+    /* Thank you slide */
+    .thank-you-slide {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .thank-you-slide h1 {
+      font-size: 64px;
+      margin: 24px 0;
+    }
+
+    .website {
+      color: #4F46E5;
+      font-size: 18px;
+      text-decoration: none;
+    }
+
+    /* Image placeholders */
+    .img-placeholder {
+      background: #f1f5f9;
+      border: 1px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 40px;
+      text-align: center;
+      color: rgba(15,15,15,0.4);
+      font-size: 12px;
+    }
+
+    /* Measurement cards */
+    .measurement-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .measurement-card.active {
+      background: rgba(16,185,129,0.1);
+      border-color: #10b981;
+    }
+
+    .measurement-header {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+    }
+
+    .measurement-header.past { color: rgba(15,15,15,0.4); }
+    .measurement-header.current { color: #10b981; }
+    .measurement-header.future { color: #4F46E5; }
+
+    .measurement-title {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .measurement-card ul {
+      font-size: 11px;
+      color: rgba(15,15,15,0.6);
+      padding-left: 16px;
+    }
+
+    .measurement-card ul li {
+      margin-bottom: 4px;
+    }
+
+    /* Workflow steps */
+    .workflow-step {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .step-number {
+      width: 32px;
+      height: 32px;
+      background: #4F46E5;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .step-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .step-desc {
+      font-size: 11px;
+      color: rgba(15,15,15,0.6);
+    }
+
+    /* Welcome flow */
+    .welcome-flow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 32px;
+      margin: 32px 0;
+    }
+
+    .welcome-arrow {
+      font-size: 32px;
+      color: #4F46E5;
+      opacity: 0.6;
+    }
+
+    .welcome-cycle {
+      width: 140px;
+      height: 140px;
+      background: linear-gradient(135deg, #4F46E5, #ec4899);
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    /* Confidentiality */
+    .confidentiality-list {
+      padding-left: 24px;
+      margin: 16px 0;
+    }
+
+    .confidentiality-list li {
+      font-size: 13px;
+      color: rgba(15,15,15,0.7);
+      margin-bottom: 12px;
+    }
+
+    .confidentiality-note {
+      font-size: 12px;
+      color: rgba(15,15,15,0.6);
+      margin: 16px 0;
+    }
+
+    .confidentiality-contact {
+      font-size: 12px;
+      color: rgba(15,15,15,0.6);
+    }
+
+    .confidentiality-contact a {
+      color: #4F46E5;
+    }
+
+    /* CTA section */
+    .cta-contact {
+      background: #f8fafc;
+      border: 2px solid #4F46E5;
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .cta-contact-name {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .cta-contact-email {
+      color: #4F46E5;
+      font-size: 14px;
+    }
+
+    /* Scale visualization */
+    .scale-viz {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      margin-top: 24px;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .scale-arrow {
+      color: #4F46E5;
+      font-size: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- SLIDE 1: Title -->
+<div class="slide title-slide">
+  <h1>Helping Nonprofits Weather The Digital Storm</h1>
+  <div class="img-placeholder" style="width: 400px; height: 200px; margin: 32px auto;">
+    [Storm/Tornado Illustration with CBO Building]
+  </div>
+  <h2>Presented @ Engaging With Aging Conference<br>December 9-10, 2025 | Durango Resort, Las Vegas</h2>
+  <div class="footer-logos">
+    <span>[Nevada Senior Services Logo]</span>
+    <span>[ASA Logo]</span>
+  </div>
+</div>
+
+<!-- SLIDE 2: Confidentiality -->
+<div class="slide">
+  <h1 style="text-align: center;">Confidentiality</h1>
+  <div style="max-width: 700px; margin: 0 auto;">
+    <p style="font-weight: 600; text-decoration: underline; margin-bottom: 16px;">Before viewing this information, we kindly request:</p>
+    <ol class="confidentiality-list">
+      <li>Not distributing or sharing any Connie™ content with anyone outside your company (without written permission from Nevada Senior Services (NSS)).</li>
+      <li>Only distributing/sharing this with certain members of your company who need it and only after underscoring confidentiality.</li>
+    </ol>
+    <p class="confidentiality-note">
+      This presentation and any/all accompanying remarks and/or demonstrations are not intended to be public. Any unauthorized viewing, copying, recording, photographing, note-taking, distributing, or <u>use of any of this content is strictly prohibited.</u>
+    </p>
+    <p class="confidentiality-contact">
+      To request an NDA or for more information please contact NSS CTO & Connie Technical Lead: <a href="mailto:cberno@nevadaseniorservices.org">cberno@nevadaseniorservices.org</a>
+    </p>
+  </div>
+</div>
+
+<!-- SLIDE 3: Welcome To Connie -->
+<div class="slide">
+  <h1>Welcome To Connie!</h1>
+  <h2>Empowering CBOs to Serve a New Generation of Older Adults</h2>
+  <div class="welcome-flow">
+    <div style="text-align: center;">
+      <div class="img-placeholder" style="width: 120px; height: 100px;">[CBO Building]</div>
+      <div style="font-weight: 600; margin-top: 8px;">CBO</div>
+    </div>
+    <div class="welcome-arrow">→</div>
+    <div class="welcome-cycle">
+      <div>Connect</div>
+      <div>Engage</div>
+      <div>Serve</div>
+    </div>
+    <div class="welcome-arrow">→</div>
+    <div style="text-align: center;">
+      <div class="img-placeholder" style="width: 120px; height: 100px;">[Community]</div>
+      <div style="font-weight: 600; margin-top: 8px;">Community</div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 4: About Us Timeline -->
+<div class="slide">
+  <div class="section-tag">About Us</div>
+  <h1>Our Purpose is To Deliver Excellence in Service and Execution</h1>
+  <div class="three-col" style="margin-top: 32px;">
+    <div class="timeline-item">
+      <div class="img-placeholder" style="height: 120px;">[2022 R&D Photo]</div>
+      <div class="timeline-year year-2022">2022</div>
+      <div class="timeline-desc">Vision born, research & planning</div>
+    </div>
+    <div class="timeline-item">
+      <div class="img-placeholder" style="height: 120px;">[2024 Team Photo]</div>
+      <div class="timeline-year year-2024">2024</div>
+      <div class="timeline-desc">Prototype built, UAT discovery</div>
+    </div>
+    <div class="timeline-item">
+      <div class="img-placeholder" style="height: 120px;">[2025 Map]</div>
+      <div class="timeline-year year-2025">2025</div>
+      <div class="timeline-desc">MVP launch, targeted rollout</div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 5: 4 Powerful Market Forces -->
+<div class="slide">
+  <div class="section-tag">The Problem</div>
+  <h1>4 Powerful Market Forces</h1>
+  <h2>Driving unprecedented demand for CBO services</h2>
+  <div class="two-col" style="margin-top: 24px;">
+    <div>
+      <div class="stat-big">>300%</div>
+      <p style="font-size: 14px; margin-top: 8px;">Y.O.Y Inc. Demand For Older Adult Care Services</p>
+      <div style="margin-top: 16px;">
+        <span class="pill">👥 Aging Society</span>
+        <span class="pill">📱 Tech Adoption</span>
+        <span class="pill">🏥 SDOH & C.I.S.</span>
+      </div>
+    </div>
+    <div class="img-placeholder" style="height: 250px;">[CBO in Digital Storm Image]</div>
+  </div>
+</div>
+
+<!-- SLIDE 6: Perfect Storm -->
+<div class="slide">
+  <div class="section-tag">The Problem</div>
+  <h1>CBOs are Caught In A "Perfect Storm"</h1>
+  <div class="two-col" style="margin-top: 24px;">
+    <div>
+      <h3>CBO Staff Told Us ...</h3>
+      <div class="storm-stat">
+        <span class="storm-x">✕</span>
+        <div>
+          <div class="storm-number">89%</div>
+          <div class="storm-desc">say they need better technology to keep up.</div>
+        </div>
+      </div>
+      <div class="storm-stat">
+        <span class="storm-x">✕</span>
+        <div>
+          <div class="storm-number">74%</div>
+          <div class="storm-desc">CBOs have critical position vacancies. Fatigue / Burnout = Top drivers of staff attrition.</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <h3>CBO Customers Told Us ...</h3>
+      <div class="storm-stat">
+        <span class="storm-x">✕</span>
+        <div>
+          <div class="storm-number">78%</div>
+          <div class="storm-desc">placed multiple calls for status updates.</div>
+        </div>
+      </div>
+      <div class="storm-stat">
+        <span class="storm-x">✕</span>
+        <div>
+          <div class="storm-number">8-10 Days</div>
+          <div class="storm-desc">response times. 10-14 Months wait for Adult Day Care.</div>
+        </div>
+      </div>
+      <div class="storm-stat">
+        <span class="storm-x">✕</span>
+        <div>
+          <div class="storm-number">Increasing Abandon Rate</div>
+          <div class="storm-desc">Only 1/6 eligible older adults are enrolled in a program. 1/10 for people of color and non-native English speakers.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="callout" style="background: #fef2f2; color: #991b1b; border: 1px solid #fecaca;">
+    <strong>Bottom Line: CBOs Need Better Communication Technology.</strong>
+  </div>
+</div>
+
+<!-- SLIDE 7: Vision -->
+<div class="slide">
+  <h1>Building the Essential Infrastructure for an Aging America</h1>
+  <p style="font-style: italic; font-size: 16px; max-width: 700px; margin: 24px auto; text-align: center;">
+    "Three powerful forces are reshaping our nation: an aging population, a digital-first world, and healthcare's growing reliance on community-based organizations. Connie sits at the intersection of all three."
+  </p>
+  <div style="text-align: center; margin-top: 32px;">
+    <div style="display: inline-block; position: relative; width: 300px; height: 300px;">
+      <div style="position: absolute; width: 280px; height: 280px; border: 2px solid #06b6d4; border-radius: 50%; top: 10px; left: 10px;"></div>
+      <div style="position: absolute; width: 200px; height: 200px; border: 2px solid #ec4899; border-radius: 50%; top: 50px; left: 50px;"></div>
+      <div style="position: absolute; width: 120px; height: 120px; border: 2px solid #4F46E5; border-radius: 50%; top: 90px; left: 90px;"></div>
+      <div style="position: absolute; width: 60px; height: 60px; background: #4F46E5; border-radius: 50%; top: 120px; left: 120px; color: white; display: flex; align-items: center; justify-content: center; font-weight: 700;">Connie</div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 8: Solution Intro -->
+<div class="slide">
+  <div class="section-tag">The Solution</div>
+  <h1>Welcome To Connie</h1>
+  <h2>The Future Requires a New Model: Where CBOs Can Connect, Engage & Serve Online</h2>
+  <div style="display: flex; align-items: center; justify-content: center; gap: 32px; margin-top: 48px;">
+    <div class="card" style="text-align: center; padding: 32px;">
+      <div style="font-size: 24px; margin-bottom: 8px;">🏢</div>
+      <div style="font-weight: 600;">CBO</div>
+    </div>
+    <div style="font-size: 32px; color: #4F46E5;">→</div>
+    <div class="card" style="text-align: center; padding: 32px; background: #4F46E5; color: white;">
+      <div style="font-size: 24px; margin-bottom: 8px;">⚙️</div>
+      <div style="font-weight: 600;">Process</div>
+    </div>
+    <div style="font-size: 32px; color: #4F46E5;">→</div>
+    <div class="card" style="text-align: center; padding: 32px;">
+      <div style="font-size: 24px; margin-bottom: 8px;">🏘️</div>
+      <div style="font-weight: 600;">Community Partner</div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 9: Say Hello To Connie -->
+<div class="slide">
+  <div class="section-tag">The Solution</div>
+  <h1>The Solution: Say Hello To Connie! 👋</h1>
+  <h2>A cloud-based communication application that helps CBOs CONNECT, ENGAGE & SERVE Older Adults online.</h2>
+  <div class="two-col" style="margin-top: 24px;">
+    <div>
+      <div class="feature-item">
+        <div class="feature-icon">✓</div>
+        <div class="feature-content">
+          <h4>Unified Communications From One Single Screen</h4>
+          <p>CBO staff access all client & partner communications across all channels (voice, email, text, chat, social, fax) from one browser screen.</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">✓</div>
+        <div class="feature-content">
+          <h4>Connect Staff & Clients From Anywhere</h4>
+          <p>Connie is cloud-based so staff can access & deliver support from any connected web browser, from any location.</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">✓</div>
+        <div class="feature-content">
+          <h4>Integration Ready</h4>
+          <p>Incorporate Connie into your existing C.R.M., E.H.R., messaging and email apps to streamline operations.</p>
+        </div>
+      </div>
+      <div style="display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap;">
+        <span style="padding: 4px 12px; background: #f1f5f9; border-radius: 4px; font-size: 11px;">Google Workspace</span>
+        <span style="padding: 4px 12px; background: #f1f5f9; border-radius: 4px; font-size: 11px;">Microsoft Teams</span>
+        <span style="padding: 4px 12px; background: #f1f5f9; border-radius: 4px; font-size: 11px;">HubSpot</span>
+        <span style="padding: 4px 12px; background: #f1f5f9; border-radius: 4px; font-size: 11px;">Zoho CRM</span>
+      </div>
+    </div>
+    <div class="img-placeholder" style="height: 280px;">[Connie Platform Screenshot on Laptop]</div>
+  </div>
+</div>
+
+<!-- SLIDE 10: How It Works -->
+<div class="slide">
+  <div class="section-tag">The Solution</div>
+  <h1>From Initial Contact to A Promise Fulfilled</h1>
+  <h2>Connie transforms fragmented, manual processes into an efficient, trackable, and data-driven workflow.</h2>
+  <div class="two-col" style="margin-top: 24px;">
+    <div>
+      <div class="workflow-step">
+        <div class="step-number">1</div>
+        <div>
+          <div class="step-title">Inbound / Outbound Flow</div>
+          <div class="step-desc">A client or partner request arrives from any channel. Connie collects, prioritizes, and routes the request into a task queue.</div>
+        </div>
+      </div>
+      <div class="workflow-step">
+        <div class="step-number">2</div>
+        <div>
+          <div class="step-title">Task Creation</div>
+          <div class="step-desc">Requests are packaged into tasks, sorted by type, and routed to the correct agent or department.</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="workflow-step">
+        <div class="step-number">3</div>
+        <div>
+          <div class="step-title">Task Processing</div>
+          <div class="step-desc">Tasks are displayed to available staff based on skill and availability. An agent accepts the task.</div>
+        </div>
+      </div>
+      <div class="workflow-step">
+        <div class="step-number">4</div>
+        <div>
+          <div class="step-title">Administration</div>
+          <div class="step-desc">Managers have tools to administer workflow, manage staff schedules, monitor performance in real-time.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 11: CIE -->
+<div class="slide">
+  <h1>Beyond a Platform: Connie is the Nexus of a Thriving Community Ecosystem</h1>
+  <div class="two-col" style="margin-top: 32px;">
+    <div class="card">
+      <h3>What is a CIE?</h3>
+      <p>Community Information Exchange: A secure network connecting healthcare, social services, and community organizations to coordinate care and share information.</p>
+    </div>
+    <div style="display: flex; gap: 24px;">
+      <div style="text-align: center;">
+        <div style="font-size: 12px; font-weight: 600; margin-bottom: 8px;">Before: Fragmented</div>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;">
+          <div style="width: 40px; height: 40px; border: 2px solid #06b6d4; border-radius: 50%;"></div>
+          <div style="width: 40px; height: 40px; border: 2px solid #ec4899; border-radius: 50%;"></div>
+          <div style="width: 40px; height: 40px; border: 2px solid #4F46E5; border-radius: 50%;"></div>
+          <div style="width: 40px; height: 40px; border: 2px solid #94a3b8; border-radius: 50%;"></div>
+        </div>
+      </div>
+      <div style="text-align: center;">
+        <div style="font-size: 12px; font-weight: 600; margin-bottom: 8px;">After: Connected</div>
+        <div style="position: relative; width: 120px; height: 80px;">
+          <div style="position: absolute; width: 50px; height: 50px; background: #4F46E5; border-radius: 50%; top: 15px; left: 35px; color: white; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700;">Connie</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 12: Results -->
+<div class="slide">
+  <div class="section-tag">Delivers Results</div>
+  <h1>Better Results For CBOs = Better Outcomes For People In Need</h1>
+  <div class="three-col" style="margin-top: 32px;">
+    <div class="stat-card">
+      <div class="stat">60%</div>
+      <div class="desc">Increase Connection Rates</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat">3x</div>
+      <div class="desc">Improve Client Engagement</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat">10/10</div>
+      <div class="desc">Scale Program & Service Delivery</div>
+    </div>
+  </div>
+  <div class="callout">
+    Cascading Benefits: Better data, better decisions, better outcomes
+  </div>
+</div>
+
+<!-- SLIDE 13: Analytics -->
+<div class="slide">
+  <div class="section-tag">Delivers Results</div>
+  <h1>Real-Time Insights & Interaction Replay</h1>
+  <div class="two-col" style="margin-top: 32px;">
+    <div class="card" style="text-align: center; padding: 40px;">
+      <div style="font-size: 48px; margin-bottom: 16px;">📊</div>
+      <h3>Analytics Dashboard</h3>
+      <p>Real-time insights</p>
+    </div>
+    <div class="card" style="text-align: center; padding: 40px;">
+      <div style="font-size: 48px; margin-bottom: 16px;">🔄</div>
+      <h3>Playback Machine</h3>
+      <p>Interaction replay</p>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 14: Measurement Infrastructure -->
+<div class="slide">
+  <div class="section-tag">Delivers Results</div>
+  <h1>Building the Measurement Infrastructure the Sector Needs</h1>
+  <h2>"Last year we presented a theory of change. This year we're collecting the data to prove it."</h2>
+  <div class="three-col" style="margin-top: 24px;">
+    <div class="measurement-card">
+      <div class="measurement-header past">2024: THE PROMISE</div>
+      <div class="measurement-title">Theory of Change</div>
+      <ul>
+        <li>Jobs-to-be-Done framework</li>
+        <li>Feedback loop design</li>
+        <li>Impact measurement vision</li>
+        <li>"We'll measure what matters"</li>
+      </ul>
+    </div>
+    <div class="measurement-card active">
+      <div class="measurement-header current">2025: THE FOUNDATION</div>
+      <div class="measurement-title">Data Collection Active</div>
+      <ul>
+        <li>Real-time supervisor dashboards</li>
+        <li>2,810+ transactions analyzed</li>
+        <li>Multi-channel tracking live</li>
+        <li>Enterprise analytics (Flex Insights)</li>
+        <li>Multi-tenant data isolation</li>
+      </ul>
+    </div>
+    <div class="measurement-card">
+      <div class="measurement-header future">2026+: THE PROOF</div>
+      <div class="measurement-title">Network Intelligence</div>
+      <ul>
+        <li>Cross-CBO benchmarking</li>
+        <li>Sector-wide standards</li>
+        <li>Outcome correlation studies</li>
+        <li>Evidence-based models</li>
+      </ul>
+    </div>
+  </div>
+  <div class="scale-viz">
+    <span><strong>1 CBO</strong><br><span style="font-size: 11px; color: rgba(15,15,15,0.5);">Operational Dashboard</span></span>
+    <span class="scale-arrow">→</span>
+    <span><strong>10 CBOs</strong><br><span style="font-size: 11px; color: rgba(15,15,15,0.5);">Benchmarking Data</span></span>
+    <span class="scale-arrow">→</span>
+    <span><strong>100 CBOs</strong><br><span style="font-size: 11px; color: rgba(15,15,15,0.5);">Sector-Wide Standards</span></span>
+  </div>
+</div>
+
+<!-- SLIDE 15: Roadmap -->
+<div class="slide">
+  <div class="section-tag">Short-term Roadmap</div>
+  <h1>From Prototype & UAT To MVP</h1>
+  <h2>With a working prototype & successful proof of concept, the Connie team is set to move into the UAT Development Phase @ Targeted Locations.</h2>
+  <div class="card" style="margin-top: 24px; text-align: center; padding: 40px;">
+    <div style="font-size: 48px; margin-bottom: 16px;">📍</div>
+    <h3>Connie UAT / Beta Program Location Map</h3>
+    <p style="margin-top: 12px;">Strategic opportunity zones: <span style="color: #ec4899;">CIS infrastructure</span> ready for integration, <span style="color: #94a3b8;">migration-based</span> senior growth, and <span style="color: #06b6d4;">organic aging-in-place</span> markets</p>
+    <div style="display: flex; justify-content: center; gap: 24px; margin-top: 16px; font-size: 11px;">
+      <span><span style="display: inline-block; width: 10px; height: 10px; background: #ec4899; border-radius: 50%;"></span> CIS Infrastructure</span>
+      <span><span style="display: inline-block; width: 10px; height: 10px; background: #94a3b8; border-radius: 50%;"></span> Migration-Based</span>
+      <span><span style="display: inline-block; width: 10px; height: 10px; background: #06b6d4; border-radius: 50%;"></span> Aging in Place</span>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 16: Pricing -->
+<div class="slide">
+  <h1>A Sustainable Social Enterprise with a Simple, Affordable Business Model</h1>
+  <h2>A B2B recurring revenue (SaaS) model that's affordable for CBOs and sustainable for ASA.</h2>
+  <div class="two-col" style="margin-top: 32px; max-width: 600px; margin-left: auto; margin-right: auto;">
+    <div class="pricing-card">
+      <div class="plan">Standard User</div>
+      <div class="price">$950/month</div>
+      <ul>
+        <li>ASA Members</li>
+        <li>Up to 2,000 clients</li>
+        <li>Full platform access</li>
+      </ul>
+    </div>
+    <div class="pricing-card highlighted">
+      <div class="plan">Super User</div>
+      <div class="price">$1,550/month</div>
+      <ul style="color: rgba(255,255,255,0.8);">
+        <li>Over 2,000 clients</li>
+        <li>Non-ASA organizations</li>
+        <li>Full platform access</li>
+      </ul>
+    </div>
+  </div>
+  <p style="text-align: center; margin-top: 24px; font-size: 13px;">
+    $1,000 onboarding fee for all plans<br>
+    All organizations using Connie become members of ASA
+  </p>
+</div>
+
+<!-- SLIDE 17: Call to Action -->
+<div class="slide">
+  <h1>Partner With Us to Build a More Connected Future for Aging</h1>
+  <div class="two-col" style="margin-top: 32px;">
+    <div>
+      <h3 style="color: #4F46E5;">The Opportunity</h3>
+      <p style="margin-bottom: 24px;">We are at a pivotal moment. An aging population, digital-first expectations, and the growing importance of community-based care have created unprecedented demand. Connie is purpose-built to meet this moment—transforming how CBOs connect, engage, and serve older adults.</p>
+      <h3 style="color: #4F46E5;">The Invitation</h3>
+      <p>We invite you to join us as a partner, pilot site, or supporter. Together, we can build the infrastructure that America's aging population needs—and that community-based organizations deserve.</p>
+    </div>
+    <div class="cta-contact">
+      <h3>Get In Touch</h3>
+      <div class="cta-contact-name">Dee Goldstein</div>
+      <a href="mailto:agoldstein@asaging.org" class="cta-contact-email">📧 agoldstein@asaging.org</a>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 18: Get Involved -->
+<div class="slide" style="text-align: center;">
+  <h1>Get Involved!</h1>
+  <h2>Our Mission: <span style="color: #06b6d4;">Help Nonprofits Deliver Community Based Programs & Services Online.</span></h2>
+  <div class="qr-placeholder">
+    [QR Code Here]
+  </div>
+</div>
+
+<!-- SLIDE 19: Thank You -->
+<div class="slide thank-you-slide">
+  <div style="width: 200px; height: 120px; background: linear-gradient(180deg, #bae6fd, #38bdf8); border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; display: flex; align-items: center; justify-content: center;">
+    <span style="font-weight: 700; font-size: 18px;">Connie</span>
+  </div>
+  <h1>THANK YOU</h1>
+  <a href="https://www.connieconnect.com" class="website">www.connieconnect.com</a>
+  <div style="margin-top: 32px;">
+    <div style="font-size: 12px; color: rgba(15,15,15,0.5); margin-bottom: 8px;">A Project of</div>
+    <div class="img-placeholder" style="width: 150px; height: 60px; margin: 0 auto;">[ASA Logo]</div>
+  </div>
+</div>
+
+</body>
+</html>

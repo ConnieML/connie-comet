@@ -5,6 +5,11 @@
   --text: #0F0F0F;
   --text-muted: rgba(15, 15, 15, 0.6);
   --accent: #E91E63;
+  --accent-primary: #4F46E5;
+  --accent-secondary: #EC4899;
+  --accent-tertiary: #06B6D4;
+  --surface: rgba(15, 15, 15, 0.03);
+  --border: rgba(15, 15, 15, 0.08);
   --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
@@ -40,7 +45,7 @@ body {
 
 .reveal {
   font-family: var(--font);
-  font-size: 42px;
+  font-size: 22px;
   font-weight: 400;
   color: var(--text);
   background: var(--bg);
@@ -53,19 +58,19 @@ body {
 }
 
 .reveal h1 {
-  font-size: 2.5em;
+  font-size: 1.8em;
   font-weight: 600;
   letter-spacing: -0.02em;
-  margin: 0 0 0.5em 0;
+  margin: 0 0 0.4em 0;
   color: var(--text);
 }
 
 .reveal h2 {
-  font-size: 1.5em;
+  font-size: 1em;
   font-weight: 500;
   letter-spacing: -0.01em;
   color: var(--text-muted);
-  margin: 0 0 1em 0;
+  margin: 0 0 0.8em 0;
 }
 
 .reveal p {
@@ -96,6 +101,1686 @@ body {
 }
 
 .reveal .slides > section {
-  padding: 60px 80px;
+  padding: 50px 70px;
   box-sizing: border-box;
+}
+
+/* Cards Grid for Timeline */
+.reveal .cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2em;
+  margin-top: 2em;
+}
+
+.reveal .cards-grid > div {
+  background: var(--surface);
+  padding: 1.5em;
+  border-radius: 12px;
+  border: 1px solid rgba(15, 15, 15, 0.06);
+}
+
+.reveal .cards-grid h3 {
+  margin: 0 0 0.5em 0;
+}
+
+.reveal .cards-grid p {
+  margin: 0;
+  font-size: 0.5em;
+  line-height: 1.6;
+}
+
+/* Flow Cycle SVG */
+.reveal .flow-cycle {
+  stroke-linecap: round;
+}
+
+/* Slide 4: Pillars */
+.reveal .pillars {
+  margin-top: 1em;
+}
+
+.reveal .pillar {
+  margin-bottom: 0.8em;
+  padding-left: 1em;
+  border-left: 3px solid var(--accent);
+}
+
+.reveal .pillar-title {
+  font-weight: 600;
+  font-size: 0.8em;
+  color: var(--accent);
+  margin-bottom: 0.2em;
+}
+
+.reveal .pillar-desc {
+  font-size: 0.5em;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+/* Mock Dashboard */
+.reveal .mock-dashboard {
+  margin-top: 1.5em;
+  padding: 1em 1.2em;
+  border: 1px solid rgba(15, 15, 15, 0.1);
+  border-radius: 8px;
+  background: rgba(15, 15, 15, 0.02);
+  max-width: 400px;
+}
+
+.reveal .dashboard-stat {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5em;
+  font-size: 0.5em;
+  color: var(--text);
+}
+
+.reveal .counter {
+  animation: connieCounterPulse 3s ease-in-out infinite;
+}
+
+@keyframes connieCounterPulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* Agent dot pulse animation */
+.reveal .agent-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #10B981;
+  margin-right: 8px;
+  animation: connieAgentPulse 2s infinite;
+}
+
+@keyframes connieAgentPulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.1);
+  }
+}
+
+/* Task list */
+.reveal .task-list {
+  margin-top: 0.8em;
+  border-top: 1px solid rgba(15, 15, 15, 0.08);
+  padding-top: 0.5em;
+}
+
+.reveal .task-item {
+  padding: 0.4em 0;
+  border-bottom: 1px solid rgba(15, 15, 15, 0.05);
+  font-size: 0.45em;
+  color: var(--text);
+}
+
+.reveal .task-time {
+  color: var(--text-muted);
+  font-size: 0.9em;
+  margin-left: 8px;
+}
+
+/* StatCard Component */
+.reveal .stat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 1.5em;
+  gap: 0.5em;
+}
+
+/* FlowDiagram Component */
+.reveal .flow-diagram {
+  width: 100%;
+  height: auto;
+  margin: 2em 0;
+  stroke-linecap: round;
+}
+
+/* PricingCard Component */
+.reveal .pricing-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 2em;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  transition: border-color 0.2s ease;
+}
+
+.reveal .pricing-card.highlighted {
+  border-color: var(--accent-primary);
+  border-width: 2px;
+}
+
+.reveal .pricing-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0.5em 0 0 0;
+}
+
+.reveal .pricing-card li {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  margin-bottom: 0.5em;
+  font-size: 0.5em;
+  color: var(--text-muted);
+}
+
+/* Section Tag */
+.reveal .section-tag {
+  display: inline-block;
+  font-size: 0.4em;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: rgba(79, 70, 229, 0.1);
+  color: var(--accent-primary);
+  padding: 0.3em 0.8em;
+  border-radius: 4px;
+  margin-bottom: 1em;
+}
+
+/* Problem Cards Grid */
+.reveal .problem-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5em;
+  margin-top: 2em;
+}
+
+.reveal .problem-card {
+  background: var(--surface);
+  padding: 1.5em;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+.reveal .problem-card-icon {
+  color: var(--accent-primary);
+  margin-bottom: 0.5em;
+}
+
+.reveal .problem-card-title {
+  font-size: 0.6em;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 0.3em;
+}
+
+.reveal .problem-card-desc {
+  font-size: 0.45em;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* Two Column Layout */
+.reveal .two-col-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3em;
+  margin-top: 2em;
+}
+
+.reveal .column {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.reveal .column-title {
+  font-size: 0.7em;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 0.5em;
+}
+
+/* Callout Box */
+.reveal .callout-box {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(236, 72, 153, 0.08));
+  border: 2px solid var(--accent-primary);
+  border-radius: 12px;
+  padding: 1.5em 2em;
+  margin-top: 2em;
+  text-align: center;
+}
+
+.reveal .callout-text {
+  font-size: 0.7em;
+  font-weight: 700;
+  color: var(--accent-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Quote Text */
+.reveal .quote-text {
+  font-size: 0.65em;
+  font-weight: 500;
+  line-height: 1.6;
+  color: var(--text);
+  margin: 1.5em 0;
+  padding-left: 1.5em;
+  border-left: 4px solid var(--accent-primary);
+  font-style: italic;
+}
+
+/* Concentric Circles */
+.reveal .concentric-circles {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  margin: 2em auto;
+  display: block;
+}
+
+/* Feature Cards Grid (Slide 8) */
+.reveal .feature-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5em;
+  margin-top: 2em;
+}
+
+.reveal .feature-card {
+  background: var(--surface);
+  padding: 1.5em;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+.reveal .feature-card-icon {
+  color: var(--accent-primary);
+  margin-bottom: 0.5em;
+}
+
+.reveal .feature-card-title {
+  font-size: 0.6em;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.reveal .feature-card-desc {
+  font-size: 0.45em;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* UI Placeholder (Slide 8) */
+.reveal .ui-placeholder {
+  border: 2px dashed var(--border);
+  border-radius: 12px;
+  padding: 3em;
+  text-align: center;
+  background: var(--surface);
+  margin-top: 2em;
+  min-height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reveal .ui-placeholder-text {
+  font-size: 0.6em;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* Flow Step Descriptions (Slide 9) */
+.reveal .flow-steps-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1em;
+  margin-top: 2em;
+}
+
+.reveal .flow-step-desc {
+  font-size: 0.4em;
+  color: var(--text-muted);
+  line-height: 1.5;
+  padding: 0.8em;
+  background: var(--surface);
+  border-radius: 8px;
+}
+
+/* CIE Definition (Slide 10) */
+.reveal .cie-definition {
+  padding: 1.5em;
+  background: var(--surface);
+  border-radius: 12px;
+  border-left: 4px solid var(--accent-primary);
+}
+
+.reveal .cie-definition h3 {
+  font-size: 0.7em;
+  font-weight: 600;
+  color: var(--accent-primary);
+  margin: 0 0 0.5em 0;
+}
+
+.reveal .cie-definition p {
+  font-size: 0.5em;
+  line-height: 1.6;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* Before/After Diagram (Slide 10) */
+.reveal .before-after {
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+  align-items: center;
+}
+
+.reveal .before-after svg {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+}
+
+.reveal .before-after-label {
+  font-size: 0.5em;
+  font-weight: 600;
+  color: var(--text);
+  text-align: center;
+  margin-bottom: 0.5em;
+}
+
+/* Results Grid (Slide 11) */
+.reveal .results-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2em;
+  margin-top: 2em;
+}
+
+.reveal .results-grid .stat-card {
+  background: var(--surface);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
+/* Placeholder Iframe (Slide 12) */
+.reveal .placeholder-iframe {
+  border: 2px dashed var(--border);
+  border-radius: 12px;
+  padding: 2em;
+  background: var(--surface);
+  min-height: 350px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
+}
+
+.reveal .placeholder-iframe-icon {
+  color: var(--accent-primary);
+}
+
+.reveal .placeholder-iframe-title {
+  font-size: 0.7em;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.reveal .placeholder-iframe-desc {
+  font-size: 0.45em;
+  color: var(--text-muted);
+}
+
+/* Measurement Timeline (Slide 13) */
+.reveal .measurement-timeline {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2em;
+  margin-top: 2em;
+}
+
+.reveal .measurement-year-card {
+  background: var(--surface);
+  padding: 1.5em;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+}
+
+.reveal .measurement-year {
+  font-size: 2em;
+  font-weight: 700;
+  margin-bottom: 0.5em;
+}
+
+.reveal .measurement-status {
+  font-size: 0.6em;
+  font-weight: 600;
+  margin-bottom: 0.3em;
+}
+
+.reveal .measurement-desc {
+  font-size: 0.45em;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.reveal .year-past {
+  color: var(--text-muted);
+  opacity: 0.7;
+}
+
+.reveal .year-current {
+  color: #10B981;
+}
+
+.reveal .year-future {
+  color: var(--accent-primary);
+}
+
+/* Year card border color encoding */
+.reveal .measurement-year-card.year-past {
+  border-left: 4px solid var(--text-muted);
+}
+
+.reveal .measurement-year-card.year-current {
+  border-left: 4px solid #10B981;
+}
+
+.reveal .measurement-year-card.year-future {
+  border-left: 4px solid var(--accent-primary);
+}
+
+/* Scale Visualization (Slide 13) */
+.reveal .scale-viz {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
+  margin-top: 2em;
+  font-size: 0.6em;
+  font-weight: 600;
+}
+
+.reveal .scale-arrow {
+  color: var(--accent-primary);
+  display: inline-flex;
+}
+
+/* Roadmap Styles (Slide 14) */
+.reveal .roadmap-placeholder {
+  border: 2px dashed var(--border);
+  border-radius: 12px;
+  padding: 3em;
+  background: var(--surface);
+  min-height: 300px;
+  margin-top: 2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reveal .roadmap-placeholder-text {
+  font-size: 0.6em;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.reveal .roadmap-legend {
+  display: flex;
+  gap: 2em;
+  margin-top: 2em;
+  justify-content: center;
+}
+
+.reveal .legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  font-size: 0.5em;
+  color: var(--text-muted);
+}
+
+.reveal .legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* Pricing Grid (Slide 15) */
+.reveal .pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2em;
+  margin-top: 2em;
+}
+
+.reveal .pricing-footer {
+  text-align: center;
+  margin-top: 2em;
+  font-size: 0.45em;
+  color: var(--text-muted);
+  line-height: 1.6;
+  padding: 1em;
+  background: var(--surface);
+  border-radius: 8px;
+}
+
+/* ========================================
+   SLIDES 16-18: CLOSING SLIDES
+   ======================================== */
+
+/* CTA Layout (Slide 16) */
+.reveal .cta-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3em;
+  margin-top: 2em;
+}
+
+.reveal .cta-column {
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+}
+
+.reveal .cta-section {
+  margin-bottom: 1em;
+}
+
+.reveal .cta-section h3 {
+  font-size: 0.7em;
+  font-weight: 600;
+  color: var(--accent-primary);
+  margin: 0 0 0.5em 0;
+}
+
+.reveal .cta-section p {
+  font-size: 0.5em;
+  line-height: 1.6;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.reveal .cta-contact {
+  background: var(--surface);
+  padding: 2em;
+  border-radius: 12px;
+  border: 2px solid var(--accent-primary);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+}
+
+.reveal .cta-contact h3 {
+  font-size: 0.7em;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0 0 1em 0;
+}
+
+.reveal .cta-contact-name {
+  font-size: 0.6em;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 0.3em;
+}
+
+.reveal .cta-contact-email {
+  font-size: 0.5em;
+  color: var(--accent-primary);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.reveal .cta-contact-email:hover {
+  opacity: 0.8;
+  cursor: pointer;
+}
+
+/* QR Placeholder (Slide 17) */
+.reveal .qr-placeholder {
+  width: min(12em, 60vh);
+  aspect-ratio: 1 / 1;
+  margin: 2em auto;
+  border: 3px dashed var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.reveal .qr-placeholder-content {
+  font-size: 0.6em;
+  color: var(--text-muted);
+  font-weight: 500;
+  text-align: center;
+}
+
+.reveal .qr-helper-text {
+  font-size: 0.45em;
+  color: var(--text-muted);
+  text-align: center;
+  margin-top: 1em;
+}
+
+/* Centered slide utility */
+.reveal section.centered {
+  text-align: center;
+}
+
+.reveal section.centered h1,
+.reveal section.centered h2 {
+  text-align: center;
+}
+
+/* Thank You Slide (Slide 18) */
+.reveal .thank-you-slide {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5em;
+  padding: 100px 120px;
+}
+
+.reveal .thank-you-slide .thank-you-logo {
+  height: 80px;
+  width: auto;
+  margin-bottom: 0.5em;
+}
+
+.reveal .thank-you-slide h1 {
+  font-size: 3.5em;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  margin: 0.3em 0;
+  text-align: center;
+}
+
+.reveal .thank-you-slide .website {
+  font-size: 0.8em;
+  color: var(--accent-primary);
+  font-weight: 500;
+  margin: 0.5em 0;
+  text-decoration: none;
+}
+
+.reveal .thank-you-slide .website:hover {
+  opacity: 0.8;
+}
+
+.reveal .asa-logo-placeholder {
+  width: 120px;
+  height: 60px;
+  border: 2px dashed var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.4em;
+  color: var(--text-muted);
+  margin-top: 1.5em;
+}
+
+/* ========================================
+   GLOBAL: Footer Logos (NSS + ASA)
+   ======================================== */
+.presentation-footer-logos {
+  position: fixed;
+  bottom: 20px;
+  left: 40px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  z-index: 100;
+  pointer-events: none;
+}
+
+.presentation-footer-logos img {
+  height: 32px;
+  width: auto;
+  opacity: 0.9;
+}
+
+/* Placeholder for logos until real images are added */
+.footer-logo-placeholder {
+  height: 32px;
+  padding: 4px 12px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--surface);
+  font-size: 10px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  font-family: var(--font);
+}
+
+/* ========================================
+   Title Slide Hero Illustration
+   ======================================== */
+.title-slide {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 80vh;
+}
+
+.title-slide h1 {
+  text-align: center;
+  font-size: 2.2em;
+}
+
+.title-slide h2 {
+  text-align: center;
+}
+
+.title-illustration {
+  width: 100%;
+  max-width: 700px;
+  margin: 2em auto;
+}
+
+.title-illustration img {
+  width: 100%;
+  height: auto;
+}
+
+/* Placeholder for storm illustration */
+.storm-placeholder {
+  width: 100%;
+  max-width: 600px;
+  height: 300px;
+  margin: 2em auto;
+  border: 2px dashed var(--border);
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.05), rgba(79, 70, 229, 0.05));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.5em;
+  color: var(--text-muted);
+}
+
+/* ========================================
+   Confidentiality Slide
+   ======================================== */
+.confidentiality-slide h1 {
+  font-size: 2em;
+  text-align: center;
+  margin-bottom: 1.5em;
+}
+
+.confidentiality-content {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.confidentiality-subtitle {
+  font-size: 0.7em;
+  font-weight: 600;
+  text-decoration: underline;
+  margin-bottom: 1.5em;
+}
+
+.confidentiality-list {
+  list-style: decimal;
+  padding-left: 1.5em;
+  margin-bottom: 2em;
+}
+
+.confidentiality-list li {
+  font-size: 0.55em;
+  line-height: 1.6;
+  margin-bottom: 0.8em;
+  color: var(--text-muted);
+}
+
+.confidentiality-note {
+  font-size: 0.5em;
+  line-height: 1.6;
+  color: var(--text-muted);
+  margin-bottom: 1.5em;
+}
+
+.confidentiality-contact {
+  font-size: 0.5em;
+  color: var(--text-muted);
+}
+
+.confidentiality-contact a {
+  color: var(--accent-primary);
+  text-decoration: none;
+}
+
+/* ========================================
+   Laptop Screenshot Container
+   ======================================== */
+.laptop-container {
+  position: relative;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.laptop-frame {
+  background: linear-gradient(135deg, #374151, #1f2937);
+  border-radius: 12px 12px 0 0;
+  padding: 8px 8px 0 8px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+}
+
+.laptop-screen {
+  background: #fff;
+  border-radius: 4px 4px 0 0;
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+}
+
+.laptop-screen img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.laptop-base {
+  background: linear-gradient(180deg, #4b5563, #374151);
+  height: 16px;
+  border-radius: 0 0 8px 8px;
+  position: relative;
+}
+
+.laptop-base::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 4px;
+  width: 80px;
+  height: 8px;
+  background: #6b7280;
+  border-radius: 4px;
+}
+
+/* Placeholder laptop screen */
+.laptop-screen-placeholder {
+  width: 100%;
+  height: 100%;
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+/* ========================================
+   Integration Logos Row
+   ======================================== */
+.integration-logos {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2em;
+  margin-top: 1.5em;
+  flex-wrap: wrap;
+}
+
+.integration-logos img {
+  height: 24px;
+  width: auto;
+  opacity: 0.7;
+  filter: grayscale(100%);
+  transition: all 0.2s ease;
+}
+
+.integration-logos img:hover {
+  opacity: 1;
+  filter: grayscale(0%);
+}
+
+/* Placeholder for integration logos */
+.integration-logo-placeholder {
+  padding: 8px 16px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 11px;
+  color: var(--text-muted);
+  background: var(--surface);
+}
+
+/* ========================================
+   Real QR Code Container
+   ======================================== */
+.qr-code-container {
+  width: min(280px, 50vw);
+  aspect-ratio: 1 / 1;
+  margin: 2em auto;
+  background: #fff;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.qr-code-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* ========================================
+   Thank You Slide Improvements
+   ======================================== */
+.thank-you-cloud {
+  width: 200px;
+  height: auto;
+  margin-bottom: 1em;
+}
+
+.thank-you-asa-logo {
+  height: 50px;
+  width: auto;
+  margin-top: 2em;
+}
+
+/* ========================================
+   Slide-specific Light Blue Footer Bar
+   ======================================== */
+.slide-footer-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: linear-gradient(180deg, rgba(186, 230, 253, 0), rgba(186, 230, 253, 0.5));
+}
+
+/* ========================================
+   Welcome Slide - CBO + Cycle + People
+   ======================================== */
+.welcome-illustration {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2em;
+  margin: 2em 0;
+  padding: 2em;
+  background: linear-gradient(180deg, rgba(248, 250, 252, 1) 0%, rgba(241, 245, 249, 0.5) 100%);
+  border-radius: 16px;
+}
+
+.welcome-illustration-placeholder {
+  width: 100%;
+  max-width: 800px;
+  height: 280px;
+  margin: 2em auto;
+  border: 2px dashed var(--border);
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(248, 250, 252, 1) 0%, rgba(241, 245, 249, 0.5) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.5em;
+  color: var(--text-muted);
+  text-align: center;
+  line-height: 1.8;
+}
+
+/* ========================================
+   About Us Timeline - 3 Column Images
+   ======================================== */
+.timeline-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2em;
+  margin-top: 2em;
+}
+
+.timeline-item {
+  text-align: center;
+}
+
+.timeline-image-placeholder {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border: 2px dashed var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.4em;
+  color: var(--text-muted);
+  margin-bottom: 1em;
+}
+
+.timeline-year {
+  font-size: 2em;
+  font-weight: 700;
+  margin-bottom: 0.3em;
+}
+
+.timeline-year.year-2022 { color: var(--text-muted); }
+.timeline-year.year-2024 { color: var(--text); }
+.timeline-year.year-2025 { color: var(--accent-primary); }
+
+.timeline-desc {
+  font-size: 0.45em;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* ========================================
+   Market Forces - Improved Layout
+   ======================================== */
+.market-forces-layout {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 3em;
+  margin-top: 2em;
+  align-items: start;
+}
+
+.market-forces-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.market-stat-big {
+  font-size: 3em;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1;
+}
+
+.market-stat-label {
+  font-size: 0.5em;
+  color: #ef4444;
+  font-weight: 500;
+}
+
+.market-forces-visual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tornado-placeholder {
+  width: 100%;
+  max-width: 500px;
+  height: 350px;
+  border: 2px dashed var(--border);
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.05), rgba(79, 70, 229, 0.05));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.45em;
+  color: var(--text-muted);
+  text-align: center;
+  line-height: 1.6;
+}
+
+/* Force pills */
+.force-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8em;
+  margin-top: 1em;
+}
+
+.force-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0.5em 1em;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 50px;
+  font-size: 0.45em;
+  color: var(--text);
+}
+
+.force-pill-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+/* ========================================
+   Perfect Storm - Detailed Stats Layout
+   ======================================== */
+.perfect-storm-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3em;
+  margin-top: 2em;
+}
+
+.storm-column h3 {
+  font-size: 0.7em;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 1em;
+}
+
+.storm-stat-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1em;
+  margin-bottom: 1.5em;
+}
+
+.storm-stat-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #fee2e2;
+  color: #ef4444;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.storm-stat-content {
+  flex: 1;
+}
+
+.storm-stat-number {
+  font-size: 1.2em;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.storm-stat-desc {
+  font-size: 0.45em;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.storm-bottom-line {
+  background: linear-gradient(135deg, #1e3a5f, #0f172a);
+  color: white;
+  padding: 1.5em 2em;
+  border-radius: 8px;
+  margin-top: 2em;
+  text-align: center;
+}
+
+.storm-bottom-line-text {
+  font-size: 0.6em;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+/* ========================================
+   Say Hello Slide - Laptop + Features
+   ======================================== */
+.say-hello-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3em;
+  margin-top: 1.5em;
+  align-items: start;
+}
+
+.say-hello-features {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5em;
+}
+
+.say-hello-feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 1em;
+}
+
+.say-hello-feature-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #dcfce7;
+  color: #16a34a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.say-hello-feature-content h4 {
+  font-size: 0.6em;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0 0 0.3em 0;
+}
+
+.say-hello-feature-content p {
+  font-size: 0.45em;
+  color: var(--text-muted);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.say-hello-visual {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ========================================
+   Workflow Slide - Numbered Steps
+   ======================================== */
+.workflow-steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5em;
+  margin-top: 2em;
+}
+
+.workflow-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.workflow-step-number {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+  color: white;
+  font-size: 1.2em;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1em;
+}
+
+.workflow-step-icon {
+  width: 80px;
+  height: 60px;
+  margin-bottom: 1em;
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.workflow-step-title {
+  font-size: 0.55em;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 0.5em;
+}
+
+.workflow-step-desc {
+  font-size: 0.4em;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* ========================================
+   CIE Slide - Before/After with Hub
+   ======================================== */
+.cie-layout {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 3em;
+  margin-top: 1.5em;
+}
+
+.cie-before-after {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2em;
+}
+
+.cie-diagram {
+  text-align: center;
+}
+
+.cie-diagram-label {
+  font-size: 0.5em;
+  font-weight: 600;
+  margin-bottom: 1em;
+}
+
+.cie-diagram-visual {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  max-width: 200px;
+  margin: 0 auto;
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+/* ========================================
+   Results Slide - With Image
+   ======================================== */
+.results-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3em;
+  margin-top: 2em;
+}
+
+.results-image-placeholder {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  border: 2px dashed var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.45em;
+  color: var(--text-muted);
+  text-align: center;
+  line-height: 1.6;
+}
+
+.results-metrics {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.results-metric {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+  padding: 1em;
+  background: var(--surface);
+  border-radius: 8px;
+}
+
+.results-metric-value {
+  font-size: 1.5em;
+  font-weight: 700;
+  color: var(--accent-primary);
+  min-width: 80px;
+}
+
+.results-metric-label {
+  font-size: 0.45em;
+  color: var(--text-muted);
+}
+
+/* ========================================
+   Analytics Slide - Dashboard Screenshots
+   ======================================== */
+.analytics-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2em;
+  margin-top: 2em;
+}
+
+.analytics-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.analytics-panel-header {
+  padding: 1em;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.analytics-panel-title {
+  font-size: 0.55em;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.analytics-panel-content {
+  padding: 1em;
+  min-height: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.analytics-screenshot-placeholder {
+  width: 100%;
+  height: 100%;
+  min-height: 200px;
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.4em;
+  color: var(--text-muted);
+}
+
+/* ========================================
+   Measurement Slide - Cards with Bullets
+   ======================================== */
+.measurement-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5em;
+  margin-top: 2em;
+}
+
+.measurement-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5em;
+}
+
+.measurement-card.active {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05));
+  border-color: #10b981;
+}
+
+.measurement-card-header {
+  font-size: 0.4em;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5em;
+}
+
+.measurement-card-header.past { color: var(--text-muted); }
+.measurement-card-header.current { color: #10b981; }
+.measurement-card-header.future { color: var(--accent-primary); }
+
+.measurement-card-title {
+  font-size: 0.7em;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 1em;
+}
+
+.measurement-card-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.measurement-card-list li {
+  font-size: 0.4em;
+  color: var(--text-muted);
+  padding: 0.4em 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.measurement-card-list li::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+}
+
+/* ========================================
+   Roadmap Slide - Map
+   ======================================== */
+.roadmap-map-container {
+  width: 100%;
+  max-width: 900px;
+  margin: 2em auto;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.roadmap-map-placeholder {
+  width: 100%;
+  height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.5em;
+  color: var(--text-muted);
+  text-align: center;
+  line-height: 1.8;
+}
+
+.roadmap-map-legend {
+  padding: 1em;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: center;
+  gap: 2em;
+}
+
+.roadmap-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  font-size: 0.4em;
+  color: var(--text-muted);
+}
+
+.roadmap-legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.roadmap-legend-dot.cis { background: #ec4899; }
+.roadmap-legend-dot.migration { background: #94a3b8; }
+.roadmap-legend-dot.aging { background: #06b6d4; }
+
+/* ========================================
+   Welcome Flow - CBO → Cycle → Community
+   ======================================== */
+.welcome-flow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5em;
+  margin: 2.5em auto;
+  padding: 2em;
+  background: linear-gradient(180deg, rgba(248, 250, 252, 1) 0%, rgba(241, 245, 249, 0.5) 100%);
+  border-radius: 16px;
+  max-width: 900px;
+}
+
+.welcome-flow-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8em;
+}
+
+.welcome-flow-item img {
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.1));
+}
+
+.welcome-flow-label {
+  font-size: 0.6em;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.welcome-flow-arrow {
+  font-size: 2.5em;
+  color: var(--accent-primary);
+  font-weight: 300;
+  opacity: 0.6;
+}
+
+.welcome-cycle {
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  border-radius: 50%;
+  width: 160px;
+  height: 160px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3em;
+  box-shadow: 0 8px 32px rgba(79, 70, 229, 0.3);
+}
+
+.cycle-word {
+  font-size: 0.7em;
+  font-weight: 600;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }

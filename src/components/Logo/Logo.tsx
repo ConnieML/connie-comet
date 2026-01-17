@@ -5,6 +5,7 @@ interface Props {
   className?: string
   loading?: 'lazy' | 'eager'
   priority?: 'auto' | 'high' | 'low'
+  variant?: 'dark' | 'light'
 }
 
 interface PayloadLogoProps {
@@ -12,10 +13,11 @@ interface PayloadLogoProps {
 }
 
 export const Logo = (props: Props) => {
-  const { loading: loadingFromProps, priority: priorityFromProps, className } = props
+  const { loading: loadingFromProps, priority: priorityFromProps, className, variant = 'dark' } = props
 
   const loading = loadingFromProps || 'lazy'
   const priority = priorityFromProps || 'low'
+  const logoSrc = variant === 'light' ? '/connie-logo_v1-white.svg' : '/connie-logo_v1-black.svg'
 
   return (
     /* eslint-disable @next/next/no-img-element */
@@ -27,7 +29,7 @@ export const Logo = (props: Props) => {
       fetchPriority={priority}
       decoding="async"
       className={clsx('max-w-[9.375rem] w-full h-[51px]', className)}
-      src="/connie-logo_v1-white.svg"
+      src={logoSrc}
     />
   )
 }
@@ -42,7 +44,7 @@ export const PayloadLogo: React.FC<PayloadLogoProps> = (props) => {
       width={150}
       height={40}
       className={clsx('max-w-[150px] w-full h-[40px]', className)}
-      src="/connie-logo_v1-white.svg"
+      src="/connie-logo-black.svg"
     />
   )
 }

@@ -288,6 +288,68 @@ Instead of manual HTML/CSS, we used professional third-party components:
 - No additional environment variables needed
 - Content must be added via PayloadCMS admin after deployment
 
+## Webchat 3.x Implementation (Dec 23, 2025) - COMPLETE
+
+### Status: DEPLOYED TO PRODUCTION (Build #72)
+
+### Overview
+Twilio Webchat 3.x integrated on all pages with custom pre-engagement form and Flex task routing.
+
+### Key Components
+- **WebchatWidget**: `src/components/WebchatWidget/index.tsx`
+- **SDK**: `https://media.twiliocdn.com/sdk/js/webchat-v3/releases/3.3.0/webchat.min.js`
+- **Deployment Key**: `CVed9f73a4605bdc4e2d18d54070df52d9`
+- **Studio Flow**: `FWfbdfef030d0914e59afd774588fbf050` (Connie.one Sales Webchat Flow)
+
+### Features
+- Custom pre-engagement form (name, email, company, phone, query)
+- Real-time agent availability checking
+- Auto-open on button click (`appStatus: 'open'`)
+- "We're Currently Away" modal when no agents available
+- Tasks route to "Connie.one Sales" queue
+
+### Critical Configuration (DO NOT CHANGE)
+- Studio Flow Send to Flex channel: `TCbea5653bb870058ae31bc02690f35f63` (hardcoded, not variable)
+- Workflow: `WWaddd2eada498f68d578b0144d207c522`
+- Task Queue: `WQ22cad65afd5e3f2e8649e4d88e0de49b` (requires `sales` skill)
+
+### Documentation
+Full implementation details: `/Users/cjberno/projects/connie/rtc/notes/Webchat-Implementation@ConnieCareTeam.md`
+
+---
+
+## Contact Page Implementation (Dec 2025) - ENHANCED
+
+### Status: DEPLOYED TO PRODUCTION
+
+### Overview
+Professional contact hub at /contact with four communication channels:
+- Contact form with Resend email + Flex task creation
+- Calendly scheduling (placeholder)
+- Live chat (placeholder - see WebchatWidget for actual chat)
+- Click-to-dial phone: +1 (877) 606-4520
+
+### Technical Details
+- **Form Submission**: API route at /api/contact using Resend
+- **Email Recipients**:
+  - `admin@connie.direct` (notification)
+  - `careteam@connie.support` (creates Flex task)
+- **Reply-To**: Customer's email (for agent responses)
+- **From Domain**: `contact@connie.one` (verified in Resend)
+- **Email Template**: emails/templates/connie-contact-submission.tsx
+- **Components**: Modular structure in src/app/(frontend)/contact/components/
+- **Styling**: Slate gradient matching existing aesthetic
+- **Accessibility**: WCAG 2.1 AA compliant, keyboard navigable
+
+### Environment Variables
+- RESEND_API_KEY: Required for email delivery (configured in Amplify)
+
+### Future Integrations (Next Sprint)
+- LiveChatCard: Connect to actual availability check (currently hardcoded as unavailable)
+- ScheduleCard: Calendly embed
+
+---
+
 ## Notes
 - Project has test setup with Playwright and Vitest
 - Footer enhancements ready for production deployment
