@@ -91,7 +91,47 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
   const [selectedSubcategory, setSelectedSubcategory] = useState<string | null>(searchParams.get('sub'))
   const [searchQuery, setSearchQuery] = useState('')
   const [copiedId, setCopiedId] = useState<string | null>(null)
+  const [previewAsset, setPreviewAsset] = useState<BrandAsset | null>(null)
+  const [downloading, setDownloading] = useState(false)
   const hasFetched = useRef(false)
+
+  // Handle escape key to close lightbox
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setPreviewAsset(null)
+    }
+    if (previewAsset) {
+      document.addEventListener('keydown', handleEscape)
+      document.body.style.overflow = 'hidden'
+    }
+    return () => {
+      document.removeEventListener('keydown', handleEscape)
+      document.body.style.overflow = ''
+    }
+  }, [previewAsset])
+
+  // Download handler using server endpoint
+  const handleDownload = async (asset: BrandAsset) => {
+    setDownloading(true)
+    try {
+      const response = await fetch(`/api/download/${asset.id}`)
+      if (!response.ok) throw new Error('Download failed')
+
+      const blob = await response.blob()
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = asset.filename || asset.name || 'download'
+      document.body.appendChild(a)
+      a.click()
+      window.URL.revokeObjectURL(url)
+      document.body.removeChild(a)
+    } catch (err) {
+      console.error('Download failed:', err)
+    } finally {
+      setDownloading(false)
+    }
+  }
 
   // Update URL when category/subcategory changes
   const updateURL = (category: string | null, subcategory: string | null) => {
@@ -455,9 +495,13 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
                     key={asset.id}
                     className="grid grid-cols-1 md:grid-cols-12 gap-4 px-6 py-4 hover:bg-white/5 transition-colors items-center"
                   >
-                    {/* Preview/Thumbnail */}
+                    {/* Preview/Thumbnail - Clickable */}
                     <div className="col-span-1">
-                      <div className="w-12 h-12 rounded-lg bg-zinc-800 flex items-center justify-center overflow-hidden">
+                      <button
+                        onClick={() => setPreviewAsset(asset)}
+                        className="w-12 h-12 rounded-lg bg-zinc-800 flex items-center justify-center overflow-hidden hover:ring-2 hover:ring-pink-500 transition-all cursor-pointer"
+                        title="Click to preview"
+                      >
                         {isImage && (asset.sizes?.thumbnail?.url || asset.url) ? (
                           <img
                             src={asset.sizes?.thumbnail?.url || asset.url}
@@ -467,7 +511,7 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
                         ) : (
                           <span className={`text-2xl ${fileIcon.color}`}>{fileIcon.icon}</span>
                         )}
-                      </div>
+                      </button>
                     </div>
 
                     {/* Name & Description */}
@@ -529,14 +573,21 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
 
                     {/* Actions */}
                     <div className="col-span-2 flex items-center justify-end gap-2">
-                      <a
-                        href={asset.url}
-                        download
-                        className="flex items-center gap-1.5 bg-pink-500 hover:bg-pink-400 text-white text-sm font-medium py-2 px-4 rounded-lg transition-colors"
+                      <button
+                        onClick={() => setPreviewAsset(asset)}
+                        className="py-2 px-3 rounded-lg text-sm font-medium bg-white/10 hover:bg-white/20 text-white transition-colors"
+                        title="Preview"
+                      >
+                        👁
+                      </button>
+                      <button
+                        onClick={() => handleDownload(asset)}
+                        disabled={downloading}
+                        className="flex items-center gap-1.5 bg-pink-500 hover:bg-pink-400 disabled:opacity-50 text-white text-sm font-medium py-2 px-4 rounded-lg transition-colors"
                       >
                         <span>↓</span>
                         <span className="hidden lg:inline">Download</span>
-                      </a>
+                      </button>
                       <button
                         onClick={() => asset.url && copyToClipboard(asset.url, asset.id)}
                         className={`py-2 px-3 rounded-lg text-sm font-medium transition-all ${
@@ -562,6 +613,199 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
               <p className="text-zinc-400 text-sm">Try adjusting your search or filter</p>
             </div>
           )}
+        </div>
+
+        {/* Lightbox Modal */}
+        {previewAsset && (
+          <LightboxModal
+            asset={previewAsset}
+            onClose={() => setPreviewAsset(null)}
+            onDownload={() => handleDownload(previewAsset)}
+            onCopyUrl={() => previewAsset.url && copyToClipboard(previewAsset.url, previewAsset.id)}
+            downloading={downloading}
+            copied={copiedId === previewAsset.id}
+            formatFileSize={formatFileSize}
+            getFileExtension={getFileExtension}
+            isImageFile={isImageFile}
+            getFileIcon={getFileIcon}
+          />
+        )}
+      </div>
+    </div>
+  )
+}
+
+// Lightbox Modal Component
+interface LightboxModalProps {
+  asset: BrandAsset
+  onClose: () => void
+  onDownload: () => void
+  onCopyUrl: () => void
+  downloading: boolean
+  copied: boolean
+  formatFileSize: (bytes?: number) => string
+  getFileExtension: (filename?: string) => string
+  isImageFile: (mimeType?: string, filename?: string) => boolean
+  getFileIcon: (filename?: string) => { icon: string; color: string }
+}
+
+const LightboxModal: React.FC<LightboxModalProps> = ({
+  asset,
+  onClose,
+  onDownload,
+  onCopyUrl,
+  downloading,
+  copied,
+  formatFileSize,
+  getFileExtension,
+  isImageFile,
+  getFileIcon,
+}) => {
+  const ext = getFileExtension(asset.filename)
+  const isImage = isImageFile(asset.mimeType, asset.filename)
+  const fileIcon = getFileIcon(asset.filename)
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+      onClick={onClose}
+    >
+      <div
+        className="relative bg-zinc-900 rounded-2xl border border-white/10 max-w-4xl w-full max-h-[90vh] overflow-hidden shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Close Button */}
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-black/50 hover:bg-black/70 text-white flex items-center justify-center transition-colors"
+          title="Close (Esc)"
+        >
+          <span className="text-xl">×</span>
+        </button>
+
+        <div className="flex flex-col md:flex-row">
+          {/* Preview Area */}
+          <div className="flex-1 bg-zinc-950 flex items-center justify-center p-8 min-h-[300px] md:min-h-[500px]">
+            {isImage && asset.url ? (
+              <img
+                src={asset.url}
+                alt={asset.name}
+                className="max-w-full max-h-[70vh] object-contain rounded-lg"
+              />
+            ) : (
+              <div className="text-center">
+                <span className={`text-8xl ${fileIcon.color}`}>{fileIcon.icon}</span>
+                <p className="mt-4 text-zinc-400 text-lg">{ext.toUpperCase()} File</p>
+              </div>
+            )}
+          </div>
+
+          {/* Details Sidebar */}
+          <div className="w-full md:w-80 p-6 border-t md:border-t-0 md:border-l border-white/10 bg-zinc-900/50">
+            <h2 className="text-xl font-semibold text-white mb-2">{asset.name}</h2>
+
+            {asset.description && (
+              <p className="text-zinc-400 text-sm mb-4">{asset.description}</p>
+            )}
+
+            {/* Metadata */}
+            <div className="space-y-3 mb-6">
+              <div className="flex justify-between text-sm">
+                <span className="text-zinc-500">Type</span>
+                <span className="text-zinc-300 flex items-center gap-1.5">
+                  <span className={fileIcon.color}>{fileIcon.icon}</span>
+                  {ext.toUpperCase() || 'FILE'}
+                </span>
+              </div>
+
+              {asset.filesize && (
+                <div className="flex justify-between text-sm">
+                  <span className="text-zinc-500">Size</span>
+                  <span className="text-zinc-300">{formatFileSize(asset.filesize)}</span>
+                </div>
+              )}
+
+              {asset.width && asset.height && (
+                <div className="flex justify-between text-sm">
+                  <span className="text-zinc-500">Dimensions</span>
+                  <span className="text-zinc-300">{asset.width} × {asset.height}</span>
+                </div>
+              )}
+
+              {asset.subcategory && (
+                <div className="flex justify-between text-sm">
+                  <span className="text-zinc-500">Subcategory</span>
+                  <span className="text-zinc-300">{asset.subcategory}</span>
+                </div>
+              )}
+
+              <div className="flex justify-between text-sm">
+                <span className="text-zinc-500">Usage</span>
+                <span
+                  className={`px-2 py-0.5 rounded text-xs font-medium ${
+                    asset.usageRights === 'public'
+                      ? 'bg-green-500/20 text-green-300'
+                      : asset.usageRights === 'partners'
+                        ? 'bg-blue-500/20 text-blue-300'
+                        : asset.usageRights === 'internal'
+                          ? 'bg-yellow-500/20 text-yellow-300'
+                          : 'bg-red-500/20 text-red-300'
+                  }`}
+                >
+                  {asset.usageRights}
+                </span>
+              </div>
+
+              {asset.usageNotes && (
+                <div className="pt-2 border-t border-white/5">
+                  <span className="text-zinc-500 text-sm block mb-1">Usage Notes</span>
+                  <p className="text-zinc-400 text-xs">{asset.usageNotes}</p>
+                </div>
+              )}
+            </div>
+
+            {/* Action Buttons */}
+            <div className="space-y-2">
+              <button
+                onClick={onDownload}
+                disabled={downloading}
+                className="w-full flex items-center justify-center gap-2 bg-pink-500 hover:bg-pink-400 disabled:opacity-50 text-white font-medium py-3 px-4 rounded-xl transition-colors"
+              >
+                {downloading ? (
+                  <>
+                    <span className="animate-spin">↻</span>
+                    <span>Downloading...</span>
+                  </>
+                ) : (
+                  <>
+                    <span>↓</span>
+                    <span>Download</span>
+                  </>
+                )}
+              </button>
+
+              <button
+                onClick={onCopyUrl}
+                className={`w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-medium transition-all ${
+                  copied
+                    ? 'bg-green-500/20 text-green-300'
+                    : 'bg-white/10 hover:bg-white/20 text-white'
+                }`}
+              >
+                {copied ? (
+                  <>
+                    <span>✓</span>
+                    <span>Copied!</span>
+                  </>
+                ) : (
+                  <>
+                    <span>🔗</span>
+                    <span>Copy URL</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
