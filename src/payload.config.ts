@@ -23,6 +23,8 @@ const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 export default buildConfig({
+  // Explicitly disable localization to prevent fallback-locale errors
+  localization: false,
   admin: {
     meta: {
       title: 'Connie Admin',
