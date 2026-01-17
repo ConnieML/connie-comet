@@ -98,7 +98,7 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
         setLoading(true)
         const params = new URLSearchParams()
         params.append('limit', '500')
-        params.append('where[_status][equals]', 'published')
+        // Note: _status filter removed - versioning disabled on BrandAssets collection
 
         if (usageFilter && usageFilter.length > 0) {
           usageFilter.forEach((usage, i) => {
