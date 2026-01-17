@@ -2,19 +2,45 @@
 
 import React, { useState, useEffect, useRef } from 'react'
 
-const categoryConfig: Record<string, { icon: string; label: string }> = {
-  logos: { icon: '~', label: 'Logos & Marks' },
-  colors: { icon: '~', label: 'Colors & Palettes' },
+// Category configuration with icons and default images
+const categoryConfig: Record<string, { icon: string; label: string; defaultImage?: string }> = {
+  logos: { icon: '◇', label: 'Logos & Marks' },
+  colors: { icon: '●', label: 'Colors & Palettes' },
   fonts: { icon: 'A', label: 'Typography & Fonts' },
-  templates: { icon: '#', label: 'Templates & Documents' },
-  photos: { icon: '*', label: 'Photography & Images' },
-  video: { icon: '>', label: 'Video & Motion' },
-  audio: { icon: ')', label: 'Audio & Sound' },
-  presentations: { icon: '=', label: 'Presentations & Decks' },
-  developer: { icon: '<', label: 'Developer & Technical' },
+  templates: { icon: '▤', label: 'Templates & Documents' },
+  photos: { icon: '▣', label: 'Photography & Images' },
+  video: { icon: '▶', label: 'Video & Motion' },
+  audio: { icon: '♪', label: 'Audio & Sound' },
+  presentations: { icon: '▧', label: 'Presentations & Decks' },
+  developer: { icon: '⟨/⟩', label: 'Developer & Technical' },
   social: { icon: '@', label: 'Social Media' },
-  packages: { icon: '+', label: 'Asset Packages' },
-  guidelines: { icon: '?', label: 'Guidelines & Docs' },
+  packages: { icon: '⊞', label: 'Asset Packages' },
+  guidelines: { icon: '☰', label: 'Guidelines & Docs' },
+}
+
+// File type icons for non-image assets
+const fileTypeIcons: Record<string, { icon: string; color: string }> = {
+  pdf: { icon: '📄', color: 'text-red-400' },
+  doc: { icon: '📝', color: 'text-blue-400' },
+  docx: { icon: '📝', color: 'text-blue-400' },
+  ppt: { icon: '📊', color: 'text-orange-400' },
+  pptx: { icon: '📊', color: 'text-orange-400' },
+  xls: { icon: '📈', color: 'text-green-400' },
+  xlsx: { icon: '📈', color: 'text-green-400' },
+  mp4: { icon: '🎬', color: 'text-purple-400' },
+  webm: { icon: '🎬', color: 'text-purple-400' },
+  mov: { icon: '🎬', color: 'text-purple-400' },
+  mp3: { icon: '🎵', color: 'text-pink-400' },
+  wav: { icon: '🎵', color: 'text-pink-400' },
+  zip: { icon: '📦', color: 'text-yellow-400' },
+  svg: { icon: '◈', color: 'text-cyan-400' },
+  psd: { icon: '🎨', color: 'text-blue-500' },
+  ai: { icon: '🎨', color: 'text-orange-500' },
+  fig: { icon: '🎨', color: 'text-purple-500' },
+  ttf: { icon: 'Aa', color: 'text-zinc-300' },
+  otf: { icon: 'Aa', color: 'text-zinc-300' },
+  woff: { icon: 'Aa', color: 'text-zinc-300' },
+  woff2: { icon: 'Aa', color: 'text-zinc-300' },
 }
 
 interface BrandAsset {
@@ -55,13 +81,12 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
 }) => {
   const [assets, setAssets] = useState<BrandAsset[]>([])
   const [loading, setLoading] = useState(true)
-  const [selectedCategory, setSelectedCategory] = useState<string>('all')
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [searchQuery, setSearchQuery] = useState('')
   const [copiedId, setCopiedId] = useState<string | null>(null)
   const hasFetched = useRef(false)
 
   useEffect(() => {
-    // Only fetch once on mount
     if (hasFetched.current) return
     hasFetched.current = true
 
@@ -69,7 +94,7 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
       try {
         setLoading(true)
         const params = new URLSearchParams()
-        params.append('limit', '100')
+        params.append('limit', '500')
         params.append('where[_status][equals]', 'published')
 
         if (usageFilter && usageFilter.length > 0) {
@@ -97,7 +122,7 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
     }
 
     fetchAssets()
-  }, []) // Empty deps - only run once
+  }, [])
 
   const copyToClipboard = async (url: string, id: string) => {
     try {
@@ -110,37 +135,63 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
   }
 
   const formatFileSize = (bytes?: number) => {
-    if (!bytes) return ''
+    if (!bytes) return '-'
     if (bytes < 1024) return `${bytes} B`
-    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} KB`
     return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
   }
 
   const getFileExtension = (filename?: string) => {
     if (!filename) return ''
-    return filename.split('.').pop()?.toUpperCase() || ''
+    return filename.split('.').pop()?.toLowerCase() || ''
   }
 
-  const availableCategories = [...new Set(assets.map((a) => a.category))]
+  const isImageFile = (mimeType?: string, filename?: string) => {
+    if (mimeType?.startsWith('image/') && !mimeType?.includes('svg')) return true
+    const ext = getFileExtension(filename)
+    return ['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext)
+  }
 
-  const filteredAssets = assets.filter((asset) => {
-    const matchesCategory = selectedCategory === 'all' || asset.category === selectedCategory
-    const matchesSearch =
-      !searchQuery ||
-      asset.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      asset.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      asset.tags?.toLowerCase().includes(searchQuery.toLowerCase())
-    return matchesCategory && matchesSearch
-  })
+  const getFileIcon = (filename?: string) => {
+    const ext = getFileExtension(filename)
+    return fileTypeIcons[ext] || { icon: '📁', color: 'text-zinc-400' }
+  }
 
-  const groupedAssets = filteredAssets.reduce(
+  // Group assets by category
+  const categoryCounts = assets.reduce(
     (acc, asset) => {
-      if (!acc[asset.category]) acc[asset.category] = []
-      acc[asset.category].push(asset)
+      acc[asset.category] = (acc[asset.category] || 0) + 1
       return acc
     },
-    {} as Record<string, BrandAsset[]>,
+    {} as Record<string, number>,
   )
+
+  // Get representative image for each category (first image asset)
+  const categoryImages = assets.reduce(
+    (acc, asset) => {
+      if (!acc[asset.category] && (asset.sizes?.thumbnail?.url || asset.sizes?.preview?.url)) {
+        acc[asset.category] = asset.sizes.thumbnail?.url || asset.sizes.preview?.url || null
+      }
+      return acc
+    },
+    {} as Record<string, string | null>,
+  )
+
+  // Filter assets for selected category
+  const filteredAssets = selectedCategory
+    ? assets.filter((asset) => {
+        const matchesCategory = asset.category === selectedCategory
+        const matchesSearch =
+          !searchQuery ||
+          asset.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          asset.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          asset.tags?.toLowerCase().includes(searchQuery.toLowerCase())
+        return matchesCategory && matchesSearch
+      })
+    : []
+
+  // Sort categories by count (descending)
+  const sortedCategories = Object.entries(categoryCounts).sort((a, b) => b[1] - a[1])
 
   if (loading) {
     return (
@@ -149,9 +200,9 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
           <div className="animate-pulse space-y-8">
             <div className="h-10 bg-white/10 rounded-lg w-64 mx-auto" />
             <div className="h-6 bg-white/10 rounded-lg w-96 mx-auto" />
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {[...Array(8)].map((_, i) => (
-                <div key={i} className="h-64 bg-white/5 rounded-2xl" />
+                <div key={i} className="h-48 bg-white/5 rounded-2xl" />
               ))}
             </div>
           </div>
@@ -160,103 +211,190 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
     )
   }
 
-  return (
-    <div className="py-20 px-4 min-h-screen bg-gradient-to-b from-zinc-900 via-zinc-900 to-black">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-16">
-          <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 tracking-tight">
-            {heading}
-          </h1>
-          <p className="text-xl text-zinc-400 max-w-2xl mx-auto leading-relaxed">{description}</p>
-        </div>
-
-        {/* Search & Filter */}
-        <div className="flex flex-col lg:flex-row gap-4 mb-12">
-          <div className="flex-1 relative">
-            <input
-              type="text"
-              placeholder="Search assets by name, description, or tag..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full px-6 py-4 rounded-2xl bg-white/5 border border-white/10 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-pink-500/50 focus:border-pink-500/50 transition-all"
-            />
-            <span className="absolute right-5 top-1/2 -translate-y-1/2 text-zinc-500">
-              [Search]
-            </span>
+  // ==========================================
+  // CATEGORY GRID VIEW (default)
+  // ==========================================
+  if (!selectedCategory) {
+    return (
+      <div className="py-20 px-4 min-h-screen bg-gradient-to-b from-zinc-900 via-zinc-900 to-black">
+        <div className="max-w-7xl mx-auto">
+          {/* Header */}
+          <div className="text-center mb-16">
+            <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 tracking-tight">
+              {heading}
+            </h1>
+            <p className="text-xl text-zinc-400 max-w-2xl mx-auto leading-relaxed">{description}</p>
+            <p className="text-sm text-zinc-500 mt-4">{assets.length} assets across {sortedCategories.length} categories</p>
           </div>
 
-          <div className="flex flex-wrap gap-2">
-            <button
-              onClick={() => setSelectedCategory('all')}
-              className={`px-5 py-3 rounded-xl text-sm font-medium transition-all ${
-                selectedCategory === 'all'
-                  ? 'bg-pink-500 text-white shadow-lg shadow-pink-500/25'
-                  : 'bg-white/5 text-zinc-300 hover:bg-white/10 border border-white/10'
-              }`}
-            >
-              All Assets
-            </button>
-            {availableCategories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setSelectedCategory(cat)}
-                className={`px-5 py-3 rounded-xl text-sm font-medium transition-all ${
-                  selectedCategory === cat
-                    ? 'bg-pink-500 text-white shadow-lg shadow-pink-500/25'
-                    : 'bg-white/5 text-zinc-300 hover:bg-white/10 border border-white/10'
-                }`}
-              >
-                [{categoryConfig[cat]?.icon}] {categoryConfig[cat]?.label}
-              </button>
-            ))}
-          </div>
-        </div>
+          {/* Category Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {sortedCategories.map(([category, count]) => {
+              const config = categoryConfig[category] || { icon: '?', label: category }
+              const imageUrl = categoryImages[category]
 
-        {/* Results count */}
-        <p className="text-sm text-zinc-500 mb-8">
-          {filteredAssets.length} asset{filteredAssets.length !== 1 ? 's' : ''} available
-        </p>
-
-        {/* Assets Grid by Category */}
-        {Object.entries(groupedAssets).map(([category, categoryAssets]) => (
-          <div key={category} className="mb-16">
-            <h2 className="text-2xl font-semibold text-white mb-8 flex items-center gap-3">
-              <span className="text-xl text-pink-500">[{categoryConfig[category]?.icon}]</span>
-              {categoryConfig[category]?.label}
-              <span className="text-sm font-normal text-zinc-500 ml-2">
-                ({categoryAssets.length})
-              </span>
-            </h2>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {categoryAssets.map((asset) => (
-                <div
-                  key={asset.id}
-                  className="group bg-white/5 backdrop-blur-sm rounded-2xl overflow-hidden border border-white/10 hover:border-pink-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-pink-500/10"
+              return (
+                <button
+                  key={category}
+                  onClick={() => setSelectedCategory(category)}
+                  className="group bg-white/5 backdrop-blur-sm rounded-2xl overflow-hidden border border-white/10 hover:border-pink-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-pink-500/10 text-left"
                 >
-                  {/* Preview */}
+                  {/* Category Preview Image */}
                   <div className="aspect-[4/3] bg-zinc-800/50 relative flex items-center justify-center overflow-hidden">
-                    {asset.sizes?.preview?.url || asset.sizes?.thumbnail?.url ? (
+                    {imageUrl ? (
                       <img
-                        src={asset.sizes.preview?.url || asset.sizes.thumbnail?.url}
-                        alt={asset.name}
-                        className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-300"
+                        src={imageUrl}
+                        alt={config.label}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 opacity-60 group-hover:opacity-80"
                       />
                     ) : (
-                      <span className="text-4xl text-zinc-600">
-                        [{categoryConfig[asset.category]?.icon || '?'}]
+                      <span className="text-6xl text-zinc-600 group-hover:text-zinc-500 transition-colors">
+                        {config.icon}
                       </span>
                     )}
+                    {/* Overlay gradient */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-zinc-900/90 via-zinc-900/30 to-transparent" />
 
-                    {/* File type badge */}
-                    <span className="absolute top-3 right-3 bg-black/60 backdrop-blur-sm text-white text-xs px-3 py-1.5 rounded-full font-medium">
-                      {getFileExtension(asset.filename)}
+                    {/* Count badge */}
+                    <span className="absolute top-3 right-3 bg-pink-500/90 text-white text-sm px-3 py-1 rounded-full font-semibold">
+                      {count}
                     </span>
+                  </div>
 
-                    {/* Usage badge */}
+                  {/* Category Info */}
+                  <div className="p-5">
+                    <div className="flex items-center gap-3">
+                      <span className="text-2xl text-pink-500">{config.icon}</span>
+                      <div>
+                        <h3 className="font-semibold text-white group-hover:text-pink-400 transition-colors">
+                          {config.label}
+                        </h3>
+                        <p className="text-sm text-zinc-500">
+                          {count} asset{count !== 1 ? 's' : ''}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </button>
+              )
+            })}
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // ==========================================
+  // TABLE VIEW (after selecting category)
+  // ==========================================
+  const categoryLabel = categoryConfig[selectedCategory]?.label || selectedCategory
+
+  return (
+    <div className="py-12 px-4 min-h-screen bg-gradient-to-b from-zinc-900 via-zinc-900 to-black">
+      <div className="max-w-7xl mx-auto">
+        {/* Back Button & Header */}
+        <div className="mb-8">
+          <button
+            onClick={() => {
+              setSelectedCategory(null)
+              setSearchQuery('')
+            }}
+            className="flex items-center gap-2 text-zinc-400 hover:text-white transition-colors mb-6 group"
+          >
+            <span className="text-xl group-hover:-translate-x-1 transition-transform">←</span>
+            <span>Back to Categories</span>
+          </button>
+
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+              <h1 className="text-3xl md:text-4xl font-bold text-white flex items-center gap-3">
+                <span className="text-pink-500">{categoryConfig[selectedCategory]?.icon}</span>
+                {categoryLabel}
+              </h1>
+              <p className="text-zinc-400 mt-1">{filteredAssets.length} assets</p>
+            </div>
+
+            {/* Search */}
+            <div className="relative w-full md:w-80">
+              <input
+                type="text"
+                placeholder="Search in category..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-pink-500/50 focus:border-pink-500/50 transition-all text-sm"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Assets Table */}
+        <div className="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 overflow-hidden">
+          {/* Table Header */}
+          <div className="hidden md:grid grid-cols-12 gap-4 px-6 py-4 bg-white/5 border-b border-white/10 text-sm font-medium text-zinc-400">
+            <div className="col-span-1">Preview</div>
+            <div className="col-span-4">Name</div>
+            <div className="col-span-2">Type</div>
+            <div className="col-span-1">Size</div>
+            <div className="col-span-2">Usage</div>
+            <div className="col-span-2 text-right">Actions</div>
+          </div>
+
+          {/* Table Body */}
+          <div className="divide-y divide-white/5">
+            {filteredAssets.map((asset) => {
+              const ext = getFileExtension(asset.filename)
+              const isImage = isImageFile(asset.mimeType, asset.filename)
+              const fileIcon = getFileIcon(asset.filename)
+
+              return (
+                <div
+                  key={asset.id}
+                  className="grid grid-cols-1 md:grid-cols-12 gap-4 px-6 py-4 hover:bg-white/5 transition-colors items-center"
+                >
+                  {/* Preview/Thumbnail */}
+                  <div className="col-span-1">
+                    <div className="w-12 h-12 rounded-lg bg-zinc-800 flex items-center justify-center overflow-hidden">
+                      {isImage && (asset.sizes?.thumbnail?.url || asset.url) ? (
+                        <img
+                          src={asset.sizes?.thumbnail?.url || asset.url}
+                          alt={asset.name}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <span className={`text-2xl ${fileIcon.color}`}>{fileIcon.icon}</span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Name & Description */}
+                  <div className="col-span-4">
+                    <h3 className="font-medium text-white truncate" title={asset.name}>
+                      {asset.name}
+                    </h3>
+                    {asset.description && (
+                      <p className="text-sm text-zinc-500 truncate" title={asset.description}>
+                        {asset.description}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* File Type */}
+                  <div className="col-span-2">
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-zinc-800 text-xs font-medium text-zinc-300">
+                      <span className={fileIcon.color}>{fileIcon.icon}</span>
+                      {ext.toUpperCase() || 'FILE'}
+                    </span>
+                  </div>
+
+                  {/* Size */}
+                  <div className="col-span-1 text-sm text-zinc-400">
+                    {formatFileSize(asset.filesize)}
+                  </div>
+
+                  {/* Usage Rights */}
+                  <div className="col-span-2">
                     <span
-                      className={`absolute top-3 left-3 text-xs px-3 py-1.5 rounded-full font-medium backdrop-blur-sm ${
+                      className={`inline-block text-xs px-2.5 py-1 rounded-lg font-medium ${
                         asset.usageRights === 'public'
                           ? 'bg-green-500/20 text-green-300'
                           : asset.usageRights === 'partners'
@@ -273,74 +411,42 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
                     </span>
                   </div>
 
-                  {/* Info */}
-                  <div className="p-5">
-                    <h3
-                      className="font-semibold text-white mb-2 truncate group-hover:text-pink-400 transition-colors"
-                      title={asset.name}
+                  {/* Actions */}
+                  <div className="col-span-2 flex items-center justify-end gap-2">
+                    <a
+                      href={asset.url}
+                      download
+                      className="flex items-center gap-1.5 bg-pink-500 hover:bg-pink-400 text-white text-sm font-medium py-2 px-4 rounded-lg transition-colors"
                     >
-                      {asset.name}
-                    </h3>
-
-                    {asset.description && (
-                      <p className="text-sm text-zinc-400 mb-4 line-clamp-2">{asset.description}</p>
-                    )}
-
-                    {/* Meta */}
-                    <div className="flex items-center gap-3 text-xs text-zinc-500 mb-5">
-                      {asset.filesize && <span>{formatFileSize(asset.filesize)}</span>}
-                      {asset.width && asset.height && (
-                        <span>
-                          | {asset.width}x{asset.height}
-                        </span>
-                      )}
-                      {asset.version && <span>| {asset.version}</span>}
-                    </div>
-
-                    {/* Actions */}
-                    <div className="flex gap-2">
-                      <a
-                        href={asset.url}
-                        download
-                        className="flex-1 bg-pink-500 hover:bg-pink-400 text-white text-sm font-semibold py-3 px-4 rounded-xl text-center transition-colors shadow-lg shadow-pink-500/20"
-                      >
-                        Download
-                      </a>
-                      <button
-                        onClick={() => asset.url && copyToClipboard(asset.url, asset.id)}
-                        className="bg-white/10 hover:bg-white/20 text-white text-sm font-medium py-3 px-4 rounded-xl transition-colors"
-                        title="Copy hotlink URL"
-                      >
-                        {copiedId === asset.id ? 'OK' : 'URL'}
-                      </button>
-                    </div>
-
-                    {/* Source link */}
-                    {asset.sourceFile && (
-                      <a
-                        href={asset.sourceFile}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="block mt-3 text-xs text-pink-400 hover:text-pink-300 transition-colors"
-                      >
-                        Open source file -&gt;
-                      </a>
-                    )}
+                      <span>↓</span>
+                      <span className="hidden lg:inline">Download</span>
+                    </a>
+                    <button
+                      onClick={() => asset.url && copyToClipboard(asset.url, asset.id)}
+                      className={`py-2 px-3 rounded-lg text-sm font-medium transition-all ${
+                        copiedId === asset.id
+                          ? 'bg-green-500/20 text-green-300'
+                          : 'bg-white/10 hover:bg-white/20 text-white'
+                      }`}
+                      title="Copy URL"
+                    >
+                      {copiedId === asset.id ? '✓' : '🔗'}
+                    </button>
                   </div>
                 </div>
-              ))}
-            </div>
+              )
+            })}
           </div>
-        ))}
 
-        {/* Empty state */}
-        {filteredAssets.length === 0 && (
-          <div className="text-center py-20">
-            <div className="text-6xl mb-6 text-zinc-600">[?]</div>
-            <h3 className="text-2xl font-semibold text-white mb-3">No assets found</h3>
-            <p className="text-zinc-400">Try adjusting your search or filters</p>
-          </div>
-        )}
+          {/* Empty State */}
+          {filteredAssets.length === 0 && (
+            <div className="text-center py-16">
+              <div className="text-4xl mb-4 text-zinc-600">🔍</div>
+              <h3 className="text-lg font-medium text-white mb-2">No assets found</h3>
+              <p className="text-zinc-400 text-sm">Try adjusting your search</p>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   )
