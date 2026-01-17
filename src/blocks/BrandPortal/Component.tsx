@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useEffect, useRef } from 'react'
+import { useSearchParams, useRouter } from 'next/navigation'
 
 // Category configuration with icons and default images
 const categoryConfig: Record<string, { icon: string; label: string }> = {
@@ -81,13 +82,25 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
   showCategories = [],
   usageFilter = ['public', 'partners', 'internal', 'restricted'],
 }) => {
+  const searchParams = useSearchParams()
+  const router = useRouter()
+
   const [assets, setAssets] = useState<BrandAsset[]>([])
   const [loading, setLoading] = useState(true)
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
-  const [selectedSubcategory, setSelectedSubcategory] = useState<string | null>(null)
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(searchParams.get('category'))
+  const [selectedSubcategory, setSelectedSubcategory] = useState<string | null>(searchParams.get('sub'))
   const [searchQuery, setSearchQuery] = useState('')
   const [copiedId, setCopiedId] = useState<string | null>(null)
   const hasFetched = useRef(false)
+
+  // Update URL when category/subcategory changes
+  const updateURL = (category: string | null, subcategory: string | null) => {
+    const params = new URLSearchParams()
+    if (category) params.set('category', category)
+    if (subcategory) params.set('sub', subcategory)
+    const queryString = params.toString()
+    router.push(queryString ? `/brand?${queryString}` : '/brand', { scroll: false })
+  }
 
   useEffect(() => {
     if (hasFetched.current) return
@@ -260,6 +273,7 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
                     setSelectedCategory(category)
                     setSelectedSubcategory(null)
                     setSearchQuery('')
+                    updateURL(category, null)
                   }}
                   className="group bg-white/5 backdrop-blur-sm rounded-2xl overflow-hidden border border-white/10 hover:border-pink-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-pink-500/10 text-left"
                 >
@@ -323,6 +337,7 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
               setSelectedCategory(null)
               setSelectedSubcategory(null)
               setSearchQuery('')
+              updateURL(null, null)
             }}
             className="flex items-center gap-2 text-zinc-400 hover:text-white transition-colors mb-6 group"
           >
@@ -359,7 +374,10 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
         {subcategories.length > 0 && (
           <div className="mb-6 flex flex-wrap gap-2">
             <button
-              onClick={() => setSelectedSubcategory(null)}
+              onClick={() => {
+                setSelectedSubcategory(null)
+                updateURL(selectedCategory, null)
+              }}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                 selectedSubcategory === null
                   ? 'bg-pink-500 text-white shadow-lg shadow-pink-500/25'
@@ -373,7 +391,10 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
               return (
                 <button
                   key={subcat}
-                  onClick={() => setSelectedSubcategory(subcat)}
+                  onClick={() => {
+                    setSelectedSubcategory(subcat)
+                    updateURL(selectedCategory, subcat)
+                  }}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                     selectedSubcategory === subcat
                       ? 'bg-pink-500 text-white shadow-lg shadow-pink-500/25'
@@ -387,7 +408,10 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
             {/* Show uncategorized count if there are assets without subcategory */}
             {categoryAssets.some((a) => !a.subcategory) && (
               <button
-                onClick={() => setSelectedSubcategory('__none__')}
+                onClick={() => {
+                  setSelectedSubcategory('__none__')
+                  updateURL(selectedCategory, '__none__')
+                }}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                   selectedSubcategory === '__none__'
                     ? 'bg-pink-500 text-white shadow-lg shadow-pink-500/25'
