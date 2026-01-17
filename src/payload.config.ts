@@ -91,11 +91,13 @@ export default buildConfig({
     s3Storage({
       collections: {
         media: {
+          disableLocalStorage: true,
           generateFileURL: ({ filename }) => {
             return `https://${process.env.S3_BUCKET_UPLOADS || 'admin-connie-one-uploads'}.s3.${process.env.S3_REGION || 'us-east-1'}.amazonaws.com/${filename}`
           },
         },
         'brand-assets': {
+          disableLocalStorage: true,
           generateFileURL: ({ filename }) => {
             return `https://${process.env.S3_BUCKET_UPLOADS || 'admin-connie-one-uploads'}.s3.${process.env.S3_REGION || 'us-east-1'}.amazonaws.com/brand/${filename}`
           },

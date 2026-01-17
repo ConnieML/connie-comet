@@ -991,7 +991,6 @@ export interface BrandAsset {
   prefix?: string | null;
   updatedAt: string;
   createdAt: string;
-  _status?: ('draft' | 'published') | null;
   url?: string | null;
   thumbnailURL?: string | null;
   filename?: string | null;
@@ -1685,7 +1684,6 @@ export interface BrandAssetsSelect<T extends boolean = true> {
   prefix?: T;
   updatedAt?: T;
   createdAt?: T;
-  _status?: T;
   url?: T;
   thumbnailURL?: T;
   filename?: T;
@@ -2144,10 +2142,6 @@ export interface TaskSchedulePublish {
       | ({
           relationTo: 'posts';
           value: string | Post;
-        } | null)
-      | ({
-          relationTo: 'brand-assets';
-          value: string | BrandAsset;
         } | null);
     global?: string | null;
     user?: (string | null) | User;
