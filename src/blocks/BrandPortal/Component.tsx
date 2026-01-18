@@ -152,12 +152,7 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
         const params = new URLSearchParams()
         params.append('limit', '500')
         // Note: _status filter removed - versioning disabled on BrandAssets collection
-
-        if (usageFilter && usageFilter.length > 0) {
-          usageFilter.forEach((usage, i) => {
-            params.append(`where[usageRights][in][${i}]`, usage)
-          })
-        }
+        // Note: usageRights filter removed - [in] syntax was broken, and default includes all values anyway
 
         if (showCategories && showCategories.length > 0) {
           showCategories.forEach((cat, i) => {
