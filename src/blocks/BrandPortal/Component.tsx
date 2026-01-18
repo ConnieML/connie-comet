@@ -108,7 +108,7 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
   const hasFetchedCategories = useRef(false)
 
   // Known categories from your database
-  const knownCategories = ['developer', 'guidelines', 'logos', 'photos', 'presentations', 'templates']
+  const knownCategories = ['developer', 'guidelines', 'logos', 'one-pagers', 'photos', 'presentations', 'templates']
 
   // Handle escape key to close lightbox
   useEffect(() => {
