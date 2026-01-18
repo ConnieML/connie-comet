@@ -69,6 +69,12 @@ interface BrandAsset {
   }
 }
 
+interface CategorySummary {
+  category: string
+  count: number
+  heroImage: string | null
+}
+
 interface BrandPortalBlockProps {
   heading?: string
   description?: string
@@ -85,15 +91,24 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
   const searchParams = useSearchParams()
   const router = useRouter()
 
-  const [assets, setAssets] = useState<BrandAsset[]>([])
-  const [loading, setLoading] = useState(true)
+  // Category-level state (for grid view)
+  const [categorySummaries, setCategorySummaries] = useState<CategorySummary[]>([])
+  const [loadingCategories, setLoadingCategories] = useState(true)
+
+  // Asset-level state (for category detail view)
+  const [categoryAssets, setCategoryAssets] = useState<BrandAsset[]>([])
+  const [loadingAssets, setLoadingAssets] = useState(false)
+
   const [selectedCategory, setSelectedCategory] = useState<string | null>(searchParams.get('category'))
   const [selectedSubcategory, setSelectedSubcategory] = useState<string | null>(searchParams.get('sub'))
   const [searchQuery, setSearchQuery] = useState('')
   const [copiedId, setCopiedId] = useState<string | null>(null)
   const [previewAsset, setPreviewAsset] = useState<BrandAsset | null>(null)
   const [downloading, setDownloading] = useState(false)
-  const hasFetched = useRef(false)
+  const hasFetchedCategories = useRef(false)
+
+  // Known categories from your database
+  const knownCategories = ['developer', 'guidelines', 'logos', 'photos', 'presentations', 'templates']
 
   // Handle escape key to close lightbox
   useEffect(() => {
@@ -142,38 +157,94 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
     router.push(queryString ? `/brand?${queryString}` : '/brand', { scroll: false })
   }
 
+  // ==========================================
+  // FETCH CATEGORY SUMMARIES (for grid view)
+  // ==========================================
   useEffect(() => {
-    if (hasFetched.current) return
-    hasFetched.current = true
+    if (hasFetchedCategories.current) return
+    hasFetchedCategories.current = true
 
-    const fetchAssets = async () => {
+    const fetchCategorySummaries = async () => {
       try {
-        setLoading(true)
+        setLoadingCategories(true)
+        
+        // Fetch one asset per category (for hero images) + get total count
+        // Using Promise.all to fetch all categories in parallel
+        const categoriesToFetch = showCategories.length > 0 ? showCategories : knownCategories
+        
+        const summaryPromises = categoriesToFetch.map(async (category) => {
+          // Fetch 1 asset with image for hero, and get totalDocs for count
+          const params = new URLSearchParams()
+          params.append('where[category][equals]', category)
+          params.append('limit', '1')
+          
+          const response = await fetch(`/api/brand-assets?${params.toString()}`)
+          if (!response.ok) return null
+          
+          const data = await response.json()
+          
+          // Find hero image from the sample asset
+          const sampleAsset = data.docs?.[0]
+          let heroImage: string | null = null
+          if (sampleAsset) {
+            heroImage = sampleAsset.sizes?.thumbnail?.url || sampleAsset.sizes?.preview?.url || null
+          }
+          
+          return {
+            category,
+            count: data.totalDocs || 0,
+            heroImage,
+          } as CategorySummary
+        })
+
+        const results = await Promise.all(summaryPromises)
+        const validSummaries = results.filter((s): s is CategorySummary => s !== null && s.count > 0)
+        
+        // Sort by count descending
+        validSummaries.sort((a, b) => b.count - a.count)
+        
+        setCategorySummaries(validSummaries)
+      } catch (err) {
+        console.error('Failed to load category summaries:', err)
+      } finally {
+        setLoadingCategories(false)
+      }
+    }
+
+    fetchCategorySummaries()
+  }, [])
+
+  // ==========================================
+  // FETCH ASSETS FOR SELECTED CATEGORY
+  // ==========================================
+  useEffect(() => {
+    if (!selectedCategory) {
+      setCategoryAssets([])
+      return
+    }
+
+    const fetchCategoryAssets = async () => {
+      try {
+        setLoadingAssets(true)
+        
         const params = new URLSearchParams()
-        params.append('limit', '50')
-        // Note: usageRights filter removed - was causing 500 errors
-        // All assets are public-read per collection config anyway
-
-        if (showCategories && showCategories.length > 0) {
-          showCategories.forEach((cat, i) => {
-            params.append(`where[category][in][${i}]`, cat)
-          })
-        }
-
+        params.append('where[category][equals]', selectedCategory)
+        params.append('limit', '100') // Higher limit OK for single category
+        
         const response = await fetch(`/api/brand-assets?${params.toString()}`)
         if (!response.ok) throw new Error('Failed to fetch assets')
 
         const data = await response.json()
-        setAssets(data.docs || [])
+        setCategoryAssets(data.docs || [])
       } catch (err) {
-        console.error('Failed to load assets:', err)
+        console.error('Failed to load category assets:', err)
       } finally {
-        setLoading(false)
+        setLoadingAssets(false)
       }
     }
 
-    fetchAssets()
-  }, [])
+    fetchCategoryAssets()
+  }, [selectedCategory])
 
   const copyToClipboard = async (url: string, id: string) => {
     try {
@@ -208,44 +279,10 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
     return fileTypeIcons[ext] || { icon: '📁', color: 'text-zinc-400' }
   }
 
-  // Group assets by category
-  const categoryCounts = assets.reduce(
-    (acc, asset) => {
-      acc[asset.category] = (acc[asset.category] || 0) + 1
-      return acc
-    },
-    {} as Record<string, number>,
-  )
-
-  // Get hero image for each category (prefer isCategoryHero, fallback to first image)
-  const categoryImages = assets.reduce(
-    (acc, asset) => {
-      const hasImage = asset.sizes?.thumbnail?.url || asset.sizes?.preview?.url
-      if (!hasImage) return acc
-
-      // If this asset is marked as hero, use it (overwrite any existing)
-      if (asset.isCategoryHero) {
-        acc[asset.category] = asset.sizes?.thumbnail?.url || asset.sizes?.preview?.url || null
-      }
-      // Otherwise, only set if we don't have one yet
-      else if (!acc[asset.category]) {
-        acc[asset.category] = asset.sizes?.thumbnail?.url || asset.sizes?.preview?.url || null
-      }
-
-      return acc
-    },
-    {} as Record<string, string | null>,
-  )
-
-  // Get assets for selected category
-  const categoryAssets = selectedCategory
-    ? assets.filter((asset) => asset.category === selectedCategory)
-    : []
-
   // Get unique subcategories for selected category
   const subcategories = [...new Set(categoryAssets.map((a) => a.subcategory).filter(Boolean))] as string[]
 
-  // Filter assets for selected category and subcategory
+  // Filter assets for selected subcategory and search
   const filteredAssets = categoryAssets.filter((asset) => {
     const matchesSubcategory = !selectedSubcategory || asset.subcategory === selectedSubcategory
     const matchesSearch =
@@ -256,10 +293,14 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
     return matchesSubcategory && matchesSearch
   })
 
-  // Sort categories by count (descending)
-  const sortedCategories = Object.entries(categoryCounts).sort((a, b) => b[1] - a[1])
+  // Calculate totals for header
+  const totalAssets = categorySummaries.reduce((sum, s) => sum + s.count, 0)
+  const totalCategories = categorySummaries.length
 
-  if (loading) {
+  // ==========================================
+  // LOADING STATE
+  // ==========================================
+  if (loadingCategories) {
     return (
       <div className="py-20 px-4">
         <div className="max-w-7xl mx-auto">
@@ -267,7 +308,7 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
             <div className="h-10 bg-white/10 rounded-lg w-64 mx-auto" />
             <div className="h-6 bg-white/10 rounded-lg w-96 mx-auto" />
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {[...Array(8)].map((_, i) => (
+              {[...Array(6)].map((_, i) => (
                 <div key={i} className="h-48 bg-white/5 rounded-2xl" />
               ))}
             </div>
@@ -291,15 +332,14 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
             </h1>
             <p className="text-xl text-zinc-400 max-w-2xl mx-auto leading-relaxed">{description}</p>
             <p className="text-sm text-zinc-500 mt-4">
-              {assets.length} assets across {sortedCategories.length} categories
+              {totalAssets} assets across {totalCategories} categories
             </p>
           </div>
 
           {/* Category Grid */}
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {sortedCategories.map(([category, count]) => {
+            {categorySummaries.map(({ category, count, heroImage }) => {
               const config = categoryConfig[category] || { icon: '?', label: category }
-              const imageUrl = categoryImages[category]
 
               return (
                 <button
@@ -314,9 +354,9 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
                 >
                   {/* Category Preview Image */}
                   <div className="aspect-[4/3] bg-zinc-800/50 relative flex items-center justify-center overflow-hidden">
-                    {imageUrl ? (
+                    {heroImage ? (
                       <img
-                        src={imageUrl}
+                        src={heroImage}
                         alt={config.label}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 opacity-60 group-hover:opacity-80"
                       />
@@ -358,129 +398,108 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
   }
 
   // ==========================================
-  // TABLE VIEW (after selecting category)
+  // CATEGORY DETAIL VIEW
   // ==========================================
-  const categoryLabel = categoryConfig[selectedCategory]?.label || selectedCategory
+  const currentCategoryConfig = categoryConfig[selectedCategory] || { icon: '?', label: selectedCategory }
 
   return (
-    <div className="py-12 px-4 min-h-screen bg-gradient-to-b from-zinc-900 via-zinc-900 to-black">
+    <div className="py-20 px-4 min-h-screen bg-gradient-to-b from-zinc-900 via-zinc-900 to-black">
       <div className="max-w-7xl mx-auto">
-        {/* Back Button & Header */}
-        <div className="mb-8">
-          <button
-            onClick={() => {
-              setSelectedCategory(null)
-              setSelectedSubcategory(null)
-              setSearchQuery('')
-              updateURL(null, null)
-            }}
-            className="flex items-center gap-2 text-zinc-400 hover:text-white transition-colors mb-6 group"
-          >
-            <span className="text-xl group-hover:-translate-x-1 transition-transform">←</span>
-            <span>Back to Categories</span>
-          </button>
+        {/* Back Button */}
+        <button
+          onClick={() => {
+            setSelectedCategory(null)
+            setSelectedSubcategory(null)
+            setSearchQuery('')
+            updateURL(null, null)
+          }}
+          className="flex items-center gap-2 text-zinc-400 hover:text-white mb-8 transition-colors"
+        >
+          <span>←</span>
+          <span>Back to Categories</span>
+        </button>
 
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div>
-              <h1 className="text-3xl md:text-4xl font-bold text-white flex items-center gap-3">
-                <span className="text-pink-500">{categoryConfig[selectedCategory]?.icon}</span>
-                {categoryLabel}
-              </h1>
-              <p className="text-zinc-400 mt-1">
-                {filteredAssets.length} asset{filteredAssets.length !== 1 ? 's' : ''}
-                {selectedSubcategory && ` in "${selectedSubcategory}"`}
-              </p>
+        {/* Category Header */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
+          <div>
+            <div className="flex items-center gap-3 mb-2">
+              <span className="text-3xl text-pink-500">{currentCategoryConfig.icon}</span>
+              <h2 className="text-3xl font-bold text-white">{currentCategoryConfig.label}</h2>
             </div>
+            <p className="text-zinc-400">{filteredAssets.length} assets</p>
+          </div>
 
-            {/* Search */}
-            <div className="relative w-full md:w-80">
-              <input
-                type="text"
-                placeholder="Search in category..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-pink-500/50 focus:border-pink-500/50 transition-all text-sm"
-              />
-            </div>
+          {/* Search in category */}
+          <div className="flex-shrink-0 w-full md:w-80">
+            <input
+              type="text"
+              placeholder="Search in category..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-pink-500/50 transition-colors"
+            />
           </div>
         </div>
 
         {/* Subcategory Filter */}
         {subcategories.length > 0 && (
-          <div className="mb-6 flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 mb-8">
             <button
               onClick={() => {
                 setSelectedSubcategory(null)
                 updateURL(selectedCategory, null)
               }}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                selectedSubcategory === null
-                  ? 'bg-pink-500 text-white shadow-lg shadow-pink-500/25'
-                  : 'bg-white/5 text-zinc-300 hover:bg-white/10 border border-white/10'
+                !selectedSubcategory
+                  ? 'bg-pink-500 text-white'
+                  : 'bg-white/5 text-zinc-400 hover:bg-white/10 hover:text-white'
               }`}
             >
-              All ({categoryAssets.length})
+              All
             </button>
-            {subcategories.map((subcat) => {
-              const count = categoryAssets.filter((a) => a.subcategory === subcat).length
-              return (
-                <button
-                  key={subcat}
-                  onClick={() => {
-                    setSelectedSubcategory(subcat)
-                    updateURL(selectedCategory, subcat)
-                  }}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                    selectedSubcategory === subcat
-                      ? 'bg-pink-500 text-white shadow-lg shadow-pink-500/25'
-                      : 'bg-white/5 text-zinc-300 hover:bg-white/10 border border-white/10'
-                  }`}
-                >
-                  {subcat} ({count})
-                </button>
-              )
-            })}
-            {/* Show uncategorized count if there are assets without subcategory */}
-            {categoryAssets.some((a) => !a.subcategory) && (
+            {subcategories.map((sub) => (
               <button
+                key={sub}
                 onClick={() => {
-                  setSelectedSubcategory('__none__')
-                  updateURL(selectedCategory, '__none__')
+                  setSelectedSubcategory(sub)
+                  updateURL(selectedCategory, sub)
                 }}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                  selectedSubcategory === '__none__'
-                    ? 'bg-pink-500 text-white shadow-lg shadow-pink-500/25'
-                    : 'bg-white/5 text-zinc-300 hover:bg-white/10 border border-white/10'
+                  selectedSubcategory === sub
+                    ? 'bg-pink-500 text-white'
+                    : 'bg-white/5 text-zinc-400 hover:bg-white/10 hover:text-white'
                 }`}
               >
-                Uncategorized ({categoryAssets.filter((a) => !a.subcategory).length})
+                {sub}
               </button>
-            )}
+            ))}
           </div>
         )}
 
-        {/* Assets Table */}
-        <div className="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 overflow-hidden">
-          {/* Table Header */}
-          <div className="hidden md:grid grid-cols-12 gap-4 px-6 py-4 bg-white/5 border-b border-white/10 text-sm font-medium text-zinc-400">
-            <div className="col-span-1">Preview</div>
-            <div className="col-span-3">Name</div>
-            <div className="col-span-2">Subcategory</div>
-            <div className="col-span-2">Type</div>
-            <div className="col-span-1">Size</div>
-            <div className="col-span-1">Usage</div>
-            <div className="col-span-2 text-right">Actions</div>
+        {/* Loading state for assets */}
+        {loadingAssets ? (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {[...Array(8)].map((_, i) => (
+              <div key={i} className="h-48 bg-white/5 rounded-2xl animate-pulse" />
+            ))}
           </div>
+        ) : (
+          <>
+            {/* Assets Table */}
+            <div className="bg-white/5 rounded-2xl border border-white/10 overflow-hidden">
+              {/* Table Header */}
+              <div className="grid grid-cols-12 gap-4 px-6 py-4 border-b border-white/10 text-sm font-medium text-zinc-400">
+                <div className="col-span-1">Preview</div>
+                <div className="col-span-3">Name</div>
+                <div className="col-span-2">Subcategory</div>
+                <div className="col-span-1">Type</div>
+                <div className="col-span-1">Size</div>
+                <div className="col-span-1">Usage</div>
+                <div className="col-span-3">Actions</div>
+              </div>
 
-          {/* Table Body */}
-          <div className="divide-y divide-white/5">
-            {filteredAssets
-              .filter((asset) => {
-                // Handle special __none__ filter for uncategorized
-                if (selectedSubcategory === '__none__') return !asset.subcategory
-                return true
-              })
-              .map((asset) => {
+              {/* Table Body */}
+              {filteredAssets.map((asset) => {
                 const ext = getFileExtension(asset.filename)
                 const isImage = isImageFile(asset.mimeType, asset.filename)
                 const fileIcon = getFileIcon(asset.filename)
@@ -488,67 +507,56 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
                 return (
                   <div
                     key={asset.id}
-                    className="grid grid-cols-1 md:grid-cols-12 gap-4 px-6 py-4 hover:bg-white/5 transition-colors items-center"
+                    className="grid grid-cols-12 gap-4 px-6 py-4 border-b border-white/5 items-center hover:bg-white/5 transition-colors"
                   >
-                    {/* Preview/Thumbnail - Clickable */}
+                    {/* Preview */}
                     <div className="col-span-1">
-                      <button
-                        onClick={() => setPreviewAsset(asset)}
-                        className="w-12 h-12 rounded-lg bg-zinc-800 flex items-center justify-center overflow-hidden hover:ring-2 hover:ring-pink-500 transition-all cursor-pointer"
-                        title="Click to preview"
-                      >
-                        {isImage && (asset.sizes?.thumbnail?.url || asset.url) ? (
-                          <img
-                            src={asset.sizes?.thumbnail?.url || asset.url}
-                            alt={asset.name}
-                            className="w-full h-full object-cover"
-                          />
-                        ) : (
-                          <span className={`text-2xl ${fileIcon.color}`}>{fileIcon.icon}</span>
-                        )}
-                      </button>
+                      {isImage && (asset.sizes?.thumbnail?.url || asset.url) ? (
+                        <img
+                          src={asset.sizes?.thumbnail?.url || asset.url}
+                          alt={asset.name}
+                          className="w-12 h-12 object-cover rounded-lg cursor-pointer hover:ring-2 hover:ring-pink-500/50 transition-all"
+                          onClick={() => setPreviewAsset(asset)}
+                        />
+                      ) : (
+                        <div
+                          className={`w-12 h-12 rounded-lg bg-zinc-800 flex items-center justify-center cursor-pointer hover:ring-2 hover:ring-pink-500/50 transition-all ${fileIcon.color}`}
+                          onClick={() => setPreviewAsset(asset)}
+                        >
+                          <span className="text-xl">{fileIcon.icon}</span>
+                        </div>
+                      )}
                     </div>
 
-                    {/* Name & Description */}
+                    {/* Name */}
                     <div className="col-span-3">
-                      <h3 className="font-medium text-white truncate" title={asset.name}>
+                      <p className="text-white font-medium truncate" title={asset.name}>
                         {asset.name}
-                      </h3>
-                      {asset.description && (
-                        <p className="text-sm text-zinc-500 truncate" title={asset.description}>
-                          {asset.description}
-                        </p>
-                      )}
+                      </p>
                     </div>
 
                     {/* Subcategory */}
                     <div className="col-span-2">
-                      {asset.subcategory ? (
-                        <span className="inline-block text-xs px-2.5 py-1 rounded-lg bg-zinc-800 text-zinc-300">
-                          {asset.subcategory}
-                        </span>
-                      ) : (
-                        <span className="text-zinc-600 text-sm">—</span>
-                      )}
+                      <p className="text-zinc-400 text-sm">{asset.subcategory || '-'}</p>
                     </div>
 
-                    {/* File Type */}
-                    <div className="col-span-2">
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-zinc-800 text-xs font-medium text-zinc-300">
-                        <span className={fileIcon.color}>{fileIcon.icon}</span>
-                        {ext.toUpperCase() || 'FILE'}
+                    {/* Type */}
+                    <div className="col-span-1">
+                      <span className={`flex items-center gap-1 text-sm ${fileIcon.color}`}>
+                        <span>{fileIcon.icon}</span>
+                        <span>{ext.toUpperCase()}</span>
                       </span>
                     </div>
 
                     {/* Size */}
-                    <div className="col-span-1 text-sm text-zinc-400">
-                      {formatFileSize(asset.filesize)}
+                    <div className="col-span-1">
+                      <p className="text-zinc-400 text-sm">{formatFileSize(asset.filesize)}</p>
                     </div>
 
-                    {/* Usage Rights */}
+                    {/* Usage */}
                     <div className="col-span-1">
                       <span
-                        className={`inline-block text-xs px-2 py-1 rounded-lg font-medium ${
+                        className={`px-2 py-1 rounded text-xs font-medium ${
                           asset.usageRights === 'public'
                             ? 'bg-green-500/20 text-green-300'
                             : asset.usageRights === 'partners'
@@ -557,35 +565,30 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
                                 ? 'bg-yellow-500/20 text-yellow-300'
                                 : 'bg-red-500/20 text-red-300'
                         }`}
-                        title={asset.usageRights}
                       >
-                        {asset.usageRights === 'public' && 'Pub'}
-                        {asset.usageRights === 'partners' && 'Part'}
-                        {asset.usageRights === 'internal' && 'Int'}
-                        {asset.usageRights === 'restricted' && 'Res'}
+                        {asset.usageRights?.slice(0, 4)}
                       </span>
                     </div>
 
                     {/* Actions */}
-                    <div className="col-span-2 flex items-center justify-end gap-2">
+                    <div className="col-span-3 flex items-center gap-2">
                       <button
                         onClick={() => setPreviewAsset(asset)}
-                        className="py-2 px-3 rounded-lg text-sm font-medium bg-white/10 hover:bg-white/20 text-white transition-colors"
+                        className="p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white transition-colors"
                         title="Preview"
                       >
                         👁
                       </button>
                       <button
                         onClick={() => handleDownload(asset)}
-                        disabled={downloading}
-                        className="flex items-center gap-1.5 bg-pink-500 hover:bg-pink-400 disabled:opacity-50 text-white text-sm font-medium py-2 px-4 rounded-lg transition-colors"
+                        className="p-2 rounded-lg bg-pink-500/80 hover:bg-pink-500 text-white transition-colors"
+                        title="Download"
                       >
-                        <span>↓</span>
-                        <span className="hidden lg:inline">Download</span>
+                        ↓
                       </button>
                       <button
                         onClick={() => asset.url && copyToClipboard(asset.url, asset.id)}
-                        className={`py-2 px-3 rounded-lg text-sm font-medium transition-all ${
+                        className={`p-2 rounded-lg transition-all ${
                           copiedId === asset.id
                             ? 'bg-green-500/20 text-green-300'
                             : 'bg-white/10 hover:bg-white/20 text-white'
@@ -598,17 +601,18 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
                   </div>
                 )
               })}
-          </div>
-
-          {/* Empty State */}
-          {filteredAssets.length === 0 && (
-            <div className="text-center py-16">
-              <div className="text-4xl mb-4 text-zinc-600">🔍</div>
-              <h3 className="text-lg font-medium text-white mb-2">No assets found</h3>
-              <p className="text-zinc-400 text-sm">Try adjusting your search or filter</p>
             </div>
-          )}
-        </div>
+
+            {/* Empty State */}
+            {filteredAssets.length === 0 && (
+              <div className="text-center py-16">
+                <div className="text-4xl mb-4 text-zinc-600">🔍</div>
+                <h3 className="text-lg font-medium text-white mb-2">No assets found</h3>
+                <p className="text-zinc-400 text-sm">Try adjusting your search or filter</p>
+              </div>
+            )}
+          </>
+        )}
 
         {/* Lightbox Modal */}
         {previewAsset && (
