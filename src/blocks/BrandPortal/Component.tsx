@@ -150,7 +150,7 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
       try {
         setLoading(true)
         const params = new URLSearchParams()
-        params.append('limit', '500')
+        params.append('limit', '50')
         // Note: usageRights filter removed - was causing 500 errors
         // All assets are public-read per collection config anyway
 
