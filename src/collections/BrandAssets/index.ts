@@ -96,6 +96,14 @@ export const BrandAssets: CollectionConfig<'brand-assets'> = {
         placeholder: 'e.g., Primary logo for dark backgrounds. Use for headers and hero sections.',
       },
     },
+    {
+      name: 'thumbnailImage',
+      type: 'upload',
+      relationTo: 'media',
+      admin: {
+        description: 'Optional custom thumbnail. If not set, category default is used.',
+      },
+    },
 
     // ============================================
     // CATEGORIZATION
@@ -109,6 +117,7 @@ export const BrandAssets: CollectionConfig<'brand-assets'> = {
           required: true,
           options: [
             { label: 'Logos & Marks', value: 'logos' },
+            { label: 'Icons', value: 'icons' },
             { label: 'Colors & Palettes', value: 'colors' },
             { label: 'Typography & Fonts', value: 'fonts' },
             { label: 'Templates & Documents', value: 'templates' },
