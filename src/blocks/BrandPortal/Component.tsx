@@ -125,6 +125,9 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
   const [sortField, setSortField] = useState<string>('name')
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc')
 
+  // View mode state
+  const [viewMode, setViewMode] = useState<'list' | 'gallery'>('list')
+
   // Toggle sort when clicking column header
   const handleSort = (field: string) => {
     if (sortField === field) {
@@ -496,15 +499,44 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
             <p className="text-zinc-400">{filteredAssets.length} assets</p>
           </div>
 
-          {/* Search in category */}
-          <div className="flex-shrink-0 w-full md:w-80">
+          {/* Search and View Toggle */}
+          <div className="flex items-center gap-3">
             <input
               type="text"
               placeholder="Search in category..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-pink-500/50 transition-colors"
+              className="w-full md:w-64 px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-pink-500/50 transition-colors"
             />
+            {/* View Toggle */}
+            <div className="flex bg-white/5 rounded-lg p-1 border border-white/10">
+              <button
+                onClick={() => setViewMode('list')}
+                className={`p-2 rounded-md transition-all ${
+                  viewMode === 'list'
+                    ? 'bg-pink-500 text-white'
+                    : 'text-zinc-400 hover:text-white'
+                }`}
+                title="List view"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
+              <button
+                onClick={() => setViewMode('gallery')}
+                className={`p-2 rounded-md transition-all ${
+                  viewMode === 'gallery'
+                    ? 'bg-pink-500 text-white'
+                    : 'text-zinc-400 hover:text-white'
+                }`}
+                title="Gallery view"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -552,143 +584,229 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
           </div>
         ) : (
           <>
-            {/* Assets Table */}
-            <div className="bg-white/5 rounded-2xl border border-white/10 overflow-hidden">
-              {/* Table Header */}
-              <div className="grid grid-cols-12 gap-4 px-6 py-4 border-b border-white/10 text-sm font-medium text-zinc-400">
-                <div className="col-span-1">Preview</div>
-                <button
-                  onClick={() => handleSort('name')}
-                  className="col-span-3 text-left hover:text-white transition-colors flex items-center"
-                >
-                  Name<SortIndicator field="name" />
-                </button>
-                <button
-                  onClick={() => handleSort('subcategory')}
-                  className="col-span-2 text-left hover:text-white transition-colors flex items-center"
-                >
-                  Subcategory<SortIndicator field="subcategory" />
-                </button>
-                <button
-                  onClick={() => handleSort('mimeType')}
-                  className="col-span-1 text-left hover:text-white transition-colors flex items-center"
-                >
-                  Type<SortIndicator field="mimeType" />
-                </button>
-                <button
-                  onClick={() => handleSort('filesize')}
-                  className="col-span-1 text-left hover:text-white transition-colors flex items-center"
-                >
-                  Size<SortIndicator field="filesize" />
-                </button>
-                <div className="col-span-1">Usage</div>
-                <div className="col-span-3">Actions</div>
-              </div>
-
-              {/* Table Body */}
-              {filteredAssets.map((asset) => {
-                const ext = getFileExtension(asset.filename)
-                const isImage = isImageFile(asset.mimeType, asset.filename)
-                const fileIcon = getFileIcon(asset.filename)
-
-                return (
-                  <div
-                    key={asset.id}
-                    className="grid grid-cols-12 gap-4 px-6 py-4 border-b border-white/5 items-center hover:bg-white/5 transition-colors"
+            {/* List View */}
+            {viewMode === 'list' && (
+              <div className="bg-white/5 rounded-2xl border border-white/10 overflow-hidden">
+                {/* Table Header */}
+                <div className="grid grid-cols-12 gap-4 px-6 py-4 border-b border-white/10 text-sm font-medium text-zinc-400">
+                  <div className="col-span-1">Preview</div>
+                  <button
+                    onClick={() => handleSort('name')}
+                    className="col-span-3 text-left hover:text-white transition-colors flex items-center"
                   >
-                    {/* Preview */}
-                    <div className="col-span-1">
-                      {getAssetThumbnail(asset) ? (
-                        <img
-                          src={getAssetThumbnail(asset)!}
-                          alt={asset.name}
-                          className="w-12 h-12 object-cover rounded-lg cursor-pointer hover:ring-2 hover:ring-pink-500/50 transition-all"
-                          onClick={() => setPreviewAsset(asset)}
-                        />
-                      ) : (
-                        <div
-                          className={`w-12 h-12 rounded-lg bg-zinc-800 flex items-center justify-center cursor-pointer hover:ring-2 hover:ring-pink-500/50 transition-all ${fileIcon.color}`}
-                          onClick={() => setPreviewAsset(asset)}
+                    Name<SortIndicator field="name" />
+                  </button>
+                  <button
+                    onClick={() => handleSort('subcategory')}
+                    className="col-span-2 text-left hover:text-white transition-colors flex items-center"
+                  >
+                    Subcategory<SortIndicator field="subcategory" />
+                  </button>
+                  <button
+                    onClick={() => handleSort('mimeType')}
+                    className="col-span-1 text-left hover:text-white transition-colors flex items-center"
+                  >
+                    Type<SortIndicator field="mimeType" />
+                  </button>
+                  <button
+                    onClick={() => handleSort('filesize')}
+                    className="col-span-1 text-left hover:text-white transition-colors flex items-center"
+                  >
+                    Size<SortIndicator field="filesize" />
+                  </button>
+                  <div className="col-span-1">Usage</div>
+                  <div className="col-span-3">Actions</div>
+                </div>
+
+                {/* Table Body */}
+                {filteredAssets.map((asset) => {
+                  const ext = getFileExtension(asset.filename)
+                  const isImage = isImageFile(asset.mimeType, asset.filename)
+                  const fileIcon = getFileIcon(asset.filename)
+
+                  return (
+                    <div
+                      key={asset.id}
+                      className="grid grid-cols-12 gap-4 px-6 py-4 border-b border-white/5 items-center hover:bg-white/5 transition-colors"
+                    >
+                      {/* Preview */}
+                      <div className="col-span-1">
+                        {getAssetThumbnail(asset) ? (
+                          <img
+                            src={getAssetThumbnail(asset)!}
+                            alt={asset.name}
+                            className="w-12 h-12 object-cover rounded-lg cursor-pointer hover:ring-2 hover:ring-pink-500/50 transition-all"
+                            onClick={() => setPreviewAsset(asset)}
+                          />
+                        ) : (
+                          <div
+                            className={`w-12 h-12 rounded-lg bg-zinc-800 flex items-center justify-center cursor-pointer hover:ring-2 hover:ring-pink-500/50 transition-all ${fileIcon.color}`}
+                            onClick={() => setPreviewAsset(asset)}
+                          >
+                            <span className="text-xl">{fileIcon.icon}</span>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Name */}
+                      <div className="col-span-3">
+                        <p className="text-white font-medium truncate" title={asset.name}>
+                          {asset.name}
+                        </p>
+                      </div>
+
+                      {/* Subcategory */}
+                      <div className="col-span-2">
+                        <p className="text-zinc-400 text-sm">{asset.subcategory || '-'}</p>
+                      </div>
+
+                      {/* Type */}
+                      <div className="col-span-1">
+                        <span className={`flex items-center gap-1 text-sm ${fileIcon.color}`}>
+                          <span>{fileIcon.icon}</span>
+                          <span>{ext.toUpperCase()}</span>
+                        </span>
+                      </div>
+
+                      {/* Size */}
+                      <div className="col-span-1">
+                        <p className="text-zinc-400 text-sm">{formatFileSize(asset.filesize)}</p>
+                      </div>
+
+                      {/* Usage */}
+                      <div className="col-span-1">
+                        <span
+                          className={`px-2 py-1 rounded text-xs font-medium ${
+                            asset.usageRights === 'public'
+                              ? 'bg-green-500/20 text-green-300'
+                              : asset.usageRights === 'partners'
+                                ? 'bg-blue-500/20 text-blue-300'
+                                : asset.usageRights === 'internal'
+                                  ? 'bg-yellow-500/20 text-yellow-300'
+                                  : 'bg-red-500/20 text-red-300'
+                          }`}
                         >
-                          <span className="text-xl">{fileIcon.icon}</span>
+                          {asset.usageRights?.slice(0, 4)}
+                        </span>
+                      </div>
+
+                      {/* Actions */}
+                      <div className="col-span-3 flex items-center gap-2">
+                        <button
+                          onClick={() => setPreviewAsset(asset)}
+                          className="p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white transition-colors"
+                          title="Preview"
+                        >
+                          👁
+                        </button>
+                        <button
+                          onClick={() => handleDownload(asset)}
+                          className="p-2 rounded-lg bg-pink-500/80 hover:bg-pink-500 text-white transition-colors"
+                          title="Download"
+                        >
+                          ↓
+                        </button>
+                        <button
+                          onClick={() => asset.url && copyToClipboard(asset.url, asset.id)}
+                          className={`p-2 rounded-lg transition-all ${
+                            copiedId === asset.id
+                              ? 'bg-green-500/20 text-green-300'
+                              : 'bg-white/10 hover:bg-white/20 text-white'
+                          }`}
+                          title="Copy URL"
+                        >
+                          {copiedId === asset.id ? '✓' : '🔗'}
+                        </button>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            )}
+
+            {/* Gallery View */}
+            {viewMode === 'gallery' && (
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                {filteredAssets.map((asset) => {
+                  const ext = getFileExtension(asset.filename)
+                  const fileIcon = getFileIcon(asset.filename)
+                  const thumbnail = getAssetThumbnail(asset)
+
+                  return (
+                    <div
+                      key={asset.id}
+                      className="group bg-white/5 rounded-xl border border-white/10 overflow-hidden hover:border-pink-500/50 transition-all cursor-pointer"
+                      onClick={() => setPreviewAsset(asset)}
+                    >
+                      {/* Thumbnail */}
+                      <div className="aspect-square bg-zinc-800/50 relative flex items-center justify-center overflow-hidden">
+                        {thumbnail ? (
+                          <img
+                            src={thumbnail}
+                            alt={asset.name}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          />
+                        ) : (
+                          <div className={`text-5xl ${fileIcon.color}`}>
+                            {fileIcon.icon}
+                          </div>
+                        )}
+                        {/* File type badge */}
+                        <span className={`absolute top-2 right-2 px-2 py-0.5 rounded text-xs font-medium bg-black/60 ${fileIcon.color}`}>
+                          {ext.toUpperCase()}
+                        </span>
+                        {/* Hover overlay with actions */}
+                        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              setPreviewAsset(asset)
+                            }}
+                            className="p-2 rounded-lg bg-white/20 hover:bg-white/30 text-white transition-colors"
+                            title="Preview"
+                          >
+                            👁
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              handleDownload(asset)
+                            }}
+                            className="p-2 rounded-lg bg-pink-500 hover:bg-pink-400 text-white transition-colors"
+                            title="Download"
+                          >
+                            ↓
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              asset.url && copyToClipboard(asset.url, asset.id)
+                            }}
+                            className={`p-2 rounded-lg transition-all ${
+                              copiedId === asset.id
+                                ? 'bg-green-500 text-white'
+                                : 'bg-white/20 hover:bg-white/30 text-white'
+                            }`}
+                            title="Copy URL"
+                          >
+                            {copiedId === asset.id ? '✓' : '🔗'}
+                          </button>
                         </div>
-                      )}
+                      </div>
+                      {/* Info */}
+                      <div className="p-3">
+                        <p className="text-white text-sm font-medium truncate" title={asset.name}>
+                          {asset.name}
+                        </p>
+                        <p className="text-zinc-500 text-xs mt-1">
+                          {formatFileSize(asset.filesize)}
+                        </p>
+                      </div>
                     </div>
-
-                    {/* Name */}
-                    <div className="col-span-3">
-                      <p className="text-white font-medium truncate" title={asset.name}>
-                        {asset.name}
-                      </p>
-                    </div>
-
-                    {/* Subcategory */}
-                    <div className="col-span-2">
-                      <p className="text-zinc-400 text-sm">{asset.subcategory || '-'}</p>
-                    </div>
-
-                    {/* Type */}
-                    <div className="col-span-1">
-                      <span className={`flex items-center gap-1 text-sm ${fileIcon.color}`}>
-                        <span>{fileIcon.icon}</span>
-                        <span>{ext.toUpperCase()}</span>
-                      </span>
-                    </div>
-
-                    {/* Size */}
-                    <div className="col-span-1">
-                      <p className="text-zinc-400 text-sm">{formatFileSize(asset.filesize)}</p>
-                    </div>
-
-                    {/* Usage */}
-                    <div className="col-span-1">
-                      <span
-                        className={`px-2 py-1 rounded text-xs font-medium ${
-                          asset.usageRights === 'public'
-                            ? 'bg-green-500/20 text-green-300'
-                            : asset.usageRights === 'partners'
-                              ? 'bg-blue-500/20 text-blue-300'
-                              : asset.usageRights === 'internal'
-                                ? 'bg-yellow-500/20 text-yellow-300'
-                                : 'bg-red-500/20 text-red-300'
-                        }`}
-                      >
-                        {asset.usageRights?.slice(0, 4)}
-                      </span>
-                    </div>
-
-                    {/* Actions */}
-                    <div className="col-span-3 flex items-center gap-2">
-                      <button
-                        onClick={() => setPreviewAsset(asset)}
-                        className="p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white transition-colors"
-                        title="Preview"
-                      >
-                        👁
-                      </button>
-                      <button
-                        onClick={() => handleDownload(asset)}
-                        className="p-2 rounded-lg bg-pink-500/80 hover:bg-pink-500 text-white transition-colors"
-                        title="Download"
-                      >
-                        ↓
-                      </button>
-                      <button
-                        onClick={() => asset.url && copyToClipboard(asset.url, asset.id)}
-                        className={`p-2 rounded-lg transition-all ${
-                          copiedId === asset.id
-                            ? 'bg-green-500/20 text-green-300'
-                            : 'bg-white/10 hover:bg-white/20 text-white'
-                        }`}
-                        title="Copy URL"
-                      >
-                        {copiedId === asset.id ? '✓' : '🔗'}
-                      </button>
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
+                  )
+                })}
+              </div>
+            )}
 
             {/* Empty State */}
             {filteredAssets.length === 0 && (
