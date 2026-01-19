@@ -1,0 +1,56 @@
+.s3-url-field {
+  margin-bottom: 1rem;
+
+  .s3-url-container {
+    display: flex;
+    gap: 0.5rem;
+    align-items: stretch;
+  }
+
+  .s3-url-input {
+    flex: 1;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    font-family: monospace;
+    background: var(--theme-elevation-50);
+    border: 1px solid var(--theme-elevation-150);
+    border-radius: 4px;
+    color: var(--theme-elevation-800);
+    cursor: text;
+
+    &:focus {
+      outline: none;
+      border-color: var(--theme-elevation-400);
+    }
+  }
+
+  .s3-url-copy-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    background: var(--theme-elevation-100);
+    border: 1px solid var(--theme-elevation-150);
+    border-radius: 4px;
+    color: var(--theme-elevation-800);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+
+    &:hover {
+      background: var(--theme-elevation-150);
+    }
+
+    &--copied {
+      background: var(--theme-success-500);
+      border-color: var(--theme-success-500);
+      color: white;
+    }
+  }
+
+  .s3-url-empty {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    color: var(--theme-elevation-400);
+    font-style: italic;
+  }
+}
