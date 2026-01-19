@@ -44,6 +44,17 @@ const fileTypeIcons: Record<string, { icon: string; color: string }> = {
   woff2: { icon: 'Aa', color: 'text-zinc-300' },
 }
 
+// Default thumbnail for all categories (can be replaced with per-category images later)
+const categoryDefaultImages: Record<string, string> = {
+  presentations: 'https://admin-connie-one-uploads.s3.us-east-1.amazonaws.com/brand/defaults/connie-default.png',
+  'one-pagers': 'https://admin-connie-one-uploads.s3.us-east-1.amazonaws.com/brand/defaults/connie-default.png',
+  templates: 'https://admin-connie-one-uploads.s3.us-east-1.amazonaws.com/brand/defaults/connie-default.png',
+  guidelines: 'https://admin-connie-one-uploads.s3.us-east-1.amazonaws.com/brand/defaults/connie-default.png',
+  developer: 'https://admin-connie-one-uploads.s3.us-east-1.amazonaws.com/brand/defaults/connie-default.png',
+  logos: 'https://admin-connie-one-uploads.s3.us-east-1.amazonaws.com/brand/defaults/connie-default.png',
+  photos: 'https://admin-connie-one-uploads.s3.us-east-1.amazonaws.com/brand/defaults/connie-default.png',
+}
+
 interface BrandAsset {
   id: string
   name: string
@@ -63,6 +74,9 @@ interface BrandAsset {
   filesize?: number
   width?: number
   height?: number
+  thumbnailImage?: {
+    url?: string
+  }
   sizes?: {
     thumbnail?: { url: string }
     preview?: { url: string }
@@ -109,6 +123,23 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
 
   // Known categories from your database
   const knownCategories = ['developer', 'guidelines', 'logos', 'one-pagers', 'photos', 'presentations', 'templates']
+
+  // Helper function to get thumbnail URL with fallback chain
+  const getAssetThumbnail = (asset: BrandAsset): string | null => {
+    // 1. Custom thumbnail on asset
+    if (asset.thumbnailImage?.url) return asset.thumbnailImage.url
+
+    // 2. Auto-generated sizes (for actual images)
+    if (asset.sizes?.thumbnail?.url) return asset.sizes.thumbnail.url
+    if (asset.sizes?.preview?.url) return asset.sizes.preview.url
+
+    // 3. Category default
+    if (asset.category && categoryDefaultImages[asset.category]) {
+      return categoryDefaultImages[asset.category]
+    }
+
+    return null
+  }
 
   // Handle escape key to close lightbox
   useEffect(() => {
@@ -183,11 +214,17 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
           
           const data = await response.json()
           
-          // Find hero image from the sample asset
+          // Find hero image from the sample asset with fallback to category default
           const sampleAsset = data.docs?.[0]
           let heroImage: string | null = null
           if (sampleAsset) {
-            heroImage = sampleAsset.sizes?.thumbnail?.url || sampleAsset.sizes?.preview?.url || null
+            heroImage = sampleAsset.thumbnailImage?.url
+              || sampleAsset.sizes?.thumbnail?.url
+              || sampleAsset.sizes?.preview?.url
+              || categoryDefaultImages[category]
+              || null
+          } else {
+            heroImage = categoryDefaultImages[category] || null
           }
           
           return {
@@ -511,9 +548,9 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
                   >
                     {/* Preview */}
                     <div className="col-span-1">
-                      {isImage && (asset.sizes?.thumbnail?.url || asset.url) ? (
+                      {getAssetThumbnail(asset) ? (
                         <img
-                          src={asset.sizes?.thumbnail?.url || asset.url}
+                          src={getAssetThumbnail(asset)!}
                           alt={asset.name}
                           className="w-12 h-12 object-cover rounded-lg cursor-pointer hover:ring-2 hover:ring-pink-500/50 transition-all"
                           onClick={() => setPreviewAsset(asset)}
