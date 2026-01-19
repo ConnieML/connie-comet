@@ -129,9 +129,10 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
     // 1. Custom thumbnail on asset
     if (asset.thumbnailImage?.url) return asset.thumbnailImage.url
 
-    // 2. Auto-generated sizes (for actual images)
-    if (asset.sizes?.thumbnail?.url) return asset.sizes.thumbnail.url
-    if (asset.sizes?.preview?.url) return asset.sizes.preview.url
+    // 2. Auto-generated sizes (only for actual images, not PDFs with dummy sizes)
+    const isActualImage = asset.mimeType?.startsWith('image/')
+    if (isActualImage && asset.sizes?.thumbnail?.url) return asset.sizes.thumbnail.url
+    if (isActualImage && asset.sizes?.preview?.url) return asset.sizes.preview.url
 
     // 3. Category default
     if (asset.category && categoryDefaultImages[asset.category]) {
@@ -218,9 +219,11 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
           const sampleAsset = data.docs?.[0]
           let heroImage: string | null = null
           if (sampleAsset) {
+            // Check if asset is an actual image (not PDF/doc with dummy sizes)
+            const isActualImage = sampleAsset.mimeType?.startsWith('image/')
             heroImage = sampleAsset.thumbnailImage?.url
-              || sampleAsset.sizes?.thumbnail?.url
-              || sampleAsset.sizes?.preview?.url
+              || (isActualImage ? sampleAsset.sizes?.thumbnail?.url : null)
+              || (isActualImage ? sampleAsset.sizes?.preview?.url : null)
               || categoryDefaultImages[category]
               || null
           } else {
