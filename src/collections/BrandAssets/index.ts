@@ -221,17 +221,6 @@ export const BrandAssets: CollectionConfig<'brand-assets'> = {
     // METADATA (Sidebar)
     // ============================================
     {
-      name: 's3Url',
-      type: 'ui',
-      admin: {
-        position: 'sidebar',
-        components: {
-          Field: '@/fields/s3Url/S3UrlComponent#S3UrlComponent',
-        },
-      },
-      label: 'S3 URL',
-    },
-    {
       name: 'version',
       type: 'text',
       admin: {
