@@ -96,14 +96,6 @@ export const BrandAssets: CollectionConfig<'brand-assets'> = {
         placeholder: 'e.g., Primary logo for dark backgrounds. Use for headers and hero sections.',
       },
     },
-    {
-      name: 'thumbnailImage',
-      type: 'upload',
-      relationTo: 'media',
-      admin: {
-        description: 'Optional custom thumbnail. If not set, category default is used.',
-      },
-    },
 
     // ============================================
     // CATEGORIZATION
