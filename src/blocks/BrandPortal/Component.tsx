@@ -121,6 +121,26 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
   const [downloading, setDownloading] = useState(false)
   const hasFetchedCategories = useRef(false)
 
+  // Sorting state
+  const [sortField, setSortField] = useState<string>('name')
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc')
+
+  // Toggle sort when clicking column header
+  const handleSort = (field: string) => {
+    if (sortField === field) {
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')
+    } else {
+      setSortField(field)
+      setSortDirection('asc')
+    }
+  }
+
+  // Sort indicator component
+  const SortIndicator = ({ field }: { field: string }) => {
+    if (sortField !== field) return <span className="ml-1 text-zinc-600">↕</span>
+    return <span className="ml-1 text-pink-400">{sortDirection === 'asc' ? '↑' : '↓'}</span>
+  }
+
   // Known categories from your database
   const knownCategories = ['developer', 'guidelines', 'logos', 'one-pagers', 'photos', 'presentations', 'templates']
 
@@ -269,11 +289,15 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
     const fetchCategoryAssets = async () => {
       try {
         setLoadingAssets(true)
-        
+
         const params = new URLSearchParams()
         params.append('where[category][equals]', selectedCategory)
         params.append('limit', '100') // Higher limit OK for single category
-        
+
+        // Add sort parameter (prefix with - for descending)
+        const sortParam = sortDirection === 'desc' ? `-${sortField}` : sortField
+        params.append('sort', sortParam)
+
         const response = await fetch(`/api/brand-assets?${params.toString()}`)
         if (!response.ok) throw new Error('Failed to fetch assets')
 
@@ -287,7 +311,7 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
     }
 
     fetchCategoryAssets()
-  }, [selectedCategory])
+  }, [selectedCategory, sortField, sortDirection])
 
   const copyToClipboard = async (url: string, id: string) => {
     try {
@@ -533,10 +557,30 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
               {/* Table Header */}
               <div className="grid grid-cols-12 gap-4 px-6 py-4 border-b border-white/10 text-sm font-medium text-zinc-400">
                 <div className="col-span-1">Preview</div>
-                <div className="col-span-3">Name</div>
-                <div className="col-span-2">Subcategory</div>
-                <div className="col-span-1">Type</div>
-                <div className="col-span-1">Size</div>
+                <button
+                  onClick={() => handleSort('name')}
+                  className="col-span-3 text-left hover:text-white transition-colors flex items-center"
+                >
+                  Name<SortIndicator field="name" />
+                </button>
+                <button
+                  onClick={() => handleSort('subcategory')}
+                  className="col-span-2 text-left hover:text-white transition-colors flex items-center"
+                >
+                  Subcategory<SortIndicator field="subcategory" />
+                </button>
+                <button
+                  onClick={() => handleSort('mimeType')}
+                  className="col-span-1 text-left hover:text-white transition-colors flex items-center"
+                >
+                  Type<SortIndicator field="mimeType" />
+                </button>
+                <button
+                  onClick={() => handleSort('filesize')}
+                  className="col-span-1 text-left hover:text-white transition-colors flex items-center"
+                >
+                  Size<SortIndicator field="filesize" />
+                </button>
                 <div className="col-span-1">Usage</div>
                 <div className="col-span-3">Actions</div>
               </div>
