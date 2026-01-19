@@ -117,6 +117,7 @@ export const BrandAssets: CollectionConfig<'brand-assets'> = {
           required: true,
           options: [
             { label: 'Logos & Marks', value: 'logos' },
+            { label: 'Icons', value: 'icons' },
             { label: 'Colors & Palettes', value: 'colors' },
             { label: 'Typography & Fonts', value: 'fonts' },
             { label: 'Templates & Documents', value: 'templates' },

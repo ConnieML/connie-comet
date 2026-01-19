@@ -6,6 +6,7 @@ import { useSearchParams, useRouter } from 'next/navigation'
 // Category configuration with icons and default images
 const categoryConfig: Record<string, { icon: string; label: string }> = {
   logos: { icon: '◇', label: 'Logos & Marks' },
+  icons: { icon: '✦', label: 'Icons' },
   colors: { icon: '●', label: 'Colors & Palettes' },
   fonts: { icon: 'A', label: 'Typography & Fonts' },
   templates: { icon: '▤', label: 'Templates & Documents' },
@@ -52,6 +53,7 @@ const categoryDefaultImages: Record<string, string> = {
   guidelines: 'https://admin-connie-one-uploads.s3.us-east-1.amazonaws.com/brand/defaults/connie-default.png',
   developer: 'https://admin-connie-one-uploads.s3.us-east-1.amazonaws.com/brand/defaults/connie-default.png',
   logos: 'https://admin-connie-one-uploads.s3.us-east-1.amazonaws.com/brand/defaults/connie-default.png',
+  icons: 'https://admin-connie-one-uploads.s3.us-east-1.amazonaws.com/brand/defaults/connie-default.png',
   photos: 'https://admin-connie-one-uploads.s3.us-east-1.amazonaws.com/brand/defaults/connie-default.png',
 }
 
@@ -145,7 +147,7 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
   }
 
   // Known categories from your database
-  const knownCategories = ['developer', 'guidelines', 'logos', 'one-pagers', 'photos', 'presentations', 'templates']
+  const knownCategories = ['developer', 'guidelines', 'icons', 'logos', 'one-pagers', 'photos', 'presentations', 'templates']
 
   // Browser-displayable image types (excludes PSD, TIFF, etc.)
   const displayableImageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml']
