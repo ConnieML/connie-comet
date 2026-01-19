@@ -233,34 +233,43 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
         const categoriesToFetch = showCategories.length > 0 ? showCategories : knownCategories
         
         const summaryPromises = categoriesToFetch.map(async (category) => {
-          // Fetch 1 asset with image for hero, and get totalDocs for count
-          const params = new URLSearchParams()
-          params.append('where[category][equals]', category)
-          params.append('limit', '1')
-          
-          const response = await fetch(`/api/brand-assets?${params.toString()}`)
-          if (!response.ok) return null
-          
-          const data = await response.json()
-          
-          // Find hero image from the sample asset with fallback to category default
-          const sampleAsset = data.docs?.[0]
+          // First, try to fetch an asset marked as category hero
+          const heroParams = new URLSearchParams()
+          heroParams.append('where[category][equals]', category)
+          heroParams.append('where[isCategoryHero][equals]', 'true')
+          heroParams.append('limit', '1')
+
+          const heroResponse = await fetch(`/api/brand-assets?${heroParams.toString()}`)
+          const heroData = heroResponse.ok ? await heroResponse.json() : { docs: [] }
+
+          // Also fetch total count for the category
+          const countParams = new URLSearchParams()
+          countParams.append('where[category][equals]', category)
+          countParams.append('limit', '1')
+
+          const countResponse = await fetch(`/api/brand-assets?${countParams.toString()}`)
+          if (!countResponse.ok) return null
+
+          const countData = await countResponse.json()
+
+          // Use hero asset if found, otherwise fall back to first asset
+          const heroAsset = heroData.docs?.[0] || countData.docs?.[0]
           let heroImage: string | null = null
-          if (sampleAsset) {
+          if (heroAsset) {
             // Check if asset is a browser-displayable image (not PSD, PDF, etc.)
-            const isDisplayable = sampleAsset.mimeType && displayableImageTypes.includes(sampleAsset.mimeType)
-            heroImage = sampleAsset.thumbnailImage?.url
-              || (isDisplayable ? sampleAsset.sizes?.thumbnail?.url : null)
-              || (isDisplayable ? sampleAsset.sizes?.preview?.url : null)
+            const isDisplayable = heroAsset.mimeType && displayableImageTypes.includes(heroAsset.mimeType)
+            heroImage = heroAsset.thumbnailImage?.url
+              || (isDisplayable ? heroAsset.sizes?.thumbnail?.url : null)
+              || (isDisplayable ? heroAsset.sizes?.preview?.url : null)
               || categoryDefaultImages[category]
               || null
           } else {
             heroImage = categoryDefaultImages[category] || null
           }
-          
+
           return {
             category,
-            count: data.totalDocs || 0,
+            count: countData.totalDocs || 0,
             heroImage,
           } as CategorySummary
         })
