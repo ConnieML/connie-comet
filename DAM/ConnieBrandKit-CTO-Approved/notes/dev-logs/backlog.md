@@ -98,6 +98,66 @@ Enforce the existing access control system:
 
 ---
 
+### BL-003: Dynamic Brand Categories (Admin-Managed)
+
+**Priority:** Medium
+**Category:** Brand Portal / Admin UX
+**Status:** Backlog
+
+**Current State:**
+Brand asset categories are hardcoded in two places:
+- `src/collections/BrandAssets/index.ts` - select field options
+- `src/blocks/BrandPortal/Component.tsx` - categoryConfig, categoryDefaultImages, knownCategories
+
+Adding/renaming/removing categories requires code changes and deployment.
+
+**Proposed Enhancement:**
+Make categories admin-manageable via a new collection:
+
+1. **New BrandCategories Collection:**
+   ```
+   - name (text, required) - "Icons", "Logos & Marks"
+   - slug (text, unique) - "icons", "logos"
+   - icon (text) - "✦", "◇"
+   - defaultImage (upload, relationTo: media)
+   - sortOrder (number) - for display ordering
+   - isActive (checkbox) - show/hide without deleting
+   ```
+
+2. **Update BrandAssets:**
+   - Change `category` from `select` to `relationship` → BrandCategories
+   - Populate category data when fetching assets
+
+3. **Update Frontend:**
+   - Fetch categories dynamically from API
+   - Remove hardcoded categoryConfig/knownCategories
+   - Build config from fetched category documents
+
+**Benefits:**
+- Brand admins can add/rename/reorder categories without code deploys
+- Category icons and default images editable in admin
+- Can deactivate categories without losing historical data
+
+**Files to Modify:**
+- Create `src/collections/BrandCategories/index.ts`
+- `src/collections/BrandAssets/index.ts` - change category field type
+- `src/blocks/BrandPortal/Component.tsx` - fetch categories dynamically
+- `src/payload.config.ts` - register new collection
+
+**Migration Required:**
+- Create BrandCategories documents for existing categories
+- Update existing BrandAssets to reference new category documents
+
+**Acceptance Criteria:**
+- [ ] BrandCategories collection with CRUD in admin
+- [ ] BrandAssets category field references BrandCategories
+- [ ] Frontend fetches and displays categories dynamically
+- [ ] Existing assets migrated to new category references
+- [ ] Sort order respected on frontend
+- [ ] Inactive categories hidden from frontend but data preserved
+
+---
+
 ## Completed Items
 
 _Move items here when completed with completion date_
