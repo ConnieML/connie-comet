@@ -193,6 +193,13 @@ S3_BUCKET_UPLOADS=admin-connie-one-uploads
 S3_ACCESS_KEY_ID=AKIAQ***REDACTED***
 S3_SECRET_ACCESS_KEY=***REDACTED***
 S3_REGION=us-east-1
+
+# Google Sheets API (UAT Discovery Form)
+GOOGLE_CLIENT_EMAIL=connie-uat-forms@stone-host-396814.iam.gserviceaccount.com
+GOOGLE_PRIVATE_KEY=***REDACTED*** # SEE CRITICAL NOTE ABOVE - must be single line with \n literals!
+
+# Resend Email Service (UAT Form Notifications)
+RESEND_API_KEY=***REDACTED***
 ```
 
 ### Deployment Best Practices
@@ -230,14 +237,61 @@ S3_REGION=us-east-1
 2. ❌ Using only `--max_old_space_size` without `--no-deprecation` - breaks existing setup
 3. ❌ Not using quotes around multiple NODE_OPTIONS flags - will fail to parse
 
+### CRITICAL: Private Key Environment Variable Format (Google Sheets API)
+**⚠️ GOOGLE_PRIVATE_KEY must contain literal `\n` characters, NOT actual newlines**
+
+- **Problem**: Google service account private keys contain newlines. AWS Amplify can corrupt the format when environment variables are updated via CLI/API.
+- **Symptom**: API calls fail with `error:1E08010C:DECODER routines::unsupported` (OpenSSL decoding error)
+- **Root Cause**: The key gets stored with actual newline characters instead of the literal two-character sequence `\n`
+
+**The Code Expects This:**
+```javascript
+// In src/app/api/uat-intake/route.ts
+private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+```
+This regex looks for literal `\n` (backslash + letter n) and converts to actual newlines.
+
+**Correct Format in Amplify:**
+The key must be a single line with `\n` literals:
+```
+-----BEGIN PRIVATE KEY-----\nMIIEvQ...\nXxlx4VM...\n-----END PRIVATE KEY-----\n
+```
+
+**How to Set Correctly:**
+Use a JSON file with double-escaped `\\n` (which becomes `\n` when parsed):
+```json
+{
+  "GOOGLE_PRIVATE_KEY": "-----BEGIN PRIVATE KEY-----\\nMIIEvQ...\\n-----END PRIVATE KEY-----\\n"
+}
+```
+Then: `aws amplify update-app --app-id XXX --environment-variables file:///path/to/env.json`
+
+**DO NOT:**
+1. ❌ Query existing env vars with AWS CLI, pipe through jq, and re-upload (corrupts escaping)
+2. ❌ Copy/paste multi-line keys directly into Amplify console (creates actual newlines)
+3. ❌ Use shell variable interpolation with the key (shell interprets `\n`)
+
+**Incident History:**
+- **2026-02-05**: UAT Discovery form broken. Root cause: GOOGLE_PRIVATE_KEY had actual newlines instead of `\n` literals after an env var update. Fixed by re-setting with properly escaped JSON file. Build #124.
+
+**Verification:**
+```bash
+# Should show key on ONE line with \n sequences visible:
+aws amplify get-app --app-id d2ptu5s7tsjcbn --query 'app.environmentVariables.GOOGLE_PRIVATE_KEY' --output json
+
+# If you see actual line breaks when using --output text, the format is WRONG
+```
+
 ### Deployment Checklist
 1. ✅ Ensure all environment variables are set in Amplify console
 2. ✅ Verify amplify.yml is correct and includes all required preBuild commands
 3. ✅ **CRITICAL**: Verify package.json build script includes `--max_old_space_size=6144`
-4. ✅ Test locally with `pnpm build` before deploying
-5. ✅ Monitor build logs carefully for any missing dependencies
-6. ✅ Check build logs for "cross-env NODE_OPTIONS" to confirm heap size is set
-7. ✅ After deployment, verify CMS admin access and functionality
+4. ✅ **CRITICAL**: Verify GOOGLE_PRIVATE_KEY format (single line with `\n` literals, not actual newlines)
+5. ✅ Test locally with `pnpm build` before deploying
+6. ✅ Monitor build logs carefully for any missing dependencies
+7. ✅ Check build logs for "cross-env NODE_OPTIONS" to confirm heap size is set
+8. ✅ After deployment, verify CMS admin access and functionality
+9. ✅ Test UAT Discovery form submission to verify Google Sheets integration
 
 ## Next Steps
 1. ✅ Complete authentication provider evaluation (Okta selected)
