@@ -76,7 +76,7 @@ export async function POST(request: Request) {
     try {
       const resend = getResendClient()
       await resend.emails.send({
-        from: 'Connie Surveys <surveys@send.connie.one>',
+        from: 'Connie Surveys <surveys@connie.one>',
         to: ['chris@connie.team', 'andrea@connie.team'],
         subject: `New Training Survey - ${formData.organization} (NPS: ${formData.npsScore}/10 - ${npsLabel})`,
         react: ConnieTrainingSurveyNotification({
