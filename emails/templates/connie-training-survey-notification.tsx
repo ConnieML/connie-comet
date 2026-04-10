@@ -17,7 +17,10 @@ interface ConnieTrainingSurveyNotificationProps {
   name: string;
   email: string;
   organization: string;
+  trainingRating?: string;
   overallSatisfaction?: string;
+  npsScore?: string;
+  npsLabel?: string;
   submissionDate: string;
   spreadsheetUrl?: string;
 }
@@ -26,14 +29,19 @@ export const ConnieTrainingSurveyNotification = ({
   name = '{{name}}',
   email = '{{email}}',
   organization = '{{organization}}',
+  trainingRating = '{{trainingRating}}',
   overallSatisfaction = '{{overallSatisfaction}}',
+  npsScore = '{{npsScore}}',
+  npsLabel = '{{npsLabel}}',
   submissionDate = '{{submissionDate}}',
-  spreadsheetUrl = 'https://docs.google.com/spreadsheets/',
+  spreadsheetUrl = 'https://connie.one/admin',
 }: ConnieTrainingSurveyNotificationProps) => {
+  const npsEmoji = npsLabel === 'Promoter' ? '\u2705' : npsLabel === 'Passive' ? '\uD83D\uDE10' : '\u274C';
+
   return (
     <Html>
       <Head />
-      <Preview>New Training Survey Submission - {organization}</Preview>
+      <Preview>New Training Survey - {organization} (NPS: {npsScore}/10)</Preview>
       <Body style={main}>
         <Container style={container}>
           <Section style={logoSection}>
@@ -48,18 +56,18 @@ export const ConnieTrainingSurveyNotification = ({
 
           <Section style={content}>
             <Heading style={h1}>
-              📊 New Training Survey Submission
+              New Training Survey Submission
             </Heading>
 
             <Text style={text}>
-              A new training survey has been completed!
+              A new 19-question NSS training survey has been completed.
             </Text>
 
             <Hr style={hr} />
 
             <Section style={detailsSection}>
               <Heading as="h2" style={h2}>
-                Submission Details
+                Respondent
               </Heading>
 
               <table style={detailsTable}>
@@ -80,12 +88,6 @@ export const ConnieTrainingSurveyNotification = ({
                   </td>
                 </tr>
                 <tr>
-                  <td style={detailLabel}>Overall Rating:</td>
-                  <td style={detailValue}>
-                    <strong>{overallSatisfaction}/5</strong>
-                  </td>
-                </tr>
-                <tr>
                   <td style={detailLabel}>Submitted:</td>
                   <td style={detailValue}>{new Date(submissionDate).toLocaleString('en-US', {
                     weekday: 'long',
@@ -100,18 +102,41 @@ export const ConnieTrainingSurveyNotification = ({
               </table>
             </Section>
 
+            <Section style={scoresSection}>
+              <Heading as="h2" style={h2}>
+                Key Scores
+              </Heading>
+
+              <table style={detailsTable}>
+                <tr>
+                  <td style={detailLabel}>Training Rating:</td>
+                  <td style={detailValue}><strong>{trainingRating}/5</strong></td>
+                </tr>
+                <tr>
+                  <td style={detailLabel}>Overall Satisfaction:</td>
+                  <td style={detailValue}><strong>{overallSatisfaction}/5</strong></td>
+                </tr>
+                <tr>
+                  <td style={detailLabel}>NPS Score:</td>
+                  <td style={detailValue}>
+                    <strong>{npsScore}/10</strong> {npsEmoji} {npsLabel}
+                  </td>
+                </tr>
+              </table>
+            </Section>
+
             <Hr style={hr} />
 
             <Section style={quickActionsSection}>
               <Text style={quickActionsTitle}>Quick Actions:</Text>
               <Text style={text}>
                 <Link href={`mailto:${email}?subject=Re: Connie Training Survey - ${organization}`} style={actionLink}>
-                  📧 Send Email to {name}
+                  Send Email to {name}
                 </Link>
               </Text>
               <Text style={text}>
                 <Link href={spreadsheetUrl} style={actionLink}>
-                  📊 View in Payload Admin
+                  View Full Response in Payload Admin
                 </Link>
               </Text>
             </Section>
@@ -193,6 +218,14 @@ const detailsSection = {
   borderRadius: '8px',
 };
 
+const scoresSection = {
+  margin: '24px 0',
+  padding: '24px',
+  backgroundColor: '#f0f7ff',
+  borderRadius: '8px',
+  borderLeft: '4px solid #2563eb',
+};
+
 const detailsTable = {
   width: '100%',
   borderCollapse: 'collapse' as const,
@@ -205,7 +238,7 @@ const detailLabel = {
   fontWeight: '600',
   padding: '8px 16px 8px 0',
   verticalAlign: 'top' as const,
-  width: '140px',
+  width: '160px',
 };
 
 const detailValue = {

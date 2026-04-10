@@ -15,43 +15,78 @@ export async function POST(request: Request) {
   try {
     const formData = await request.json()
 
-    // Get Payload instance
     const payload = await getPayload({ config })
 
-    // Save to Payload collection
     const surveyResponse = await payload.create({
       collection: 'training-surveys',
       data: {
+        // Contact Info
         name: formData.name,
         email: formData.email,
         phone: formData.phone || '',
         organization: formData.organization,
-        servicesUsed: formData.servicesUsed.map((service: string) => ({ service })),
+
+        // Section 1: Onboarding
+        trainingRating: parseInt(formData.trainingRating, 10),
+        trainingRatingComment: formData.trainingRatingComment || '',
+        trainingConfidence: formData.trainingConfidence,
+        trainingConfidenceComment: formData.trainingConfidenceComment || '',
+        trainingHelpful: formData.trainingHelpful || '',
+        trainingClearer: formData.trainingClearer || '',
+
+        // Section 2: Before/After
+        oldCommMethods: (formData.oldCommMethods || []).map((method: string) => ({ method })),
+        connieSpeedRating: parseInt(formData.connieSpeedRating, 10),
+        connieReachRating: parseInt(formData.connieReachRating, 10),
+        connieHistoryRating: parseInt(formData.connieHistoryRating, 10),
+        connieResponseSpeed: formData.connieResponseSpeed,
+        connieResponseSpeedComment: formData.connieResponseSpeedComment || '',
+
+        // Section 3: What's Working
+        usefulFeatures: (formData.usefulFeatures || []).map((feature: string) => ({ feature })),
+        connieBetter: formData.connieBetter || '',
+
+        // Section 4: Challenges
+        hasTechnicalIssues: formData.hasTechnicalIssues,
+        technicalIssuesDescription: formData.technicalIssuesDescription || '',
+        confusingFeatures: formData.confusingFeatures || '',
+        slowdowns: formData.slowdowns || '',
+
+        // Section 5: Support
+        additionalTraining: formData.additionalTraining || '',
+        preferredTrainingFormat: (formData.preferredTrainingFormat || []).map((format: string) => ({ format })),
+
+        // Section 6: Satisfaction
         overallSatisfaction: parseInt(formData.overallSatisfaction, 10),
-        staffProfessionalism: parseInt(formData.staffProfessionalism, 10),
-        communicationEase: formData.communicationEase,
-        whatWorking: formData.whatWorking || '',
-        whatImprove: formData.whatImprove || '',
-        wouldRecommend: formData.wouldRecommend || '',
-        additionalComments: formData.additionalComments || '',
+        npsScore: parseInt(formData.npsScore, 10),
+        otherFeedback: formData.otherFeedback || '',
+
+        // Section 7: Role Context
+        primaryRole: formData.primaryRole || '',
+        weeklyClientCount: formData.weeklyClientCount || '',
       },
     })
 
     // Send email notifications
     const submissionDate = new Date().toISOString()
     const adminUrl = `${process.env.NEXT_PUBLIC_SERVER_URL}/admin/collections/training-surveys/${surveyResponse.id}`
+    const npsNum = parseInt(formData.npsScore, 10)
+    const npsLabel = npsNum >= 9 ? 'Promoter' : npsNum >= 7 ? 'Passive' : 'Detractor'
 
     try {
       const resend = getResendClient()
       await resend.emails.send({
         from: 'Connie Surveys <surveys@send.connie.one>',
         to: ['admin@connie.direct', 'andrea@connie.tel'],
-        subject: `New Training Survey - ${formData.organization}`,
+        subject: `New Training Survey - ${formData.organization} (NPS: ${formData.npsScore}/10 - ${npsLabel})`,
         react: ConnieTrainingSurveyNotification({
           name: formData.name,
           email: formData.email,
           organization: formData.organization,
+          trainingRating: formData.trainingRating,
           overallSatisfaction: formData.overallSatisfaction,
+          npsScore: formData.npsScore,
+          npsLabel,
           submissionDate,
           spreadsheetUrl: adminUrl,
         }),

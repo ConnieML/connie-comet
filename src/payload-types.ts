@@ -74,6 +74,7 @@ export interface Config {
     users: User;
     'external-documents': ExternalDocument;
     'brand-assets': BrandAsset;
+    'training-surveys': TrainingSurvey;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -92,6 +93,7 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     'external-documents': ExternalDocumentsSelect<false> | ExternalDocumentsSelect<true>;
     'brand-assets': BrandAssetsSelect<false> | BrandAssetsSelect<true>;
+    'training-surveys': TrainingSurveysSelect<false> | TrainingSurveysSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -941,8 +943,13 @@ export interface BrandAsset {
    * Brief description of the asset and its intended use
    */
   description?: string | null;
+  /**
+   * Optional custom thumbnail. If not set, category default is used.
+   */
+  thumbnailImage?: (string | null) | Media;
   category:
     | 'logos'
+    | 'icons'
     | 'colors'
     | 'fonts'
     | 'templates'
@@ -1018,6 +1025,148 @@ export interface BrandAsset {
       filename?: string | null;
     };
   };
+}
+/**
+ * Connie Training Survey responses — 19-question NSS feedback form
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "training-surveys".
+ */
+export interface TrainingSurvey {
+  id: string;
+  /**
+   * Respondent name
+   */
+  name: string;
+  /**
+   * Respondent email address
+   */
+  email: string;
+  /**
+   * Respondent phone number (optional)
+   */
+  phone?: string | null;
+  /**
+   * Organization name
+   */
+  organization: string;
+  /**
+   * Q1: How would you rate the onboarding/training process? (1-5)
+   */
+  trainingRating: number;
+  /**
+   * Q1 follow-up comment
+   */
+  trainingRatingComment?: string | null;
+  /**
+   * Q2: Confident using Connie on your own? (Yes/No/Somewhat)
+   */
+  trainingConfidence: string;
+  /**
+   * Q2 follow-up comment
+   */
+  trainingConfidenceComment?: string | null;
+  /**
+   * Q3: Most helpful part of training
+   */
+  trainingHelpful?: string | null;
+  /**
+   * Q4: What could have been clearer
+   */
+  trainingClearer?: string | null;
+  /**
+   * Q5: Previous communication methods
+   */
+  oldCommMethods?:
+    | {
+        method?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Q6a: Connie rating — Speed of communication (1-5)
+   */
+  connieSpeedRating: number;
+  /**
+   * Q6b: Connie rating — Ease of reaching clients (1-5)
+   */
+  connieReachRating: number;
+  /**
+   * Q6c: Connie rating — Tracking conversation history (1-5)
+   */
+  connieHistoryRating: number;
+  /**
+   * Q7: Has Connie changed response speed? (Yes/No/Not sure)
+   */
+  connieResponseSpeed: string;
+  /**
+   * Q7 follow-up comment
+   */
+  connieResponseSpeedComment?: string | null;
+  /**
+   * Q8: Most useful Connie features
+   */
+  usefulFeatures?:
+    | {
+        feature?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Q9: What Connie does better than old system
+   */
+  connieBetter?: string | null;
+  /**
+   * Q10: Experienced technical issues? (Yes/No)
+   */
+  hasTechnicalIssues: string;
+  /**
+   * Q10 follow-up: Description of technical issues
+   */
+  technicalIssuesDescription?: string | null;
+  /**
+   * Q11: Confusing or hard-to-use features
+   */
+  confusingFeatures?: string | null;
+  /**
+   * Q12: What slowed you down
+   */
+  slowdowns?: string | null;
+  /**
+   * Q13: Additional training/resources needed
+   */
+  additionalTraining?: string | null;
+  /**
+   * Q14: Preferred training format
+   */
+  preferredTrainingFormat?:
+    | {
+        format?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Q15: Overall satisfaction (1-5)
+   */
+  overallSatisfaction: number;
+  /**
+   * Q16: NPS — How likely to recommend Connie (0-10)
+   */
+  npsScore: number;
+  /**
+   * Q17: Other feedback, suggestions, or concerns
+   */
+  otherFeedback?: string | null;
+  /**
+   * Q18: Primary role at NSS
+   */
+  primaryRole?: string | null;
+  /**
+   * Q19: Clients communicated with per week
+   */
+  weeklyClientCount?: string | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1219,6 +1368,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'brand-assets';
         value: string | BrandAsset;
+      } | null)
+    | ({
+        relationTo: 'training-surveys';
+        value: string | TrainingSurvey;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1670,6 +1823,7 @@ export interface ExternalDocumentsSelect<T extends boolean = true> {
 export interface BrandAssetsSelect<T extends boolean = true> {
   name?: T;
   description?: T;
+  thumbnailImage?: T;
   category?: T;
   assetType?: T;
   subcategory?: T;
@@ -1717,6 +1871,58 @@ export interface BrandAssetsSelect<T extends boolean = true> {
               filename?: T;
             };
       };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "training-surveys_select".
+ */
+export interface TrainingSurveysSelect<T extends boolean = true> {
+  name?: T;
+  email?: T;
+  phone?: T;
+  organization?: T;
+  trainingRating?: T;
+  trainingRatingComment?: T;
+  trainingConfidence?: T;
+  trainingConfidenceComment?: T;
+  trainingHelpful?: T;
+  trainingClearer?: T;
+  oldCommMethods?:
+    | T
+    | {
+        method?: T;
+        id?: T;
+      };
+  connieSpeedRating?: T;
+  connieReachRating?: T;
+  connieHistoryRating?: T;
+  connieResponseSpeed?: T;
+  connieResponseSpeedComment?: T;
+  usefulFeatures?:
+    | T
+    | {
+        feature?: T;
+        id?: T;
+      };
+  connieBetter?: T;
+  hasTechnicalIssues?: T;
+  technicalIssuesDescription?: T;
+  confusingFeatures?: T;
+  slowdowns?: T;
+  additionalTraining?: T;
+  preferredTrainingFormat?:
+    | T
+    | {
+        format?: T;
+        id?: T;
+      };
+  overallSatisfaction?: T;
+  npsScore?: T;
+  otherFeedback?: T;
+  primaryRole?: T;
+  weeklyClientCount?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
