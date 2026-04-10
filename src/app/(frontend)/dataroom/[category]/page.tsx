@@ -160,6 +160,42 @@ export default function CategoryPage({ params }: PageProps) {
                   </div>
                 </Link>
 
+                {/* Surveys Card */}
+                <Link
+                  href="/dataroom/surveys"
+                  className="group"
+                >
+                  <div className="bg-gradient-to-br from-orange-50 to-yellow-50 border-2 border-orange-200 rounded-xl p-6 hover:from-orange-100 hover:to-yellow-100 hover:border-orange-300 transition-all duration-300 hover:transform hover:scale-[1.02] shadow-lg hover:shadow-xl">
+                    {/* Surveys Icon */}
+                    <div className="text-center mb-4">
+                      <div className="text-4xl mb-2">📋</div>
+                      <div className="inline-block px-2 py-1 bg-orange-100 text-orange-700 text-xs rounded-full border border-orange-300">
+                        SURVEYS
+                      </div>
+                    </div>
+
+                    {/* Surveys Info */}
+                    <div className="text-center">
+                      <h3 className="text-lg font-medium text-slate-800 mb-2 group-hover:text-orange-600 transition-colors">
+                        Surveys & Feedback
+                      </h3>
+                      
+                      <p className="text-sm text-slate-600 mb-3">
+                        Collection of Connie-related surveys for training, user feedback, and program evaluation
+                      </p>
+
+                      <div className="flex justify-between items-center text-xs text-slate-600 mb-3">
+                        <span>FEEDBACK</span>
+                        <span>📊 Forms</span>
+                      </div>
+                      
+                      <div className="text-xs text-orange-600 font-medium">
+                        View Surveys →
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+
                 {/* UAT Hub Card */}
                 <Link
                   href="/dataroom/user-acceptance-testing"
