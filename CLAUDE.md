@@ -1,5 +1,10 @@
 # Connie.one Project Context
 
+## 🚨 Known Gotchas — Read Before Editing
+
+- **`amplify.yml` env var defaults are a landmine for `NEXT_PUBLIC_*` vars.** The `${VAR:-default}` pattern silently bakes the literal string `"default"` into the client bundle at build time when a var is unset in the Amplify console. This broke the Connie webchat widget from Dec 2025 → Apr 2026 without anyone noticing. Full diagnostic + fix protocol: [`docs/runbooks/nextjs-amplify-env-var-poisoning.md`](./docs/runbooks/nextjs-amplify-env-var-poisoning.md).
+- **"Deployed" ≠ "works".** Every user-facing change needs one click-through in production before marking done. The Webchat 3.x section below was marked "COMPLETE — DEPLOYED TO PRODUCTION" for four months while the widget was showing "We're Currently Away" to every visitor. Don't repeat this.
+
 ## Project Overview
 - Next.js/Payload CMS project for connie.one
 - Connie is a startup CPAAS for nonprofits (digital transformation, ops efficiency, scale impact)
@@ -342,24 +347,30 @@ Instead of manual HTML/CSS, we used professional third-party components:
 - No additional environment variables needed
 - Content must be added via PayloadCMS admin after deployment
 
-## Webchat 3.x Implementation (Dec 23, 2025) - COMPLETE
+## Webchat 3.x Implementation (Dec 23, 2025 — repaired 2026-04-17)
 
-### Status: DEPLOYED TO PRODUCTION (Build #72)
+### Status: REPAIRED 2026-04-17 after 4-month silent outage
+
+**History:** Shipped as "complete" in Build #72 (Dec 23, 2025) but the production widget showed "We're Currently Away" to every visitor from that build forward. Root cause: `NEXT_PUBLIC_WEBCHAT_*` env vars were never set in Amplify console, and `amplify.yml`'s `${VAR:-default}` fallback pattern baked the literal string `"default"` into the client bundle. The availability check fetched `"default"` as a URL → 404 HTML → JSON parse threw → `isAvailable` caught the error and set to `false` forever. Diagnosed by the Connie CTO agent 2026-04-17; fixed same day.
+
+See `docs/runbooks/nextjs-amplify-env-var-poisoning.md` for the diagnostic + fix protocol.
 
 ### Overview
 Twilio Webchat 3.x integrated on all pages with custom pre-engagement form and Flex task routing.
 
 ### Key Components
 - **WebchatWidget**: `src/components/WebchatWidget/index.tsx`
+- **Availability endpoint**: `src/app/api/chat/availability/route.ts` (always-available mode — returns `{available: true, agentCount: 1}` unconditionally; upgrade notes inline)
 - **SDK**: `https://media.twiliocdn.com/sdk/js/webchat-v3/releases/3.3.0/webchat.min.js`
-- **Deployment Key**: `CVed9f73a4605bdc4e2d18d54070df52d9`
+- **Deployment Key**: `CVed9f73a4605bdc4e2d18d54070df52d9` (now set in Amplify as `NEXT_PUBLIC_WEBCHAT_DEPLOYMENT_KEY`)
+- **Availability URL**: `https://connie.one/api/chat/availability` (set in Amplify as `NEXT_PUBLIC_WEBCHAT_AVAILABILITY_URL`)
 - **Studio Flow**: `FWfbdfef030d0914e59afd774588fbf050` (Connie.one Sales Webchat Flow)
 
 ### Features
 - Custom pre-engagement form (name, email, company, phone, query)
-- Real-time agent availability checking
+- Availability check (currently always-available; swap `/api/chat/availability` to a real TaskRouter query when warranted)
 - Auto-open on button click (`appStatus: 'open'`)
-- "We're Currently Away" modal when no agents available
+- "We're Currently Away" modal **only if** `/api/chat/availability` ever returns `{available: false}` — with the current implementation this never fires
 - Tasks route to "Connie.one Sales" queue
 
 ### Critical Configuration (DO NOT CHANGE)
