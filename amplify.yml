@@ -37,7 +37,11 @@ frontend:
         # Create media directory and setup
         - mkdir -p public/media
         - nvm use 20
-        - npm install -g pnpm@latest
+        # Pin pnpm to a Node-20-compatible version (matches "packageManager" in
+        # package.json). pnpm@latest broke build #132 on 2026-05-08 when pnpm
+        # 11.0.0 (released 2026-04-28) raised its Node requirement to >=22.13
+        # while this build still pins Node 20. Don't @latest your build tools.
+        - npm install -g pnpm@10.12.4
         - pnpm install
         - pnpm payload generate:importmap
     build:
