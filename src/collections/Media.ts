@@ -87,6 +87,8 @@ export const Media: CollectionConfig = {
         { label: 'Legal Documents', value: 'legal' },
         { label: 'Business Operations', value: 'business' },
         { label: 'Technical Documentation', value: 'technical' },
+        // Compliance categories
+        { label: 'HIPAA Compliance', value: 'hipaa' },
       ],
       admin: {
         condition: (data) => data.isDataroomDocument,

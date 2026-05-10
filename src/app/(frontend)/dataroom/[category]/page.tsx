@@ -30,6 +30,11 @@ const categoryLabels: Record<string, { label: string; icon: string; description:
     icon: '🔧',
     description: 'Architecture docs, API documentation, security reports'
   },
+  hipaa: {
+    label: 'HIPAA Compliance',
+    icon: '🔐',
+    description: 'Compliance Statement, Business Associate Agreement, subprocessor BAA chain'
+  },
 }
 
 interface DocumentData {
@@ -120,7 +125,39 @@ export default function CategoryPage({ params }: PageProps) {
         {/* Documents Grid */}
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            
+
+            {/* Featured HIPAA card on the Legal Documents page */}
+            {category === 'legal' && (
+              <Link
+                href="/dataroom/hipaa"
+                className="group"
+              >
+                <div className="bg-gradient-to-br from-rose-50 to-pink-50 border-2 border-rose-200 rounded-xl p-6 hover:from-rose-100 hover:to-pink-100 hover:border-rose-300 transition-all duration-300 hover:transform hover:scale-[1.02] shadow-lg hover:shadow-xl">
+                  <div className="text-center mb-4">
+                    <div className="text-4xl mb-2">🔐</div>
+                    <div className="inline-block px-2 py-1 bg-rose-100 text-rose-700 text-xs rounded-full border border-rose-300">
+                      COMPLIANCE
+                    </div>
+                  </div>
+                  <div className="text-center">
+                    <h3 className="text-lg font-medium text-slate-800 mb-2 group-hover:text-rose-600 transition-colors">
+                      HIPAA Compliance
+                    </h3>
+                    <p className="text-sm text-slate-600 mb-3">
+                      Compliance Statement, Business Associate Agreement, and subprocessor BAA chain
+                    </p>
+                    <div className="flex justify-between items-center text-xs text-slate-600 mb-3">
+                      <span>HEALTHCARE</span>
+                      <span>📄 Statement + BAA</span>
+                    </div>
+                    <div className="text-xs text-rose-600 font-medium">
+                      View HIPAA Documents →
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            )}
+
             {/* Special Business Category Cards */}
             {category === 'business' && (
               <>
@@ -234,6 +271,39 @@ export default function CategoryPage({ params }: PageProps) {
               </>
             )}
 
+            {/* HIPAA: BAA placeholder card (disabled until form is drafted) */}
+            {category === 'hipaa' && (
+              <div
+                aria-disabled="true"
+                className="cursor-not-allowed opacity-70"
+                title="BAA Form — under legal review, not yet available"
+              >
+                <div className="bg-white/40 backdrop-blur-sm border-2 border-dashed border-slate-300 rounded-xl p-6 shadow-sm">
+                  <div className="text-center mb-4">
+                    <div className="text-4xl mb-2 grayscale">📝</div>
+                    <div className="inline-block px-2 py-1 bg-slate-100 text-slate-600 text-xs rounded-full border border-slate-300">
+                      COMING SOON
+                    </div>
+                  </div>
+                  <div className="text-center">
+                    <h3 className="text-lg font-medium text-slate-700 mb-2">
+                      Business Associate Agreement
+                    </h3>
+                    <p className="text-sm text-slate-500 mb-3">
+                      Connie BAA template for third-party organizations adopting the platform under SaaS terms
+                    </p>
+                    <div className="flex justify-between items-center text-xs text-slate-500 mb-3">
+                      <span>UNDER LEGAL REVIEW</span>
+                      <span>📄 PDF</span>
+                    </div>
+                    <div className="text-xs text-slate-500 font-medium">
+                      Available once draft is finalized
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Regular Documents */}
             {docs.length > 0 && docs.map((doc: DocumentData) => (
               <Link
@@ -290,8 +360,8 @@ export default function CategoryPage({ params }: PageProps) {
             ))}
           </div>
           
-          {/* Show "No Documents Yet" message only if business category has no docs and no UAT card */}
-          {docs.length === 0 && category !== 'business' && (
+          {/* Show "No Documents Yet" message only when no docs AND no special-case cards render */}
+          {docs.length === 0 && category !== 'business' && category !== 'hipaa' && (
             <div className="text-center py-16">
               <div className="text-6xl mb-4">📂</div>
               <h3 className="text-2xl font-light text-slate-800 mb-4">No Documents Yet</h3>
