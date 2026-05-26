@@ -46,7 +46,43 @@ export default function UATHubPage() {
 
         {/* UAT Resources Grid */}
         <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+            {/* Testing Philosophy Card */}
+            <Link
+              href="/dataroom/user-acceptance-testing/testing-philosophy"
+              className="group"
+            >
+              <div className="bg-gradient-to-br from-cyan-50 to-blue-50 border-2 border-cyan-200 rounded-xl p-8 hover:from-cyan-100 hover:to-blue-100 hover:border-cyan-300 transition-all duration-300 hover:transform hover:scale-[1.02] shadow-lg hover:shadow-xl">
+                {/* Philosophy Icon */}
+                <div className="text-center mb-6">
+                  <div className="text-6xl mb-4">🧭</div>
+                  <div className="inline-block px-3 py-2 bg-cyan-100 text-cyan-700 text-sm rounded-full border border-cyan-300 font-semibold">
+                    READ FIRST
+                  </div>
+                </div>
+
+                {/* Philosophy Info */}
+                <div className="text-center">
+                  <h3 className="text-2xl font-semibold text-slate-800 mb-4 group-hover:text-cyan-600 transition-colors">
+                    Testing Philosophy
+                  </h3>
+
+                  <p className="text-slate-600 mb-6 leading-relaxed">
+                    Why the UAT spreadsheet has three layers &mdash; User Story, Channel, Atomic Feature &mdash; and how to read it in 2 minutes
+                  </p>
+
+                  <div className="flex justify-between items-center text-sm text-slate-600 mb-4">
+                    <span className="font-medium">📖 2-min read</span>
+                    <span className="font-medium">🎯 For testers</span>
+                  </div>
+
+                  <div className="text-sm text-cyan-600 font-semibold">
+                    Read the Philosophy &rarr;
+                  </div>
+                </div>
+              </div>
+            </Link>
 
             {/* UAT Testing Dashboard Card */}
             <Link
