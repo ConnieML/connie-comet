@@ -104,11 +104,11 @@ export async function POST(request: Request) {
     const spreadsheetUrl = `https://docs.google.com/spreadsheets/d/${spreadsheetId}`
 
     try {
-      // Send to both admin emails
+      // Send to the notification distribution list
       const resend = getResendClient()
       await resend.emails.send({
         from: 'Connie Team <uat@send.connie.one>',
-        to: ['cberno@nevadaseniorservices.org', 'admin@connie.direct'],
+        to: ['cberno@nevadaseniorservices.org', 'admin@connie.direct', 'cmorris@thebensonagency.com'],
         subject: `New UAT Discovery Form Submission - ${formData.orgName}`,
         react: ConnieUATSubmissionNotification({
           organizationName: formData.orgName,
