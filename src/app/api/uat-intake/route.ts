@@ -89,11 +89,17 @@ export async function POST(request: Request) {
       new Date().toISOString() // Submission date
     ]
 
-    // Append to sheet
+    // Append to sheet.
+    // Range MUST be at least as wide as rowData (58 fields = A:BF). The previous
+    // 'A:AZ' range was only 52 columns wide, so appends drifted right and every
+    // submission after 2025-12-22 landed starting at column AZ instead of A.
+    // INSERT_ROWS forces a fresh row anchored at column A rather than writing
+    // into whatever cells table-detection thinks come next.
     await sheets.spreadsheets.values.append({
       spreadsheetId,
-      range: 'Intake Data!A:AZ',
+      range: 'Intake Data!A:BF',
       valueInputOption: 'RAW',
+      insertDataOption: 'INSERT_ROWS',
       requestBody: {
         values: [rowData]
       }
@@ -107,7 +113,9 @@ export async function POST(request: Request) {
       // Send to the notification distribution list
       const resend = getResendClient()
       await resend.emails.send({
-        from: 'Connie Team <uat@send.connie.one>',
+        // send.connie.one was never verified in Resend — every send 403'd from
+        // 2025-11-06 until 2026-07-31. connie.one is the verified domain.
+        from: 'Connie Team <uat@connie.one>',
         to: ['cberno@nevadaseniorservices.org', 'admin@connie.direct', 'cmorris@thebensonagency.com'],
         subject: `New UAT Discovery Form Submission - ${formData.orgName}`,
         react: ConnieUATSubmissionNotification({
