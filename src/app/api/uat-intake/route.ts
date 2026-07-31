@@ -117,12 +117,21 @@ export async function POST(request: Request) {
     const submissionDate = new Date().toISOString()
     const spreadsheetUrl = `https://docs.google.com/spreadsheets/d/${spreadsheetId}`
 
+    // A failed notification must never be reported as an unqualified success.
+    // From 2025-11-06 to 2026-07-31 this block caught a hard 403 (unverified
+    // sender domain) and still returned {success: true}, so a nine-month
+    // notification outage looked healthy to every caller and every smoke test.
+    // The submission itself is already safely in the sheet by this point, so we
+    // still return 200 — losing a lead or prompting a duplicate submission would
+    // be worse than a missed email — but `notified` now carries the truth and is
+    // the field to assert in any health check.
+    let notified = false
+    let notificationError: string | undefined
+
     try {
-      // Send to the notification distribution list
       const resend = getResendClient()
-      await resend.emails.send({
-        // send.connie.one was never verified in Resend — every send 403'd from
-        // 2025-11-06 until 2026-07-31. connie.one is the verified domain.
+      const { error } = await resend.emails.send({
+        // send.connie.one was never verified in Resend. connie.one is.
         from: 'Connie Team <uat@connie.one>',
         to: ['cberno@nevadaseniorservices.org', 'admin@connie.direct', 'cmorris@thebensonagency.com'],
         subject: `New UAT Discovery Form Submission - ${formData.orgName}`,
@@ -136,14 +145,22 @@ export async function POST(request: Request) {
         }),
       })
 
-      console.log('Email notification sent successfully')
+      // The Resend SDK reports API-level rejections (403 unverified domain,
+      // invalid recipient) in `error` rather than by throwing — the original
+      // catch block could never have seen them.
+      if (error) {
+        notificationError = `${error.name}: ${error.message}`
+        console.error('[uat-intake] NOTIFICATION FAILED (row saved):', notificationError)
+      } else {
+        notified = true
+        console.log('[uat-intake] notification sent for', formData.orgName)
+      }
     } catch (emailError) {
-      // Log email error but don't fail the request
-      console.error('Failed to send email notification:', emailError)
-      console.error('Email error details:', JSON.stringify(emailError, null, 2))
+      notificationError = emailError instanceof Error ? emailError.message : 'Unknown error'
+      console.error('[uat-intake] NOTIFICATION THREW (row saved):', emailError)
     }
 
-    return NextResponse.json({ success: true })
+    return NextResponse.json({ success: true, row: nextRow, notified, notificationError })
   } catch (error) {
     console.error('Error submitting intake form:', error)
     console.error('Error details:', JSON.stringify(error, null, 2))
