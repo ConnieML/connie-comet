@@ -89,17 +89,25 @@ export async function POST(request: Request) {
       new Date().toISOString() // Submission date
     ]
 
-    // Append to sheet.
-    // Range MUST be at least as wide as rowData (58 fields = A:BF). The previous
-    // 'A:AZ' range was only 52 columns wide, so appends drifted right and every
-    // submission after 2025-12-22 landed starting at column AZ instead of A.
-    // INSERT_ROWS forces a fresh row anchored at column A rather than writing
-    // into whatever cells table-detection thinks come next.
-    await sheets.spreadsheets.values.append({
+    // Write the row at an explicitly computed position.
+    //
+    // Do NOT use values.append here. append() anchors to the first column of the
+    // data block it detects, not to the range it is given. The original range
+    // 'Intake Data!A:AZ' was 52 columns wide while rowData is 58 fields, so from
+    // 2025-12-22 rows drifted right and landed at column AZ — and once a drifted
+    // block existed, append kept detecting THAT block and writing at AZ even
+    // after the range was widened. Seven rows (including two real prospects) were
+    // repaired on 2026-07-31; this write is deterministic so it cannot recur.
+    const existingRows = await sheets.spreadsheets.values.get({
       spreadsheetId,
-      range: 'Intake Data!A:BF',
+      range: 'Intake Data!A:A',
+    })
+    const nextRow = (existingRows.data.values?.length ?? 1) + 1
+
+    await sheets.spreadsheets.values.update({
+      spreadsheetId,
+      range: `Intake Data!A${nextRow}`,
       valueInputOption: 'RAW',
-      insertDataOption: 'INSERT_ROWS',
       requestBody: {
         values: [rowData]
       }
