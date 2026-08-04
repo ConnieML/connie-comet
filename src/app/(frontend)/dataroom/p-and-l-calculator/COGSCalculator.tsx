@@ -66,12 +66,28 @@ interface CostBreakdown {
 }
 
 export default function COGSCalculator() {
+  // S25/F18 — prefill from a Testing Partner Intake submission via URL params:
+  //   ?voice=1250&fax=160&email=450&webforms=25&ref=UAT-20260804-X6A
+  // Every intake submission writes this link into its PeoplePerson lead, so
+  // sales opens the calculator already loaded with the submitter's volumes.
+  const prefillNum = (key: string): number | null => {
+    if (typeof window === 'undefined') return null
+    const v = new URLSearchParams(window.location.search).get(key)
+    if (v === null) return null
+    const n = parseInt(v, 10)
+    return Number.isFinite(n) && n >= 0 ? n : null
+  }
+  const prefillRef =
+    typeof window !== 'undefined'
+      ? new URLSearchParams(window.location.search).get('ref') || ''
+      : ''
+
   const [state, setState] = useState<CalculatorState>({
     platformOpex: DEFAULT_VALUES.platform_opex,
-    voiceCalls: DEFAULT_VALUES.voice_calls,
-    faxCount: DEFAULT_VALUES.fax_count,
-    emailCount: DEFAULT_VALUES.email_count,
-    webFormCount: DEFAULT_VALUES.web_form_count,
+    voiceCalls: prefillNum('voice') ?? DEFAULT_VALUES.voice_calls,
+    faxCount: prefillNum('fax') ?? DEFAULT_VALUES.fax_count,
+    emailCount: prefillNum('email') ?? DEFAULT_VALUES.email_count,
+    webFormCount: prefillNum('webforms') ?? DEFAULT_VALUES.web_form_count,
     targetMargin: 40
   })
 
@@ -175,6 +191,16 @@ export default function COGSCalculator() {
 
   return (
     <div className="w-full max-w-7xl mx-auto">
+      {prefillRef && (
+        <div className="mb-6 p-4 bg-indigo-50 border-2 border-indigo-300 rounded-xl text-slate-800">
+          <span className="font-semibold">Prefilled from intake {prefillRef}</span>
+          <span className="text-slate-600">
+            {' '}
+            — volumes below came from the Testing Partner&apos;s submission. Adjust freely; nothing
+            saves back.
+          </span>
+        </div>
+      )}
       {/* Configuration Section */}
       <div className="grid lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2">

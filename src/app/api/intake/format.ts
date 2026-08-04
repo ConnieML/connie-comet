@@ -138,12 +138,28 @@ export const buildEmailSections = (formData: FormData): Section[] => {
 const esc = (s: string): string =>
   s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 
+// S25/F18 — one-click sales handoff: a P&L-calculator link preloaded with the
+// submitter's volumes. Voice = inbound + outbound calls; fax = both directions;
+// email = received (inbound is the calculator's cost driver).
+export const buildCalculatorLink = (formData: FormData, refNumber: string): string => {
+  const n = (v: unknown): number => parseInt(str(v), 10) || 0
+  const params = new URLSearchParams({
+    voice: String(n(formData.inboundCalls) + n(formData.outboundCalls)),
+    fax: String(n(formData.inboundFaxes) + n(formData.outboundFaxes)),
+    email: String(n(formData.emailsReceived)),
+    webforms: String(n(formData.formSubmissions)),
+    ref: refNumber,
+  })
+  return `https://connie.one/dataroom/p-and-l-calculator?${params.toString()}`
+}
+
 // PP lead description: the FULL submission, formatted as simple HTML so staff
 // working the lead in PeoplePerson see everything without leaving the CRM.
 export const buildPPLeadDescription = (formData: FormData, refNumber: string): string => {
   const sections = buildEmailSections(formData)
   const parts: string[] = [
     `<p><strong>Testing Partner Intake — ${esc(refNumber)}</strong><br>Submitted via connie.one/intake</p>`,
+    `<p>💰 <a href="${buildCalculatorLink(formData, refNumber)}">Open P&amp;L calculator — prefilled with this submission's volumes</a></p>`,
   ]
   for (const section of sections) {
     parts.push(`<p><strong>${esc(section.title)}</strong></p>`)
