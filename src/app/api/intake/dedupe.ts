@@ -11,9 +11,13 @@
 export type PPLead = {
   id: string
   name?: string | null
+  title?: string | null
   company?: string | null
   email?: string | null
   phonenumber?: string | null
+  website?: string | null
+  source?: string | null
+  status?: string | null
   description?: string | null
   dateadded?: string | null
 }

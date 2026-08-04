@@ -123,8 +123,11 @@ const fetchPPLeads = async (token: string): Promise<PPLead[]> => {
   return Array.isArray(json) ? (json as PPLead[]) : []
 }
 
-// F17 — append a follow-up intake to an existing lead (partial PUT: description
-// only, other fields untouched — validated against the live API 2026-08-04).
+// F17 — append a follow-up intake to an existing lead.
+// CRITICAL: Perfex's lead PUT is NOT partial — omitted contact fields (email,
+// phonenumber, title, website) are CLEARED on update (observed live 2026-08-04:
+// a description-only PUT wiped the lead's email, which then broke dedupe).
+// Always echo the lead's existing field set back alongside the new description.
 const appendToPPLead = async (
   token: string,
   lead: PPLead,
@@ -146,7 +149,21 @@ const appendToPPLead = async (
     `<p><strong>FOLLOW-UP: Testing Partner Intake ${refNumber}</strong> (${stamp}, matched by ${matchedBy}${verifyNote})</p>` +
     othersNote +
     buildPPLeadDescription(formData, refNumber)
-  const body = new URLSearchParams({ description: appended })
+  const body = new URLSearchParams({
+    // Echo existing fields — Perfex PUT clears anything omitted (see above).
+    // Source/status echo the LEAD's own values so an append never resets a
+    // staff-progressed pipeline stage back to "new".
+    name: String(lead.name || ''),
+    title: String(lead.title || ''),
+    company: String(lead.company || ''),
+    email: String(lead.email || ''),
+    phonenumber: String(lead.phonenumber || ''),
+    website: String(lead.website || ''),
+    source: String(lead.source || PP_LEAD_SOURCE),
+    status: String(lead.status || PP_LEAD_STATUS),
+    assigned: '1',
+    description: appended,
+  })
   const res = await fetch(`${PP_API_BASE}/leads/${lead.id}`, {
     method: 'PUT',
     headers: { authtoken: token, 'User-Agent': PP_UA, 'Content-Type': 'application/x-www-form-urlencoded' },
