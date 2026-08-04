@@ -17,6 +17,20 @@ import { findDuplicate, type PPLead } from './dedupe'
 // ---------------------------------------------------------------------------
 
 const PP_API_BASE = 'https://connie.peopleperson.app/api'
+// The PP host's WAF serves an HTML block page to UA-less PUT requests from
+// datacenter IPs (observed 2026-08-04: Lambda PUT blocked, identical PUT from a
+// workstation fine, POSTs fine either way). Browser-style UA passes — same
+// lesson as the Cloudflare/Resend UA block (S15).
+const PP_UA = 'Mozilla/5.0 (compatible; ConnieIntake/1.0; +https://connie.one)'
+
+const ppJson = async (res: Response): Promise<Record<string, unknown>> => {
+  const text = await res.text()
+  try {
+    return JSON.parse(text) as Record<string, unknown>
+  } catch {
+    throw new Error(`PP returned non-JSON (HTTP ${res.status}): ${text.slice(0, 120)}`)
+  }
+}
 const PP_LEAD_SOURCE = '4' // "Web to lead" style source used by existing form leads
 const PP_LEAD_STATUS = '2' // matches existing inbound web-form leads
 const INTERNAL_RECIPIENTS = [
@@ -91,10 +105,10 @@ const createPPLead = async (
   })
   const res = await fetch(`${PP_API_BASE}/leads`, {
     method: 'POST',
-    headers: { authtoken: token, 'Content-Type': 'application/x-www-form-urlencoded' },
+    headers: { authtoken: token, 'User-Agent': PP_UA, 'Content-Type': 'application/x-www-form-urlencoded' },
     body: body.toString(),
   })
-  const json = (await res.json()) as { status?: boolean; message?: string; record_id?: number }
+  const json = (await ppJson(res)) as { status?: boolean; message?: string; record_id?: number }
   if (!res.ok || !json.status || !json.record_id) {
     throw new Error(`PP lead create failed (HTTP ${res.status}): ${json.message || 'unknown'}`)
   }
@@ -103,7 +117,7 @@ const createPPLead = async (
 
 // F17 — fetch the lead book once per submission (~340 rows) for dedupe matching.
 const fetchPPLeads = async (token: string): Promise<PPLead[]> => {
-  const res = await fetch(`${PP_API_BASE}/leads`, { headers: { authtoken: token } })
+  const res = await fetch(`${PP_API_BASE}/leads`, { headers: { authtoken: token, 'User-Agent': PP_UA } })
   if (!res.ok) throw new Error(`PP leads fetch failed (HTTP ${res.status})`)
   const json = await res.json()
   return Array.isArray(json) ? (json as PPLead[]) : []
@@ -135,10 +149,10 @@ const appendToPPLead = async (
   const body = new URLSearchParams({ description: appended })
   const res = await fetch(`${PP_API_BASE}/leads/${lead.id}`, {
     method: 'PUT',
-    headers: { authtoken: token, 'Content-Type': 'application/x-www-form-urlencoded' },
+    headers: { authtoken: token, 'User-Agent': PP_UA, 'Content-Type': 'application/x-www-form-urlencoded' },
     body: body.toString(),
   })
-  const json = (await res.json()) as { status?: boolean; message?: string }
+  const json = (await ppJson(res)) as { status?: boolean; message?: string }
   if (!res.ok || !json.status) {
     throw new Error(`PP lead append failed (HTTP ${res.status}): ${json.message || 'unknown'}`)
   }

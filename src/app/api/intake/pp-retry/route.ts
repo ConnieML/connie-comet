@@ -45,7 +45,7 @@ export async function POST(request: Request) {
         })
         const res = await fetch(`${PP_API_BASE}/leads`, {
           method: 'POST',
-          headers: { authtoken: token, 'Content-Type': 'application/x-www-form-urlencoded' },
+          headers: { authtoken: token, 'User-Agent': 'Mozilla/5.0 (compatible; ConnieIntake/1.0; +https://connie.one)', 'Content-Type': 'application/x-www-form-urlencoded' },
           body: params.toString(),
         })
         const json = (await res.json()) as { status?: boolean; message?: string; record_id?: number }
