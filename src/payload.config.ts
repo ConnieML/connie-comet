@@ -14,6 +14,7 @@ import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
 import { Users } from './collections/Users'
 import { TrainingSurveys } from './collections/TrainingSurveys'
+import { UATSubmissions } from './collections/UATSubmissions'
 import { Footer } from './Footer/config'
 import { Header } from './Header/config'
 import { plugins } from './plugins'
@@ -84,7 +85,7 @@ export default buildConfig({
   db: mongooseAdapter({
     url: process.env.DATABASE_URI || '',
   }),
-  collections: [Pages, Posts, Media, Categories, Users, ExternalDocuments, BrandAssets, TrainingSurveys],
+  collections: [Pages, Posts, Media, Categories, Users, ExternalDocuments, BrandAssets, TrainingSurveys, UATSubmissions],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
   plugins: [

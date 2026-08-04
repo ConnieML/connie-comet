@@ -26,7 +26,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   // Check if this is the UAT discovery page or presentations page
   const headersList = await headers()
   const pathname = headersList.get('x-pathname') || '/'
-  const isUATDiscoveryPage = pathname.includes('/user-acceptance-testing/discovery')
+  const isUATDiscoveryPage =
+    pathname.includes('/user-acceptance-testing/discovery') || pathname.startsWith('/intake')
   const isPresentationsPage = pathname.startsWith('/presentations')
 
   return (

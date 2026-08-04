@@ -24,6 +24,10 @@ frontend:
         - echo "GOOGLE_PRIVATE_KEY=${GOOGLE_PRIVATE_KEY:-default}" >> .env.production
         # Resend Email Service Configuration
         - echo "RESEND_API_KEY=${RESEND_API_KEY:-default}" >> .env.production
+        # PeoplePerson CRM (S25 Testing Partner Intake — lead sync). Empty default on
+        # purpose: the intake route treats a missing/short token as "PP not configured"
+        # and records ppSyncStatus accordingly instead of failing the submission.
+        - echo "PP_API_TOKEN=${PP_API_TOKEN:-}" >> .env.production
         # Twilio Flex Webchat Configuration
         # NOTE: NEXT_PUBLIC_* vars are baked into the client bundle at build time.
         # Never default them to a string like "default" — that silently ships a

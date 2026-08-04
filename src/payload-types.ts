@@ -75,10 +75,12 @@ export interface Config {
     'external-documents': ExternalDocument;
     'brand-assets': BrandAsset;
     'training-surveys': TrainingSurvey;
+    'uat-submissions': UatSubmission;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
     search: Search;
+    'payload-kv': PayloadKv;
     'payload-jobs': PayloadJob;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -94,10 +96,12 @@ export interface Config {
     'external-documents': ExternalDocumentsSelect<false> | ExternalDocumentsSelect<true>;
     'brand-assets': BrandAssetsSelect<false> | BrandAssetsSelect<true>;
     'training-surveys': TrainingSurveysSelect<false> | TrainingSurveysSelect<true>;
+    'uat-submissions': UatSubmissionsSelect<false> | UatSubmissionsSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
     search: SearchSelect<false> | SearchSelect<true>;
+    'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -106,6 +110,7 @@ export interface Config {
   db: {
     defaultIDType: string;
   };
+  fallbackLocale: null;
   globals: {
     header: Header;
     footer: Footer;
@@ -164,7 +169,7 @@ export interface Page {
       root: {
         type: string;
         children: {
-          type: string;
+          type: any;
           version: number;
           [k: string]: unknown;
         }[];
@@ -240,7 +245,7 @@ export interface Post {
     root: {
       type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];
@@ -286,7 +291,7 @@ export interface Media {
     root: {
       type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];
@@ -326,6 +331,7 @@ export interface Media {
         | 'financial'
         | 'business'
         | 'technical'
+        | 'hipaa'
       )
     | null;
   /**
@@ -484,7 +490,7 @@ export interface CallToActionBlock {
     root: {
       type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];
@@ -535,7 +541,7 @@ export interface ContentBlock {
           root: {
             type: string;
             children: {
-              type: string;
+              type: any;
               version: number;
               [k: string]: unknown;
             }[];
@@ -592,7 +598,7 @@ export interface ArchiveBlock {
     root: {
       type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];
@@ -628,7 +634,7 @@ export interface FormBlock {
     root: {
       type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];
@@ -685,7 +691,7 @@ export interface Form {
               root: {
                 type: string;
                 children: {
-                  type: string;
+                  type: any;
                   version: number;
                   [k: string]: unknown;
                 }[];
@@ -768,7 +774,7 @@ export interface Form {
     root: {
       type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];
@@ -800,7 +806,7 @@ export interface Form {
           root: {
             type: string;
             children: {
-              type: string;
+              type: any;
               version: number;
               [k: string]: unknown;
             }[];
@@ -1169,6 +1175,57 @@ export interface TrainingSurvey {
   createdAt: string;
 }
 /**
+ * Testing Partner Intake Form submissions (V2, connie.one/intake) — system of record. PP lead is the staff-facing surface.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "uat-submissions".
+ */
+export interface UatSubmission {
+  id: string;
+  /**
+   * Submission reference, e.g. UAT-20260804-K3X
+   */
+  refNumber: string;
+  orgName: string;
+  contactName: string;
+  email: string;
+  phone?: string | null;
+  /**
+   * PeoplePerson lead record id (connie tenant), set on successful sync
+   */
+  ppLeadId?: string | null;
+  /**
+   * PP lead-create outcome. failed → use /api/intake/pp-retry
+   */
+  ppSyncStatus?: ('synced' | 'failed' | 'skipped') | null;
+  /**
+   * Last PP sync error, if any
+   */
+  ppSyncError?: string | null;
+  /**
+   * Respondent confirmation email delivered
+   */
+  confirmationSent?: boolean | null;
+  /**
+   * Internal notification (incl. CareTeam task address) delivered
+   */
+  internalNotified?: boolean | null;
+  /**
+   * Complete structured submission payload (all form fields)
+   */
+  data:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
@@ -1241,6 +1298,23 @@ export interface Search {
     | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-kv".
+ */
+export interface PayloadKv {
+  id: string;
+  key: string;
+  data:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1374,6 +1448,10 @@ export interface PayloadLockedDocument {
         value: string | TrainingSurvey;
       } | null)
     | ({
+        relationTo: 'uat-submissions';
+        value: string | UatSubmission;
+      } | null)
+    | ({
         relationTo: 'redirects';
         value: string | Redirect;
       } | null)
@@ -1388,10 +1466,6 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'search';
         value: string | Search;
-      } | null)
-    | ({
-        relationTo: 'payload-jobs';
-        value: string | PayloadJob;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -1926,6 +2000,25 @@ export interface TrainingSurveysSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "uat-submissions_select".
+ */
+export interface UatSubmissionsSelect<T extends boolean = true> {
+  refNumber?: T;
+  orgName?: T;
+  contactName?: T;
+  email?: T;
+  phone?: T;
+  ppLeadId?: T;
+  ppSyncStatus?: T;
+  ppSyncError?: T;
+  confirmationSent?: T;
+  internalNotified?: T;
+  data?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects_select".
  */
 export interface RedirectsSelect<T extends boolean = true> {
@@ -2115,6 +2208,14 @@ export interface SearchSelect<T extends boolean = true> {
       };
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-kv_select".
+ */
+export interface PayloadKvSelect<T extends boolean = true> {
+  key?: T;
+  data?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -2364,7 +2465,7 @@ export interface BannerBlock {
     root: {
       type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];
