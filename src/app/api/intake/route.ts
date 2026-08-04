@@ -5,6 +5,7 @@ import config from '@payload-config'
 import ConnieIntakeConfirmation from '../../../../emails/templates/connie-intake-confirmation'
 import ConnieIntakeInternalNotification from '../../../../emails/templates/connie-intake-internal-notification'
 import { buildEmailSections, buildPPLeadDescription } from './format'
+import { findDuplicate, type PPLead } from './dedupe'
 
 // ---------------------------------------------------------------------------
 // Testing Partner Intake Form V2 submission pipeline (S25).
@@ -73,7 +74,9 @@ const createPPLead = async (
   token: string,
   formData: Record<string, unknown>,
   refNumber: string,
+  flagNote?: string,
 ): Promise<{ leadId: string }> => {
+  const description = (flagNote ? `${flagNote}\n` : '') + buildPPLeadDescription(formData, refNumber)
   const body = new URLSearchParams({
     name: String(formData.contactName || ''),
     title: String(formData.contactTitle || ''),
@@ -84,7 +87,7 @@ const createPPLead = async (
     source: PP_LEAD_SOURCE,
     status: PP_LEAD_STATUS,
     assigned: '1',
-    description: buildPPLeadDescription(formData, refNumber),
+    description,
   })
   const res = await fetch(`${PP_API_BASE}/leads`, {
     method: 'POST',
@@ -96,6 +99,49 @@ const createPPLead = async (
     throw new Error(`PP lead create failed (HTTP ${res.status}): ${json.message || 'unknown'}`)
   }
   return { leadId: String(json.record_id) }
+}
+
+// F17 — fetch the lead book once per submission (~340 rows) for dedupe matching.
+const fetchPPLeads = async (token: string): Promise<PPLead[]> => {
+  const res = await fetch(`${PP_API_BASE}/leads`, { headers: { authtoken: token } })
+  if (!res.ok) throw new Error(`PP leads fetch failed (HTTP ${res.status})`)
+  const json = await res.json()
+  return Array.isArray(json) ? (json as PPLead[]) : []
+}
+
+// F17 — append a follow-up intake to an existing lead (partial PUT: description
+// only, other fields untouched — validated against the live API 2026-08-04).
+const appendToPPLead = async (
+  token: string,
+  lead: PPLead,
+  formData: Record<string, unknown>,
+  refNumber: string,
+  matchedBy: string,
+  others: string[],
+): Promise<void> => {
+  const stamp = new Date().toISOString().slice(0, 10)
+  const verifyNote =
+    matchedBy === 'org name'
+      ? ' — matched by org name, <strong>verify same organization</strong>'
+      : ''
+  const othersNote = others.length
+    ? `<p><em>Same ${matchedBy} also on lead(s) #${others.join(', #')}.</em></p>`
+    : ''
+  const appended =
+    `${lead.description || ''}\n<hr>` +
+    `<p><strong>FOLLOW-UP: Testing Partner Intake ${refNumber}</strong> (${stamp}, matched by ${matchedBy}${verifyNote})</p>` +
+    othersNote +
+    buildPPLeadDescription(formData, refNumber)
+  const body = new URLSearchParams({ description: appended })
+  const res = await fetch(`${PP_API_BASE}/leads/${lead.id}`, {
+    method: 'PUT',
+    headers: { authtoken: token, 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: body.toString(),
+  })
+  const json = (await res.json()) as { status?: boolean; message?: string }
+  if (!res.ok || !json.status) {
+    throw new Error(`PP lead append failed (HTTP ${res.status}): ${json.message || 'unknown'}`)
+  }
 }
 
 export async function POST(request: Request) {
@@ -153,21 +199,54 @@ export async function POST(request: Request) {
     const payloadAdminUrl = `${serverUrl}/admin/collections/uat-submissions/${record.id}`
 
     // --- 4. PP lead (front door) — never fatal, one in-request retry --------
+    // F17: multi-dimension dedupe first. email/phone/org-normalized match →
+    // APPEND to the existing lead; fuzzy org similarity → NEW lead flagged
+    // "possible duplicate" (advisory only, never auto-merged).
     let ppLeadId: string | undefined
     let ppSyncStatus: 'synced' | 'failed' | 'skipped' = 'skipped'
     let ppSyncError: string | undefined
+    let ppDedupeNote: string | undefined
     const ppToken = getPPToken()
     if (ppToken) {
       for (let attempt = 0; attempt < 2; attempt++) {
         try {
-          const { leadId } = await createPPLead(ppToken, formData, refNumber)
-          ppLeadId = leadId
+          let dedupe: ReturnType<typeof findDuplicate> = { mode: 'none' }
+          try {
+            dedupe = findDuplicate(await fetchPPLeads(ppToken), {
+              email: String(formData.email || ''),
+              phone: String(formData.phone || ''),
+              orgName: String(formData.orgName || ''),
+            })
+          } catch (fetchErr) {
+            // Dedupe is best-effort: if the lead book can't be read, fall back
+            // to plain create rather than losing the lead entirely.
+            console.error('[intake] PP dedupe fetch failed, falling back to create:', fetchErr)
+          }
+
+          if (dedupe.mode === 'append') {
+            await appendToPPLead(ppToken, dedupe.lead, formData, refNumber, dedupe.matchedBy, dedupe.others)
+            ppLeadId = dedupe.lead.id
+            ppDedupeNote = `follow-up appended to existing lead #${dedupe.lead.id} (matched by ${dedupe.matchedBy})`
+          } else if (dedupe.mode === 'flag') {
+            const ids = dedupe.possibles.map((l) => `#${l.id}`).join(', ')
+            const { leadId } = await createPPLead(
+              ppToken,
+              formData,
+              refNumber,
+              `<p><strong>⚠ Possible duplicate</strong> — similar org name on lead(s) ${ids}. Please review and merge manually if same organization.</p>`,
+            )
+            ppLeadId = leadId
+            ppDedupeNote = `new lead; possible duplicate of ${ids} (similar org name — review manually)`
+          } else {
+            const { leadId } = await createPPLead(ppToken, formData, refNumber)
+            ppLeadId = leadId
+          }
           ppSyncStatus = 'synced'
           break
         } catch (e) {
           ppSyncStatus = 'failed'
           ppSyncError = e instanceof Error ? e.message : 'Unknown PP error'
-          console.error(`[intake] PP lead create attempt ${attempt + 1} failed:`, ppSyncError)
+          console.error(`[intake] PP lead sync attempt ${attempt + 1} failed:`, ppSyncError)
         }
       }
     } else {
@@ -211,7 +290,9 @@ export async function POST(request: Request) {
       const { error: internalErr } = await resend.emails.send({
         from: 'Connie Intake <intake@connie.one>',
         to: INTERNAL_RECIPIENTS,
-        subject: `New Testing Partner Intake — ${formData.orgName} (${refNumber})`,
+        subject:
+          `New Testing Partner Intake — ${formData.orgName} (${refNumber})` +
+          (ppDedupeNote ? ` — ${ppDedupeNote}` : ''),
         react: ConnieIntakeInternalNotification({
           refNumber,
           orgName: String(formData.orgName),
@@ -238,7 +319,7 @@ export async function POST(request: Request) {
       await payload.update({
         collection: 'uat-submissions',
         id: record.id,
-        data: { ppLeadId, ppSyncStatus, ppSyncError, confirmationSent, internalNotified },
+        data: { ppLeadId, ppSyncStatus, ppSyncError, ppDedupeNote, confirmationSent, internalNotified },
       })
     } catch (updateErr) {
       console.error('[intake] outcome-flag update failed (record saved):', updateErr)

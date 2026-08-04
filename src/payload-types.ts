@@ -1203,6 +1203,10 @@ export interface UatSubmission {
    */
   ppSyncError?: string | null;
   /**
+   * F17 dedupe outcome — e.g. "follow-up appended to existing lead #358 (matched by email)"
+   */
+  ppDedupeNote?: string | null;
+  /**
    * Respondent confirmation email delivered
    */
   confirmationSent?: boolean | null;
@@ -2011,6 +2015,7 @@ export interface UatSubmissionsSelect<T extends boolean = true> {
   ppLeadId?: T;
   ppSyncStatus?: T;
   ppSyncError?: T;
+  ppDedupeNote?: T;
   confirmationSent?: T;
   internalNotified?: T;
   data?: T;

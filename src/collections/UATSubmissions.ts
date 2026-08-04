@@ -47,6 +47,13 @@ export const UATSubmissions: CollectionConfig = {
       admin: { description: 'Last PP sync error, if any' },
     },
     {
+      name: 'ppDedupeNote',
+      type: 'text',
+      admin: {
+        description: 'F17 dedupe outcome — e.g. "follow-up appended to existing lead #358 (matched by email)"',
+      },
+    },
+    {
       name: 'confirmationSent',
       type: 'checkbox',
       defaultValue: false,
