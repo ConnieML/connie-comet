@@ -37,6 +37,7 @@ const INTERNAL_RECIPIENTS = [
   'cberno@nevadaseniorservices.org',
   'admin@connie.direct',
   'careteam@connie.support', // P2 — creates the CareTeam Flex task via the email channel
+  'cmorris@thebensonagency.com', // Cindy Morris (Benson Agency) — parity with V1 list
 ]
 
 const getResendClient = () => {
