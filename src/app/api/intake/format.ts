@@ -143,14 +143,18 @@ const esc = (s: string): string =>
 // email = received (inbound is the calculator's cost driver).
 export const buildCalculatorLink = (formData: FormData, refNumber: string): string => {
   const n = (v: unknown): number => parseInt(str(v), 10) || 0
-  const params = new URLSearchParams({
-    voice: String(n(formData.inboundCalls) + n(formData.outboundCalls)),
-    fax: String(n(formData.inboundFaxes) + n(formData.outboundFaxes)),
-    email: String(n(formData.emailsReceived)),
-    webforms: String(n(formData.formSubmissions)),
-    ref: refNumber,
-  })
-  return `https://connie.one/dataroom/p-and-l-calculator?${params.toString()}`
+  // Single compact param, deliberately AMPERSAND-FREE: Perfex's REST PUT
+  // re-parses the request body, so a multi-param URL inside the description
+  // (`...&fax=160...`) becomes stray DB fields → mysqli "Unknown column 'fax'"
+  // (observed live 2026-08-04). Format: p=<voice>~<fax>~<email>~<webforms>~<ref>
+  const p = [
+    n(formData.inboundCalls) + n(formData.outboundCalls),
+    n(formData.inboundFaxes) + n(formData.outboundFaxes),
+    n(formData.emailsReceived),
+    n(formData.formSubmissions),
+    refNumber,
+  ].join('~')
+  return `https://connie.one/dataroom/p-and-l-calculator?p=${p}`
 }
 
 // PP lead description: the FULL submission, formatted as simple HTML so staff

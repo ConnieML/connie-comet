@@ -66,28 +66,36 @@ interface CostBreakdown {
 }
 
 export default function COGSCalculator() {
-  // S25/F18 — prefill from a Testing Partner Intake submission via URL params:
-  //   ?voice=1250&fax=160&email=450&webforms=25&ref=UAT-20260804-X6A
-  // Every intake submission writes this link into its PeoplePerson lead, so
-  // sales opens the calculator already loaded with the submitter's volumes.
-  const prefillNum = (key: string): number | null => {
-    if (typeof window === 'undefined') return null
-    const v = new URLSearchParams(window.location.search).get(key)
-    if (v === null) return null
-    const n = parseInt(v, 10)
+  // S25/F18 — prefill from a Testing Partner Intake submission via URL params.
+  // Preferred compact form (ampersand-free — survives Perfex's PUT body
+  // re-parse when the link is embedded in a lead description):
+  //   ?p=<voice>~<fax>~<email>~<webforms>~<ref>     e.g. ?p=1250~160~450~25~UAT-20260804-X6A
+  // Individual params (?voice=&fax=&email=&webforms=&ref=) still work for
+  // hand-built links. Every intake submission writes the compact link into its
+  // PeoplePerson lead, so sales opens the calculator already loaded.
+  const search = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null
+  const compact = (search?.get('p') || '').split('~')
+  const compactNum = (i: number): number | null => {
+    const n = parseInt(compact[i] ?? '', 10)
     return Number.isFinite(n) && n >= 0 ? n : null
   }
-  const prefillRef =
-    typeof window !== 'undefined'
-      ? new URLSearchParams(window.location.search).get('ref') || ''
-      : ''
+  const prefillNum = (key: string, compactIdx: number): number | null => {
+    if (!search) return null
+    const v = search.get(key)
+    if (v !== null) {
+      const n = parseInt(v, 10)
+      if (Number.isFinite(n) && n >= 0) return n
+    }
+    return compactNum(compactIdx)
+  }
+  const prefillRef = search?.get('ref') || (compact.length >= 5 ? compact[4] : '') || ''
 
   const [state, setState] = useState<CalculatorState>({
     platformOpex: DEFAULT_VALUES.platform_opex,
-    voiceCalls: prefillNum('voice') ?? DEFAULT_VALUES.voice_calls,
-    faxCount: prefillNum('fax') ?? DEFAULT_VALUES.fax_count,
-    emailCount: prefillNum('email') ?? DEFAULT_VALUES.email_count,
-    webFormCount: prefillNum('webforms') ?? DEFAULT_VALUES.web_form_count,
+    voiceCalls: prefillNum('voice', 0) ?? DEFAULT_VALUES.voice_calls,
+    faxCount: prefillNum('fax', 1) ?? DEFAULT_VALUES.fax_count,
+    emailCount: prefillNum('email', 2) ?? DEFAULT_VALUES.email_count,
+    webFormCount: prefillNum('webforms', 3) ?? DEFAULT_VALUES.web_form_count,
     targetMargin: 40
   })
 
