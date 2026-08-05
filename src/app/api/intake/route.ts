@@ -123,6 +123,18 @@ const fetchPPLeads = async (token: string): Promise<PPLead[]> => {
   return Array.isArray(json) ? (json as PPLead[]) : []
 }
 
+// Perfex's REST PUT re-parses the decoded request body, so ANY ampersand in a
+// field VALUE — including inside HTML entities like &amp; — is treated as a
+// field separator and the fragment becomes a stray DB column (mysqli "Unknown
+// column"). POST does not have this bug. Sanitize every PUT value: entities
+// collapse to fullwidth lookalikes (visually identical to staff in PP).
+const ppPutSafe = (s: string): string =>
+  s
+    .replace(/&amp;/g, '＆')
+    .replace(/&lt;/g, '＜')
+    .replace(/&gt;/g, '＞')
+    .replace(/&/g, '＆')
+
 // F17 — append a follow-up intake to an existing lead.
 // CRITICAL: Perfex's lead PUT is NOT partial — omitted contact fields (email,
 // phonenumber, title, website) are CLEARED on update (observed live 2026-08-04:
@@ -152,17 +164,18 @@ const appendToPPLead = async (
   const body = new URLSearchParams({
     // Echo existing fields — Perfex PUT clears anything omitted (see above).
     // Source/status echo the LEAD's own values so an append never resets a
-    // staff-progressed pipeline stage back to "new".
-    name: String(lead.name || ''),
-    title: String(lead.title || ''),
-    company: String(lead.company || ''),
-    email: String(lead.email || ''),
-    phonenumber: String(lead.phonenumber || ''),
-    website: String(lead.website || ''),
+    // staff-progressed pipeline stage back to "new". Every value goes through
+    // ppPutSafe — see the ampersand landmine note above.
+    name: ppPutSafe(String(lead.name || '')),
+    title: ppPutSafe(String(lead.title || '')),
+    company: ppPutSafe(String(lead.company || '')),
+    email: ppPutSafe(String(lead.email || '')),
+    phonenumber: ppPutSafe(String(lead.phonenumber || '')),
+    website: ppPutSafe(String(lead.website || '')),
     source: String(lead.source || PP_LEAD_SOURCE),
     status: String(lead.status || PP_LEAD_STATUS),
     assigned: '1',
-    description: appended,
+    description: ppPutSafe(appended),
   })
   const res = await fetch(`${PP_API_BASE}/leads/${lead.id}`, {
     method: 'PUT',
