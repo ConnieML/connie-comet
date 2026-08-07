@@ -158,7 +158,7 @@ export default function UATHubPage() {
               </div>
             </a>
 
-            {/* UAT Cohort Pricing Card */}
+            {/* UAT Pricing Card */}
             <Link
               href="/dataroom/user-acceptance-testing/pricing"
               className="group"
@@ -175,7 +175,7 @@ export default function UATHubPage() {
                 {/* Pricing Info */}
                 <div className="text-center">
                   <h3 className="text-2xl font-semibold text-slate-800 mb-4 group-hover:text-amber-600 transition-colors">
-                    UAT Cohort Pricing
+                    UAT Pricing
                   </h3>
 
                   <p className="text-slate-600 mb-6 leading-relaxed">
@@ -188,7 +188,7 @@ export default function UATHubPage() {
                   </div>
 
                   <div className="text-sm text-amber-600 font-semibold">
-                    View Pricing Grid →
+                    View Pricing →
                   </div>
                 </div>
               </div>

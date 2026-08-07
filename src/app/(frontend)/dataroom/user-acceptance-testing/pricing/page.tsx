@@ -1,75 +1,26 @@
 'use client'
 
-import React, { useState } from 'react'
+import React from 'react'
 import Link from 'next/link'
 
-// Import rates from P&L Calculator
-const WHOLESALE_RATES = {
-  voice: {
-    per_call: 0.0041,
-    per_minute: 0.0129,
-    avg_duration_minutes: 2.5
-  },
-  fax: {
-    per_fax: 0.0788,
-    fixed_monthly: 20.00
-  },
-  email: {
-    per_email: 0.00
-  },
-  web_form: {
-    per_form: 0.00
-  },
-  sms: {
-    per_message: 0.0075 // Standard Twilio rate
-  },
-  platform: {
-    default_monthly: 250.00
-  }
-}
-
-const NSS_BASELINE = {
-  voice_calls: 55,
-  faxes: 76,
-  emails: 142,
-  web_forms: 7,
-  sms_messages: 50
-}
-
-const SUPPORT_COSTS = {
-  month_1: { hours_per_week: 12, rate_per_hour: 30 },
-  month_2: { hours_per_week: 5, rate_per_hour: 30 },
-  month_3_plus: { hours_per_week: 3, rate_per_hour: 30 }
-}
-
-export default function UATPricingPage() {
-  const [volumes, setVolumes] = useState(NSS_BASELINE)
-
-  // Calculate blended voice rate
-  const blendedVoiceRate = WHOLESALE_RATES.voice.per_call +
-    (WHOLESALE_RATES.voice.per_minute * WHOLESALE_RATES.voice.avg_duration_minutes)
-
-  // Calculate costs
-  const voiceCost = volumes.voice_calls * blendedVoiceRate
-  const faxCost = (volumes.faxes * WHOLESALE_RATES.fax.per_fax) + WHOLESALE_RATES.fax.fixed_monthly
-  const emailCost = volumes.emails * WHOLESALE_RATES.email.per_email
-  const webFormCost = volumes.web_forms * WHOLESALE_RATES.web_form.per_form
-  const smsCost = volumes.sms_messages * WHOLESALE_RATES.sms.per_message
-
-  const transactionCOGS = voiceCost + faxCost + emailCost + webFormCost + smsCost
-  const platformOpex = WHOLESALE_RATES.platform.default_monthly
-
-  // Support costs
-  const supportMonth1 = SUPPORT_COSTS.month_1.hours_per_week * 4 * SUPPORT_COSTS.month_1.rate_per_hour
-  const supportMonth2 = SUPPORT_COSTS.month_2.hours_per_week * 4 * SUPPORT_COSTS.month_2.rate_per_hour
-  const supportMonth3Plus = SUPPORT_COSTS.month_3_plus.hours_per_week * 4 * SUPPORT_COSTS.month_3_plus.rate_per_hour
-
-  const totalMonth1 = transactionCOGS + platformOpex + supportMonth1
-  const totalSteadyState = transactionCOGS + platformOpex + supportMonth3Plus
-
+export default function UATPricingHubPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-200 text-slate-800">
-      <div className="container mx-auto px-6 py-16">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-200 text-slate-800 relative overflow-hidden">
+      {/* Dot Matrix Background */}
+      <div className="dot-matrix fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[600px] pointer-events-none z-0 opacity-100">
+        <div className="dot absolute w-1 h-1 bg-slate-400 rounded-full opacity-40" style={{top: '10%', left: '15%', animationDelay: '0s'}}></div>
+        <div className="dot absolute w-1 h-1 bg-slate-500 rounded-full opacity-30" style={{top: '20%', left: '25%', animationDelay: '-1s'}}></div>
+        <div className="dot absolute w-1 h-1 bg-slate-400 rounded-full opacity-40" style={{top: '30%', left: '35%', animationDelay: '-2s'}}></div>
+        <div className="dot absolute w-1 h-1 bg-slate-500 rounded-full opacity-30" style={{top: '40%', left: '45%', animationDelay: '-3s'}}></div>
+        <div className="dot absolute w-1 h-1 bg-slate-400 rounded-full opacity-40" style={{top: '50%', left: '55%', animationDelay: '-4s'}}></div>
+        <div className="dot absolute w-1 h-1 bg-slate-500 rounded-full opacity-30" style={{top: '60%', left: '65%', animationDelay: '-5s'}}></div>
+        <div className="dot absolute w-1 h-1 bg-slate-400 rounded-full opacity-40" style={{top: '70%', left: '75%', animationDelay: '-6s'}}></div>
+        <div className="dot absolute w-1 h-1 bg-slate-500 rounded-full opacity-30" style={{top: '80%', left: '85%', animationDelay: '-7s'}}></div>
+        <div className="dot absolute w-1 h-1 bg-slate-400 rounded-full opacity-40" style={{top: '15%', left: '80%', animationDelay: '-8s'}}></div>
+        <div className="dot absolute w-1 h-1 bg-slate-500 rounded-full opacity-30" style={{top: '25%', left: '70%', animationDelay: '-9s'}}></div>
+      </div>
+
+      <div className="container mx-auto px-6 py-16 relative z-10">
         {/* Back Navigation */}
         <div className="mb-8">
           <Link
@@ -83,241 +34,133 @@ export default function UATPricingPage() {
         {/* Header */}
         <div className="text-center mb-12">
           <div className="text-6xl mb-4">💰</div>
-          <h1 className="text-4xl font-light text-slate-800 mb-4">
-            UAT Cohort Pricing
-          </h1>
+          <h1 className="text-4xl font-light text-slate-800 mb-4">UAT Pricing</h1>
           <p className="text-xl text-slate-600 max-w-3xl mx-auto">
-            Transparent, cost-based pricing for User Acceptance Testing cohort participants
+            What a UAT partner pays, why, and what it looks like on an invoice
           </p>
         </div>
 
-        {/* Pricing Grid */}
-        <div className="max-w-6xl mx-auto mb-12">
-          <div className="bg-white/80 backdrop-blur-sm border border-slate-300 rounded-2xl p-8 shadow-lg">
-            <h2 className="text-2xl font-semibold text-slate-800 mb-6">Per-Channel Costs</h2>
-
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b-2 border-slate-300">
-                    <th className="text-left py-3 px-4 text-slate-700 font-semibold">Channel</th>
-                    <th className="text-right py-3 px-4 text-slate-700 font-semibold">Per-Transaction Rate</th>
-                    <th className="text-right py-3 px-4 text-slate-700 font-semibold">Fixed Monthly</th>
-                    <th className="text-right py-3 px-4 text-slate-700 font-semibold">Typical Volume<br/>(NSS baseline)</th>
-                    <th className="text-right py-3 px-4 text-slate-700 font-semibold">Est. Monthly Cost</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-200">
-                  <tr className="hover:bg-slate-50">
-                    <td className="py-3 px-4 font-medium">Voice Calls</td>
-                    <td className="text-right py-3 px-4 text-slate-600">
-                      ${blendedVoiceRate.toFixed(4)}/call*
-                    </td>
-                    <td className="text-right py-3 px-4 text-slate-600">$0</td>
-                    <td className="text-right py-3 px-4 text-slate-600">{volumes.voice_calls} calls</td>
-                    <td className="text-right py-3 px-4 font-semibold text-slate-800">
-                      ${voiceCost.toFixed(2)}
-                    </td>
-                  </tr>
-                  <tr className="hover:bg-slate-50">
-                    <td className="py-3 px-4 font-medium">Faxes</td>
-                    <td className="text-right py-3 px-4 text-slate-600">
-                      ${WHOLESALE_RATES.fax.per_fax.toFixed(4)}/fax
-                    </td>
-                    <td className="text-right py-3 px-4 text-slate-600">
-                      ${WHOLESALE_RATES.fax.fixed_monthly.toFixed(2)}
-                    </td>
-                    <td className="text-right py-3 px-4 text-slate-600">{volumes.faxes} faxes</td>
-                    <td className="text-right py-3 px-4 font-semibold text-slate-800">
-                      ${faxCost.toFixed(2)}
-                    </td>
-                  </tr>
-                  <tr className="hover:bg-slate-50">
-                    <td className="py-3 px-4 font-medium">Emails</td>
-                    <td className="text-right py-3 px-4 text-green-600 font-semibold">FREE</td>
-                    <td className="text-right py-3 px-4 text-slate-600">$0</td>
-                    <td className="text-right py-3 px-4 text-slate-600">{volumes.emails} emails</td>
-                    <td className="text-right py-3 px-4 font-semibold text-green-600">
-                      ${emailCost.toFixed(2)}
-                    </td>
-                  </tr>
-                  <tr className="hover:bg-slate-50">
-                    <td className="py-3 px-4 font-medium">Web Forms</td>
-                    <td className="text-right py-3 px-4 text-green-600 font-semibold">FREE</td>
-                    <td className="text-right py-3 px-4 text-slate-600">$0</td>
-                    <td className="text-right py-3 px-4 text-slate-600">{volumes.web_forms} forms</td>
-                    <td className="text-right py-3 px-4 font-semibold text-green-600">
-                      ${webFormCost.toFixed(2)}
-                    </td>
-                  </tr>
-                  <tr className="hover:bg-slate-50">
-                    <td className="py-3 px-4 font-medium">SMS</td>
-                    <td className="text-right py-3 px-4 text-slate-600">
-                      ${WHOLESALE_RATES.sms.per_message.toFixed(4)}/msg
-                    </td>
-                    <td className="text-right py-3 px-4 text-slate-600">$0</td>
-                    <td className="text-right py-3 px-4 text-slate-600">{volumes.sms_messages} messages</td>
-                    <td className="text-right py-3 px-4 font-semibold text-slate-800">
-                      ${smsCost.toFixed(2)}
-                    </td>
-                  </tr>
-                  <tr className="bg-slate-100 font-bold border-t-2 border-slate-300">
-                    <td className="py-3 px-4" colSpan={4}>Transaction COGS Subtotal</td>
-                    <td className="text-right py-3 px-4 text-slate-800">
-                      ${transactionCOGS.toFixed(2)}/month
-                    </td>
-                  </tr>
-                  <tr className="bg-blue-50">
-                    <td className="py-3 px-4 font-medium">Platform OpEx Share</td>
-                    <td className="text-right py-3 px-4 text-slate-600" colSpan={2}>
-                      Fixed monthly allocation
-                    </td>
-                    <td className="text-right py-3 px-4 text-slate-600">Per cohort member</td>
-                    <td className="text-right py-3 px-4 font-semibold text-blue-900">
-                      ${platformOpex.toFixed(2)}/month
-                    </td>
-                  </tr>
-                  <tr className="bg-slate-200 font-bold text-lg border-t-2 border-slate-400">
-                    <td className="py-4 px-4" colSpan={4}>TOTAL (excl. support)</td>
-                    <td className="text-right py-4 px-4 text-slate-900">
-                      ${(transactionCOGS + platformOpex).toFixed(2)}/month
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <div className="mt-4 text-sm text-slate-600 italic">
-              *Voice blended rate: ${WHOLESALE_RATES.voice.per_call.toFixed(4)}/call + (${WHOLESALE_RATES.voice.per_minute.toFixed(4)}/min × {WHOLESALE_RATES.voice.avg_duration_minutes} min avg) = ${blendedVoiceRate.toFixed(4)}/call
-            </div>
+        {/* The model, in one line */}
+        <div className="max-w-4xl mx-auto mb-14">
+          <div className="bg-white/70 backdrop-blur border-2 border-slate-200 rounded-2xl px-8 py-6 shadow-lg text-center">
+            <p className="text-lg text-slate-700">
+              Your monthly bill ={' '}
+              <span className="font-semibold text-slate-900">the usage you caused</span> +{' '}
+              <span className="font-semibold text-slate-900">one flat charge of $850</span>
+            </p>
+            <p className="text-sm text-slate-500 mt-2">
+              Only usage varies. Everything else is fixed, every month.
+            </p>
           </div>
         </div>
 
-        {/* Support Costs Section */}
-        <div className="max-w-6xl mx-auto mb-12">
-          <div className="bg-gradient-to-br from-purple-50 to-blue-50 border-2 border-purple-200 rounded-2xl p-8 shadow-lg">
-            <h2 className="text-2xl font-semibold text-slate-800 mb-6">Support Costs (Time-Based)</h2>
-
-            <div className="grid md:grid-cols-3 gap-6">
-              <div className="bg-white/60 rounded-xl p-6 border border-purple-200">
-                <div className="text-purple-600 font-bold text-sm mb-2">MONTH 1 - Onboarding</div>
-                <div className="text-3xl font-bold text-slate-900 mb-2">
-                  ${supportMonth1.toLocaleString()}
-                </div>
-                <div className="text-sm text-slate-600">
-                  {SUPPORT_COSTS.month_1.hours_per_week} hrs/week × ${SUPPORT_COSTS.month_1.rate_per_hour}/hr
-                </div>
-              </div>
-
-              <div className="bg-white/60 rounded-xl p-6 border border-purple-200">
-                <div className="text-purple-600 font-bold text-sm mb-2">MONTH 2 - Stabilization</div>
-                <div className="text-3xl font-bold text-slate-900 mb-2">
-                  ${supportMonth2.toLocaleString()}
-                </div>
-                <div className="text-sm text-slate-600">
-                  {SUPPORT_COSTS.month_2.hours_per_week} hrs/week × ${SUPPORT_COSTS.month_2.rate_per_hour}/hr
-                </div>
-              </div>
-
-              <div className="bg-white/60 rounded-xl p-6 border border-green-200">
-                <div className="text-green-600 font-bold text-sm mb-2">MONTH 3+ - Steady State</div>
-                <div className="text-3xl font-bold text-green-800 mb-2">
-                  ${supportMonth3Plus.toLocaleString()}
-                </div>
-                <div className="text-sm text-slate-600">
-                  {SUPPORT_COSTS.month_3_plus.hours_per_week} hrs/week × ${SUPPORT_COSTS.month_3_plus.rate_per_hour}/hr
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Total Cost Examples */}
-        <div className="max-w-6xl mx-auto mb-12">
-          <div className="grid md:grid-cols-2 gap-8">
-            {/* Month 1 Total */}
-            <div className="bg-gradient-to-br from-orange-50 to-red-50 border-2 border-orange-200 rounded-2xl p-8 shadow-lg">
-              <h3 className="text-xl font-semibold text-slate-800 mb-4">Total First Month Cost</h3>
-              <div className="space-y-2 text-slate-700 mb-4">
-                <div className="flex justify-between">
-                  <span>Transaction COGS:</span>
-                  <span className="font-semibold">${transactionCOGS.toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Platform OpEx Share:</span>
-                  <span className="font-semibold">${platformOpex.toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Support (Month 1):</span>
-                  <span className="font-semibold">${supportMonth1.toLocaleString()}</span>
-                </div>
-                <div className="border-t-2 border-orange-300 pt-2 mt-2 flex justify-between text-lg font-bold text-orange-900">
-                  <span>TOTAL MONTH 1:</span>
-                  <span>${totalMonth1.toLocaleString()}</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Steady State Total */}
-            <div className="bg-gradient-to-br from-green-50 to-teal-50 border-2 border-green-200 rounded-2xl p-8 shadow-lg">
-              <h3 className="text-xl font-semibold text-slate-800 mb-4">Steady State Cost (Month 3+)</h3>
-              <div className="space-y-2 text-slate-700 mb-4">
-                <div className="flex justify-between">
-                  <span>Transaction COGS:</span>
-                  <span className="font-semibold">${transactionCOGS.toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Platform OpEx Share:</span>
-                  <span className="font-semibold">${platformOpex.toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Support (Steady):</span>
-                  <span className="font-semibold">${supportMonth3Plus.toLocaleString()}</span>
-                </div>
-                <div className="border-t-2 border-green-300 pt-2 mt-2 flex justify-between text-lg font-bold text-green-900">
-                  <span>TOTAL MONTH 3+:</span>
-                  <span>${totalSteadyState.toLocaleString()}/month</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Fairness Principles */}
+        {/* Cards */}
         <div className="max-w-6xl mx-auto">
-          <div className="bg-white/80 backdrop-blur-sm border border-slate-300 rounded-2xl p-8 shadow-lg">
-            <h2 className="text-2xl font-semibold text-slate-800 mb-6 text-center">UAT Cohort Fairness Principles</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
 
-            <div className="grid md:grid-cols-3 gap-8">
-              <div className="text-center">
-                <div className="text-4xl mb-3">📊</div>
-                <h3 className="font-semibold text-slate-800 mb-2">Cost-Based Pricing</h3>
-                <p className="text-sm text-slate-600">
-                  All rates reflect actual wholesale costs from platform providers. No markup on infrastructure.
-                </p>
+            {/* Pricing Policy Card */}
+            <Link href="/dataroom/user-acceptance-testing/pricing/policy" className="group">
+              <div className="h-full bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-amber-200 rounded-xl p-8 hover:from-amber-100 hover:to-orange-100 hover:border-amber-300 transition-all duration-300 hover:transform hover:scale-[1.02] shadow-lg hover:shadow-xl">
+                <div className="text-center mb-6">
+                  <div className="text-6xl mb-4">📜</div>
+                  <div className="inline-block px-3 py-2 bg-amber-100 text-amber-700 text-sm rounded-full border border-amber-300 font-semibold">
+                    START HERE
+                  </div>
+                </div>
+                <div className="text-center">
+                  <h3 className="text-2xl font-semibold text-slate-800 mb-4 group-hover:text-amber-600 transition-colors">
+                    Pricing Policy
+                  </h3>
+                  <p className="text-slate-600 mb-6 leading-relaxed">
+                    The four categories, what each one covers, what UAT partners get, and how
+                    billing works &mdash; in two pages
+                  </p>
+                  <div className="flex justify-between items-center text-sm text-slate-600 mb-4">
+                    <span className="font-medium">📄 2-page read</span>
+                    <span className="font-medium">🗓️ Aug 2026</span>
+                  </div>
+                  <div className="text-sm text-amber-600 font-semibold">
+                    Read the Policy &rarr;
+                  </div>
+                </div>
               </div>
+            </Link>
 
-              <div className="text-center">
-                <div className="text-4xl mb-3">🔍</div>
-                <h3 className="font-semibold text-slate-800 mb-2">Complete Transparency</h3>
-                <p className="text-sm text-slate-600">
-                  Every cost is visible and verifiable. No hidden fees or surprise charges.
-                </p>
+            {/* Pricing Breakdown Card */}
+            <Link href="/dataroom/user-acceptance-testing/pricing/breakdown" className="group">
+              <div className="h-full bg-gradient-to-br from-purple-50 to-blue-50 border-2 border-purple-200 rounded-xl p-8 hover:from-purple-100 hover:to-blue-100 hover:border-purple-300 transition-all duration-300 hover:transform hover:scale-[1.02] shadow-lg hover:shadow-xl">
+                <div className="text-center mb-6">
+                  <div className="text-6xl mb-4">📊</div>
+                  <div className="inline-block px-3 py-2 bg-purple-100 text-purple-700 text-sm rounded-full border border-purple-300 font-semibold">
+                    THE DETAIL
+                  </div>
+                </div>
+                <div className="text-center">
+                  <h3 className="text-2xl font-semibold text-slate-800 mb-4 group-hover:text-purple-600 transition-colors">
+                    Pricing Breakdown
+                  </h3>
+                  <p className="text-slate-600 mb-6 leading-relaxed">
+                    Per-channel wholesale costs, support time bands, and the fairness principles
+                    behind how the cohort shares them
+                  </p>
+                  <div className="flex justify-between items-center text-sm text-slate-600 mb-4">
+                    <span className="font-medium">🔢 Rate detail</span>
+                    <span className="font-medium">📡 Per channel</span>
+                  </div>
+                  <div className="text-sm text-purple-600 font-semibold">
+                    See the Breakdown &rarr;
+                  </div>
+                </div>
               </div>
+            </Link>
 
-              <div className="text-center">
-                <div className="text-4xl mb-3">🤝</div>
-                <h3 className="font-semibold text-slate-800 mb-2">Shared Benefit</h3>
-                <p className="text-sm text-slate-600">
-                  Platform costs are split equally among cohort members. More participants = lower individual cost.
-                </p>
+            {/* Sample Invoice Card */}
+            <Link href="/dataroom/user-acceptance-testing/pricing/invoice" className="group">
+              <div className="h-full bg-gradient-to-br from-green-50 to-teal-50 border-2 border-green-200 rounded-xl p-8 hover:from-green-100 hover:to-teal-100 hover:border-green-300 transition-all duration-300 hover:transform hover:scale-[1.02] shadow-lg hover:shadow-xl">
+                <div className="text-center mb-6">
+                  <div className="text-6xl mb-4">🧾</div>
+                  <div className="inline-block px-3 py-2 bg-green-100 text-green-700 text-sm rounded-full border border-green-300 font-semibold">
+                    WHAT YOU&rsquo;LL GET
+                  </div>
+                </div>
+                <div className="text-center">
+                  <h3 className="text-2xl font-semibold text-slate-800 mb-4 group-hover:text-green-600 transition-colors">
+                    Sample Invoice
+                  </h3>
+                  <p className="text-slate-600 mb-6 leading-relaxed">
+                    A real-shaped monthly invoice for a small nonprofit &mdash; usage itemised,
+                    flat charges plain, no surprises
+                  </p>
+                  <div className="flex justify-between items-center text-sm text-slate-600 mb-4">
+                    <span className="font-medium">🧾 Sample</span>
+                    <span className="font-medium">💵 ~$1,200/mo</span>
+                  </div>
+                  <div className="text-sm text-green-600 font-semibold">
+                    View the Invoice &rarr;
+                  </div>
+                </div>
               </div>
-            </div>
+            </Link>
 
-            <div className="mt-8 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-              <p className="text-sm text-slate-700 text-center">
-                <strong>Questions about pricing?</strong> Contact Chris Berno to discuss your organization&apos;s specific usage patterns and cost projections.
+          </div>
+
+          {/* Estimator prompt */}
+          <div className="mt-14 max-w-4xl mx-auto">
+            <div className="bg-gradient-to-br from-slate-50 to-blue-50 border-2 border-slate-200 rounded-2xl p-8 shadow-lg text-center">
+              <h2 className="text-2xl font-semibold text-slate-800 mb-3">
+                Want your own number?
+              </h2>
+              <p className="text-slate-600 mb-6 max-w-2xl mx-auto leading-relaxed">
+                The intake wizard collects your operating hours, headcount and channel volumes,
+                then estimates your monthly cost across all four categories. The estimate is
+                indicative &mdash; the agreement is the agreement.
               </p>
+              <Link
+                href="/intake"
+                className="inline-block px-6 py-3 bg-slate-800 text-white rounded-lg font-semibold hover:bg-slate-900 transition-colors"
+              >
+                Start the Intake Wizard →
+              </Link>
             </div>
           </div>
         </div>
