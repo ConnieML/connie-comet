@@ -27,7 +27,7 @@ type DayHours = { open: string; close: string; closed: boolean }
 const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] as const
 
 const DEFAULT_HOURS: Record<string, DayHours> = Object.fromEntries(
-  DAYS.map((d) => [d, { open: '08:00', close: '17:00', closed: d === 'Saturday' || d === 'Sunday' }]),
+  DAYS.map((d) => [d, { open: '', close: '', closed: true }]),
 )
 
 const CHANNELS = [
@@ -262,7 +262,14 @@ export default function TestingPartnerIntakePage() {
         break
       case 2: {
         const anyOpen = DAYS.some((d) => !formData.hoursByDay[d].closed)
-        if (!anyOpen) return { msg: 'Please set hours for at least one open day', field: 'hoursByDay' }
+        if (!anyOpen)
+          return { msg: 'Please check at least one day you’re open', field: 'hoursByDay' }
+        // Days now start blank, so an open day with no hours is possible — catch it here.
+        const missing = DAYS.find(
+          (d) => !formData.hoursByDay[d].closed && (!formData.hoursByDay[d].open || !formData.hoursByDay[d].close),
+        )
+        if (missing)
+          return { msg: `Please enter opening and closing times for ${missing}`, field: 'hoursByDay' }
         break
       }
       case 3:
@@ -348,7 +355,7 @@ export default function TestingPartnerIntakePage() {
               <div className="text-6xl mb-6">✅</div>
               <h2 className="text-3xl font-light text-slate-800 mb-4">Thank You!</h2>
               <p className="text-lg text-slate-600 mb-4">
-                Your Testing Partner Intake Form has been submitted successfully.
+                Your Intake Form has been submitted successfully.
               </p>
               {refNumber && (
                 <div className="inline-block bg-indigo-50 border-2 border-indigo-200 rounded-xl px-6 py-3 mb-6">
@@ -464,7 +471,7 @@ export default function TestingPartnerIntakePage() {
                   </div>
                   <div className="text-center">
                     <h1 className="text-4xl font-light text-slate-900 mb-6">
-                      Testing Partner Intake Form
+                      Intake Form
                     </h1>
                     <p className="text-xl text-slate-700 mb-6 leading-normal">
                       This short intake wizard asks a series of questions about how your
@@ -703,7 +710,7 @@ export default function TestingPartnerIntakePage() {
                       ⏰ Hours of Operation
                     </h2>
                     <p className="text-lg text-slate-600">
-                      Set your typical hours for each day — uncheck days you&apos;re closed.
+                      Check the days you&apos;re open and enter your hours of operation.
                     </p>
                   </div>
 
@@ -889,7 +896,7 @@ export default function TestingPartnerIntakePage() {
 
                   <div>
                     <label htmlFor="teamNotes" className={labelCls}>
-                      Anything unusual about your team structure?
+                      Anything unique about your team structure?
                     </label>
                     <textarea
                       id="teamNotes"
@@ -1234,7 +1241,7 @@ export default function TestingPartnerIntakePage() {
                   <div className="space-y-8">
                     <div>
                       <label htmlFor="hasTechnicalResources" className={labelCls}>
-                        Do you have dedicated technical resources?{' '}
+                        Do you have dedicated I.T. Team or Technical Staff?{' '}
                         <span className="text-red-600 text-xl">*</span>
                       </label>
                       <select

@@ -56,7 +56,7 @@ export default function UATPricingHubPage() {
 
         {/* Cards */}
         <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
 
             {/* Pricing Policy Card */}
             <Link href="/dataroom/user-acceptance-testing/pricing/policy" className="group">
@@ -81,6 +81,34 @@ export default function UATPricingHubPage() {
                   </div>
                   <div className="text-sm text-amber-600 font-semibold">
                     Read the Policy &rarr;
+                  </div>
+                </div>
+              </div>
+            </Link>
+
+            {/* UAT Rate Card */}
+            <Link href="/dataroom/user-acceptance-testing/pricing/rate-card" className="group">
+              <div className="h-full bg-gradient-to-br from-purple-50 to-blue-50 border-2 border-purple-200 rounded-xl p-8 hover:from-purple-100 hover:to-blue-100 hover:border-purple-300 transition-all duration-300 hover:transform hover:scale-[1.02] shadow-lg hover:shadow-xl">
+                <div className="text-center mb-6">
+                  <div className="text-6xl mb-4">📊</div>
+                  <div className="inline-block px-3 py-2 bg-purple-100 text-purple-700 text-sm rounded-full border border-purple-300 font-semibold">
+                    THE RATES
+                  </div>
+                </div>
+                <div className="text-center">
+                  <h3 className="text-2xl font-semibold text-slate-800 mb-4 group-hover:text-purple-600 transition-colors">
+                    UAT Rate Card
+                  </h3>
+                  <p className="text-slate-600 mb-6 leading-relaxed">
+                    Every wholesale rate behind a UAT invoice &mdash; what each channel costs, and
+                    why platform time is billed by the hour
+                  </p>
+                  <div className="flex justify-between items-center text-sm text-slate-600 mb-4">
+                    <span className="font-medium">🔢 Per channel</span>
+                    <span className="font-medium">🗓️ Aug 2026</span>
+                  </div>
+                  <div className="text-sm text-purple-600 font-semibold">
+                    See the Rates &rarr;
                   </div>
                 </div>
               </div>
