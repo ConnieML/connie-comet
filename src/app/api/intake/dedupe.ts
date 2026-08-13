@@ -18,6 +18,7 @@ export type PPLead = {
   website?: string | null
   source?: string | null
   status?: string | null
+  assigned?: string | null
   description?: string | null
   dateadded?: string | null
 }

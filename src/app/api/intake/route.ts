@@ -33,6 +33,10 @@ const ppJson = async (res: Response): Promise<Record<string, unknown>> => {
 }
 const PP_LEAD_SOURCE = '4' // "Web to lead" style source used by existing form leads
 const PP_LEAD_STATUS = '2' // matches existing inbound web-form leads
+// Default owner for inbound testing-partner leads. PP staffid 4 = Cindy Morris
+// (Benson Agency); staffid 1 = Chris Berno. Changed 2026-08-13 per CEO — Cindy is
+// primary on intake leads; Chris stays notified via INTERNAL_RECIPIENTS below.
+const PP_LEAD_ASSIGNEE = '4'
 const INTERNAL_RECIPIENTS = [
   'cberno@nevadaseniorservices.org',
   'admin@connie.direct',
@@ -101,7 +105,7 @@ const createPPLead = async (
     website: String(formData.websiteUrl || ''),
     source: PP_LEAD_SOURCE,
     status: PP_LEAD_STATUS,
-    assigned: '1',
+    assigned: PP_LEAD_ASSIGNEE,
     description,
   })
   const res = await fetch(`${PP_API_BASE}/leads`, {
@@ -173,9 +177,12 @@ const appendToPPLead = async (
     email: ppPutSafe(String(lead.email || '')),
     phonenumber: ppPutSafe(String(lead.phonenumber || '')),
     website: ppPutSafe(String(lead.website || '')),
+    // Assignee echoes the LEAD's own owner for the same reason as source/status:
+    // a follow-up intake must never yank a manually-reassigned lead back to the
+    // default owner. Falls back to the default only if the lead has no assignee.
     source: String(lead.source || PP_LEAD_SOURCE),
     status: String(lead.status || PP_LEAD_STATUS),
-    assigned: '1',
+    assigned: String(lead.assigned || PP_LEAD_ASSIGNEE),
     description: ppPutSafe(appended),
   })
   const res = await fetch(`${PP_API_BASE}/leads/${lead.id}`, {
