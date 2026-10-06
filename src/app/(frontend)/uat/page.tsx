@@ -13,10 +13,10 @@ export default function ConnieUATPage() {
           <div className="text-center">
             <div className="mb-8">
               <Image
-                src="/connie-logo-black.svg"
-                alt="Connie"
-                width={180}
-                height={48}
+                src="/threadconnect-logo-darkteal.svg"
+                alt="ThreadConnect"
+                width={186}
+                height={60}
                 className="mx-auto"
               />
             </div>
@@ -32,7 +32,7 @@ export default function ConnieUATPage() {
                 href="https://connie.one/dataroom/user-acceptance-testing/discovery"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block py-3 px-8 bg-twilio-blue hover:bg-[#0052CC] text-white font-semibold rounded-md transition-colors"
+                className="inline-block py-3 px-8 bg-twilio-blue hover:bg-tc-900 text-white font-semibold rounded-md transition-colors"
               >
                 UAT Interest Form
               </a>
@@ -241,7 +241,7 @@ export default function ConnieUATPage() {
                   href="https://calendly.com/connie-uat"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-block w-full py-3 px-6 bg-twilio-blue hover:bg-[#0052CC] text-white font-semibold rounded-md transition-colors"
+                  className="inline-block w-full py-3 px-6 bg-twilio-blue hover:bg-tc-900 text-white font-semibold rounded-md transition-colors"
                 >
                   Book a Meeting
                 </a>

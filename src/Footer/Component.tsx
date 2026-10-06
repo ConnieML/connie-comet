@@ -15,7 +15,7 @@ export async function Footer() {
   const footerColumns = footerData?.footerColumns || []
 
   return (
-    <footer className="mt-auto border-t border-border bg-black dark:bg-card text-white">
+    <footer className="mt-auto border-t border-border bg-tc-800 dark:bg-card text-white">
       <div className="container py-8 gap-8 flex flex-col">
         {/* Top section with logo and nav items */}
         <div className="flex flex-col md:flex-row md:justify-between gap-8">

@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 
 export default function BrandPage() {
   return (
-    <main className="bg-zinc-900 min-h-screen">
+    <main className="bg-tc-900 min-h-screen">
       <BrandPortalBlock
         heading="Connie Brand Assets"
         description="Official logos, templates, and brand materials for partners, developers, and team members. Download what you need or copy hotlink URLs for direct embedding."

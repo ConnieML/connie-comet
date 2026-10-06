@@ -27,8 +27,8 @@ export default function QuarterlyBusinessReview() {
         
         <header className="text-center mb-16">
           <img 
-            src="https://r2.flowith.net/files/59e583fe-a268-450d-9d89-c6dd4579bb67/1751052774560-connie-logo@1276x357.png" 
-            alt="Connie Digital Logo" 
+            src="/threadconnect-logo-darkteal.svg" 
+            alt="ThreadConnect" 
             className="mx-auto mb-8 h-12 w-auto"
           />
           <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">

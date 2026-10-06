@@ -71,7 +71,7 @@ export default function DataroomPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-200 text-slate-800 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-b from-tc-cream to-tc-100 text-slate-800 relative overflow-hidden">
       {/* Dot Matrix Background */}
       <div className="dot-matrix fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[600px] pointer-events-none z-0 opacity-100">
         <div className="dot absolute w-1 h-1 bg-slate-400 rounded-full opacity-40" style={{top: '10%', left: '15%', animationDelay: '0s'}}></div>
@@ -114,8 +114,8 @@ export default function DataroomPage() {
               >
                 <div className={`backdrop-blur-sm rounded-2xl p-8 transition-all duration-300 hover:transform hover:scale-[1.02] shadow-lg hover:shadow-xl ${
                   category.isSpecial 
-                    ? 'bg-gradient-to-br from-blue-50 to-purple-50 border-2 border-blue-200 hover:border-blue-400' 
-                    : 'bg-white/60 border border-slate-200 hover:bg-white/80 hover:border-pink-500/50'
+                    ? 'bg-gradient-to-br from-tc-50 to-tc-cream border-2 border-tc-200 hover:border-tc-500' 
+                    : 'bg-white/60 border border-slate-200 hover:bg-white/80 hover:border-tc-500/50'
                 }`}>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">
@@ -130,7 +130,7 @@ export default function DataroomPage() {
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="text-3xl font-light text-pink-600 mb-1">
+                      <div className="text-3xl font-light text-tc-600 mb-1">
                         {category.count}
                       </div>
                       <div className="text-sm text-slate-500">
@@ -150,7 +150,7 @@ export default function DataroomPage() {
             </p>
             
             <div className="mt-4">
-              <span className="inline-block px-3 py-1 bg-pink-100 text-pink-700 text-xs rounded-full border border-pink-300">
+              <span className="inline-block px-3 py-1 bg-tc-100 text-tc-800 text-xs rounded-full border border-tc-300">
                 DEMO DATAROOM • Showcase Version
               </span>
             </div>

@@ -110,7 +110,7 @@ export const HeroBlock: React.FC<Props> = ({
           position: absolute;
           width: 2px;
           height: 2px;
-          background: #0066cc;
+          background: #048E99;
           border-radius: 50%;
           animation: pulse 6s ease-in-out infinite;
           opacity: 0.4;
@@ -129,7 +129,7 @@ export const HeroBlock: React.FC<Props> = ({
         }
 
         .dot:nth-child(4n) {
-          background: #0066cc;
+          background: #048E99;
           animation-delay: -1s;
           animation-duration: 7s;
           opacity: 0.25;
@@ -179,7 +179,7 @@ export const HeroBlock: React.FC<Props> = ({
         }
         
         .hero-title .highlight {
-          color: #0066cc;
+          color: #037A84;
           font-weight: 800;
         }
 
@@ -200,12 +200,12 @@ export const HeroBlock: React.FC<Props> = ({
         .glassmorphism-card {
           background: rgba(255, 255, 255, 0.9);
           backdrop-filter: blur(20px);
-          border: 1px solid rgba(0, 102, 204, 0.2);
+          border: 1px solid rgba(4, 142, 153, 0.2);
           border-radius: 16px;
           padding: 40px;
           max-width: 500px;
           margin: 0 auto;
-          box-shadow: 0 8px 32px rgba(0, 102, 204, 0.08);
+          box-shadow: 0 8px 32px rgba(4, 142, 153, 0.08);
           position: relative;
           z-index: 1;
         }
@@ -233,13 +233,13 @@ export const HeroBlock: React.FC<Props> = ({
         }
 
         .email-input:focus {
-          border-color: #0066cc;
-          box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.2);
+          border-color: #048E99;
+          box-shadow: 0 0 0 2px rgba(4, 142, 153, 0.2);
         }
 
         .cta-button {
           padding: 16px 32px;
-          background: #0066cc;
+          background: #00393E;
           color: white;
           border: none;
           border-radius: 8px;
@@ -250,9 +250,9 @@ export const HeroBlock: React.FC<Props> = ({
         }
 
         .cta-button:hover {
-          background: #0052a3;
+          background: #002A2E;
           transform: translateY(-1px);
-          box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+          box-shadow: 0 4px 12px rgba(4, 142, 153, 0.3);
         }
 
         @media (max-width: 768px) {

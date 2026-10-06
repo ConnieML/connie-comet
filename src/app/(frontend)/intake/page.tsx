@@ -31,7 +31,7 @@ const DEFAULT_HOURS: Record<string, DayHours> = Object.fromEntries(
 )
 
 const CHANNELS = [
-  { key: 'Live Voice Calls', icon: Phone, color: 'text-indigo-600' },
+  { key: 'Live Voice Calls', icon: Phone, color: 'text-tc-600' },
   { key: 'Messaging SMS/TXT', icon: MessageSquare, color: 'text-green-600' },
   { key: 'Webchat', icon: MessagesSquare, color: 'text-blue-600' },
   { key: 'Webforms', icon: FileText, color: 'text-purple-600' },
@@ -136,7 +136,7 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
 const PHONE_RE = /(\d[\s\-().]*){10,}/
 
 const inputCls =
-  'w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500'
+  'w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-tc-500 focus:border-tc-500'
 const labelCls = 'block text-base font-semibold text-slate-900 mb-3'
 const errCls = 'border-red-400 ring-2 ring-red-200'
 
@@ -348,7 +348,7 @@ export default function TestingPartnerIntakePage() {
   // -------------------------------------------------------------------------
   if (submitSuccess) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-200 text-slate-800">
+      <div className="min-h-screen bg-gradient-to-b from-tc-cream to-tc-100 text-slate-800">
         <div className="container mx-auto px-6 py-16">
           <div className="max-w-2xl mx-auto">
             <div className="bg-white/60 backdrop-blur-sm border border-slate-200 rounded-2xl p-12 shadow-lg text-center">
@@ -358,9 +358,9 @@ export default function TestingPartnerIntakePage() {
                 Your Intake Form has been submitted successfully.
               </p>
               {refNumber && (
-                <div className="inline-block bg-indigo-50 border-2 border-indigo-200 rounded-xl px-6 py-3 mb-6">
+                <div className="inline-block bg-tc-50 border-2 border-tc-200 rounded-xl px-6 py-3 mb-6">
                   <p className="text-sm text-slate-600 mb-1">Your reference number</p>
-                  <p className="text-2xl font-semibold tracking-wide text-indigo-800">{refNumber}</p>
+                  <p className="text-2xl font-semibold tracking-wide text-tc-800">{refNumber}</p>
                 </div>
               )}
               <p className="text-base text-slate-600 mb-6">
@@ -380,13 +380,13 @@ export default function TestingPartnerIntakePage() {
                 Questions? Contact us at{' '}
                 <a
                   href="mailto:support@connie.team"
-                  className="text-indigo-600 hover:text-indigo-800 underline"
+                  className="text-tc-600 hover:text-tc-800 underline"
                 >
                   support@connie.team
                 </a>
               </p>
               <div className="mt-8 flex justify-center opacity-40 hover:opacity-60 transition-opacity">
-                <Image src="/connie-logo-black-strong.svg" alt="Connie" width={120} height={32} />
+                <Image src="/threadconnect-logo-darkteal.svg" alt="ThreadConnect" width={124} height={40} />
               </div>
             </div>
           </div>
@@ -399,7 +399,7 @@ export default function TestingPartnerIntakePage() {
   // Form
   // -------------------------------------------------------------------------
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-100 to-slate-400 text-slate-800">
+    <div className="min-h-screen bg-gradient-to-b from-tc-cream to-tc-200 text-slate-800">
       <div className="container mx-auto px-6 py-8">
         <div className="max-w-4xl mx-auto relative">
           {/* Support button */}
@@ -417,7 +417,7 @@ export default function TestingPartnerIntakePage() {
 
           {/* F3 restore banner */}
           {draftAvailable && (
-            <div className="mb-6 p-6 bg-indigo-50 border-2 border-indigo-300 rounded-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div className="mb-6 p-6 bg-tc-50 border-2 border-tc-300 rounded-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
               <p className="text-lg text-slate-800 font-medium">
                 Welcome back! We saved your progress on this device.
               </p>
@@ -425,7 +425,7 @@ export default function TestingPartnerIntakePage() {
                 <button
                   type="button"
                   onClick={restoreDraft}
-                  className="px-5 py-2.5 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 transition-colors"
+                  className="px-5 py-2.5 bg-tc-600 text-white font-medium rounded-lg hover:bg-tc-700 transition-colors"
                 >
                   Pick up where I left off
                 </button>
@@ -462,10 +462,10 @@ export default function TestingPartnerIntakePage() {
                 <div className="space-y-8">
                   <div className="flex justify-center mb-2">
                     <Image
-                      src="/connie-logo-black-strong.svg"
-                      alt="Connie"
-                      width={250}
-                      height={66}
+                      src="/threadconnect-logo-darkteal.svg"
+                      alt="ThreadConnect"
+                      width={232}
+                      height={75}
                       priority
                     />
                   </div>
@@ -487,11 +487,11 @@ export default function TestingPartnerIntakePage() {
                     </div>
                   </div>
 
-                  <div className="bg-indigo-50 border-2 border-indigo-300 rounded-xl p-8 space-y-6">
+                  <div className="bg-tc-50 border-2 border-tc-300 rounded-xl p-8 space-y-6">
                     <h2 className="text-2xl font-semibold text-slate-900 mb-4">What to Expect</h2>
                     <ul className="space-y-4 text-lg text-slate-700">
                       <li className="flex items-start gap-4">
-                        <span className="text-indigo-600 text-2xl flex-shrink-0">1</span>
+                        <span className="text-tc-600 text-2xl flex-shrink-0">1</span>
                         <span>
                           <strong className="text-slate-900">7 sections</strong> covering your
                           organization, hours, staffing, communication channels, technology, goals,
@@ -499,21 +499,21 @@ export default function TestingPartnerIntakePage() {
                         </span>
                       </li>
                       <li className="flex items-start gap-4">
-                        <span className="text-indigo-600 text-2xl flex-shrink-0">2</span>
+                        <span className="text-tc-600 text-2xl flex-shrink-0">2</span>
                         <span>
                           <strong className="text-slate-900">10-15 minutes</strong> to complete —
                           you can go back and forth between steps
                         </span>
                       </li>
                       <li className="flex items-start gap-4">
-                        <span className="text-indigo-600 text-2xl flex-shrink-0">3</span>
+                        <span className="text-tc-600 text-2xl flex-shrink-0">3</span>
                         <span>
                           <strong className="text-slate-900">Best estimates are fine</strong> —
                           we&apos;re looking for general understanding, not exact numbers
                         </span>
                       </li>
                       <li className="flex items-start gap-4">
-                        <span className="text-indigo-600 text-2xl flex-shrink-0">4</span>
+                        <span className="text-tc-600 text-2xl flex-shrink-0">4</span>
                         <span>
                           <strong className="text-slate-900">
                             Required fields are marked with <span className="text-red-600">*</span>
@@ -719,7 +719,7 @@ export default function TestingPartnerIntakePage() {
                       <button
                         type="button"
                         onClick={applyMondayToAll}
-                        className="px-4 py-2 bg-indigo-100 text-indigo-800 font-medium text-sm rounded-lg hover:bg-indigo-200 transition-colors"
+                        className="px-4 py-2 bg-tc-100 text-tc-800 font-medium text-sm rounded-lg hover:bg-tc-200 transition-colors"
                       >
                         Apply Monday&apos;s hours to all days
                       </button>
@@ -738,7 +738,7 @@ export default function TestingPartnerIntakePage() {
                               type="checkbox"
                               checked={!h.closed}
                               onChange={() => setDayHours(day, { closed: !h.closed })}
-                              className="rounded border-2 border-slate-300 text-indigo-600 focus:ring-4 focus:ring-indigo-500 w-6 h-6"
+                              className="rounded border-2 border-slate-300 text-tc-600 focus:ring-4 focus:ring-tc-500 w-6 h-6"
                             />
                             <span
                               className={`text-lg font-medium ${h.closed ? 'text-slate-400' : 'text-slate-900'}`}
@@ -758,7 +758,7 @@ export default function TestingPartnerIntakePage() {
                                 type="time"
                                 value={h.open}
                                 onChange={(e) => setDayHours(day, { open: e.target.value })}
-                                className="px-4 py-2.5 border-2 border-slate-300 rounded-lg text-base focus:outline-none focus:ring-4 focus:ring-indigo-500"
+                                className="px-4 py-2.5 border-2 border-slate-300 rounded-lg text-base focus:outline-none focus:ring-4 focus:ring-tc-500"
                               />
                               <span className="text-slate-500">to</span>
                               <label className="sr-only" htmlFor={`close-${day}`}>
@@ -769,7 +769,7 @@ export default function TestingPartnerIntakePage() {
                                 type="time"
                                 value={h.close}
                                 onChange={(e) => setDayHours(day, { close: e.target.value })}
-                                className="px-4 py-2.5 border-2 border-slate-300 rounded-lg text-base focus:outline-none focus:ring-4 focus:ring-indigo-500"
+                                className="px-4 py-2.5 border-2 border-slate-300 rounded-lg text-base focus:outline-none focus:ring-4 focus:ring-tc-500"
                               />
                             </div>
                           )}
@@ -801,7 +801,7 @@ export default function TestingPartnerIntakePage() {
                   </div>
 
                   {formData.afterHoursSupport.startsWith('Yes') && (
-                    <div className="pl-4 border-l-4 border-indigo-300 bg-indigo-50/50 p-4 rounded-r-xl">
+                    <div className="pl-4 border-l-4 border-tc-300 bg-tc-50/50 p-4 rounded-r-xl">
                       <label htmlFor="afterHoursDescription" className={labelCls}>
                         Tell us how after-hours coverage works today
                       </label>
@@ -876,14 +876,14 @@ export default function TestingPartnerIntakePage() {
                             value={formData[role.key]}
                             onChange={(e) => set(role.key, e.target.value)}
                             className={
-                              'w-full md:w-32 px-4 py-3 border-2 border-slate-300 rounded-xl text-lg text-center focus:outline-none focus:ring-4 focus:ring-indigo-500' +
+                              'w-full md:w-32 px-4 py-3 border-2 border-slate-300 rounded-xl text-lg text-center focus:outline-none focus:ring-4 focus:ring-tc-500' +
                               err(role.key === 'agentCount' ? 'agentCount' : '')
                             }
                           />
                         </div>
                       ))}
                       <div className="flex justify-end pr-4">
-                        <p className="text-lg font-semibold text-indigo-800">
+                        <p className="text-lg font-semibold text-tc-800">
                           Total seats: {seatTotal}
                         </p>
                       </div>
@@ -954,7 +954,7 @@ export default function TestingPartnerIntakePage() {
                           <label
                             className={`flex items-center space-x-3 p-4 border-2 rounded-xl transition-colors cursor-pointer ${
                               checked
-                                ? 'bg-indigo-50 border-indigo-300'
+                                ? 'bg-tc-50 border-tc-300'
                                 : 'bg-white border-slate-300 hover:bg-slate-50'
                             }`}
                           >
@@ -962,7 +962,7 @@ export default function TestingPartnerIntakePage() {
                               type="checkbox"
                               checked={checked}
                               onChange={() => toggleIn('channelsToMigrate', key)}
-                              className="rounded border-2 border-slate-300 text-indigo-600 focus:ring-4 focus:ring-indigo-500 w-6 h-6"
+                              className="rounded border-2 border-slate-300 text-tc-600 focus:ring-4 focus:ring-tc-500 w-6 h-6"
                             />
                             <Icon className={`w-6 h-6 ${color}`} />
                             <span className="text-lg text-slate-900 font-medium">{key}</span>
@@ -970,7 +970,7 @@ export default function TestingPartnerIntakePage() {
 
                           {/* Inline expansion — directly under the channel card */}
                           {checked && key === 'Live Voice Calls' && (
-                            <div className="mt-2 mb-2 ml-4 pl-4 border-l-4 border-indigo-300 bg-indigo-50/50 p-4 rounded-r-xl space-y-4">
+                            <div className="mt-2 mb-2 ml-4 pl-4 border-l-4 border-tc-300 bg-tc-50/50 p-4 rounded-r-xl space-y-4">
                               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
                                   <label htmlFor="inboundCalls" className={labelCls}>
@@ -1257,7 +1257,7 @@ export default function TestingPartnerIntakePage() {
                     </div>
 
                     {formData.hasTechnicalResources === 'Yes' && (
-                      <div className="pl-4 border-l-4 border-indigo-300 bg-indigo-50/50 p-4 rounded-r-xl space-y-4">
+                      <div className="pl-4 border-l-4 border-tc-300 bg-tc-50/50 p-4 rounded-r-xl space-y-4">
                         <p className={labelCls}>Tell us more — check all that apply</p>
                         <div className="space-y-2">
                           {TECH_RESOURCE_TYPES.map((t) => (
@@ -1266,7 +1266,7 @@ export default function TestingPartnerIntakePage() {
                                 type="checkbox"
                                 checked={formData.techResourceTypes.includes(t)}
                                 onChange={() => toggleIn('techResourceTypes', t)}
-                                className="rounded border-2 border-slate-300 text-indigo-600 focus:ring-4 focus:ring-indigo-500 w-6 h-6"
+                                className="rounded border-2 border-slate-300 text-tc-600 focus:ring-4 focus:ring-tc-500 w-6 h-6"
                               />
                               <span className="text-lg text-slate-900">{t}</span>
                             </label>
@@ -1300,7 +1300,7 @@ export default function TestingPartnerIntakePage() {
                               type="checkbox"
                               checked={formData.staffAccess.includes(opt)}
                               onChange={() => toggleIn('staffAccess', opt)}
-                              className="rounded border-2 border-slate-300 text-indigo-600 focus:ring-4 focus:ring-indigo-500 w-6 h-6"
+                              className="rounded border-2 border-slate-300 text-tc-600 focus:ring-4 focus:ring-tc-500 w-6 h-6"
                             />
                             <span className="text-lg text-slate-900">{opt}</span>
                           </label>
@@ -1626,7 +1626,7 @@ export default function TestingPartnerIntakePage() {
                             href="https://connie.one/acceptable-use-policy"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-indigo-600 hover:text-indigo-800 underline text-base"
+                            className="text-tc-600 hover:text-tc-800 underline text-base"
                           >
                             Acceptable Use Policy
                           </a>
@@ -1635,7 +1635,7 @@ export default function TestingPartnerIntakePage() {
                             href="https://connie.one/terms-of-service"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-indigo-600 hover:text-indigo-800 underline text-base"
+                            className="text-tc-600 hover:text-tc-800 underline text-base"
                           >
                             Terms of Service
                           </a>
@@ -1644,7 +1644,7 @@ export default function TestingPartnerIntakePage() {
                             href="https://connie.one/privacy-policy"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-indigo-600 hover:text-indigo-800 underline text-base"
+                            className="text-tc-600 hover:text-tc-800 underline text-base"
                           >
                             Privacy Policy
                           </a>
@@ -1653,7 +1653,7 @@ export default function TestingPartnerIntakePage() {
                             href="https://connie.one/dataroom/legal"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-indigo-600 hover:text-indigo-800 underline text-base"
+                            className="text-tc-600 hover:text-tc-800 underline text-base"
                           >
                             Testing Partner MOU
                           </a>
@@ -1687,7 +1687,7 @@ export default function TestingPartnerIntakePage() {
                   </div>
                   <div className="w-full bg-slate-200 rounded-full h-4 overflow-hidden">
                     <div
-                      className="bg-indigo-600 h-4 rounded-full transition-all duration-300 ease-in-out"
+                      className="bg-tc-600 h-4 rounded-full transition-all duration-300 ease-in-out"
                       style={{ width: `${(currentStep / totalSteps) * 100}%` }}
                     />
                   </div>
@@ -1711,7 +1711,7 @@ export default function TestingPartnerIntakePage() {
                   <button
                     type="button"
                     onClick={goToNextStep}
-                    className="flex items-center gap-2 px-5 py-2.5 bg-indigo-600 text-white font-medium text-base rounded-lg hover:bg-indigo-700 transition-colors"
+                    className="flex items-center gap-2 px-5 py-2.5 bg-tc-600 text-white font-medium text-base rounded-lg hover:bg-tc-700 transition-colors"
                   >
                     {currentStep === 0 ? 'Get Started' : 'Next'}
                     <ChevronRight className="w-5 h-5" />
@@ -1732,7 +1732,7 @@ export default function TestingPartnerIntakePage() {
 
           {currentStep > 0 && (
             <div className="mt-8 flex justify-center opacity-40 hover:opacity-60 transition-opacity">
-              <Image src="/connie-logo-black-strong.svg" alt="Connie" width={120} height={32} />
+              <Image src="/threadconnect-logo-darkteal.svg" alt="ThreadConnect" width={124} height={40} />
             </div>
           )}
         </div>

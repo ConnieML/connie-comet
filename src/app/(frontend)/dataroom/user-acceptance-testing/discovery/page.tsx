@@ -265,7 +265,7 @@ export default function UATDiscoveryPage() {
 
   if (submitSuccess) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-200 text-slate-800">
+      <div className="min-h-screen bg-gradient-to-b from-tc-cream to-tc-100 text-slate-800">
         <div className="container mx-auto px-6 py-16">
           <div className="max-w-2xl mx-auto">
             <div className="bg-white/60 backdrop-blur-sm border border-slate-200 rounded-2xl p-12 shadow-lg text-center">
@@ -287,7 +287,7 @@ export default function UATDiscoveryPage() {
                 Questions? Contact Chris Berno at{' '}
                 <a
                   href="mailto:cberno@nevadaseniorservices.org"
-                  className="text-indigo-600 hover:text-indigo-800 underline"
+                  className="text-tc-600 hover:text-tc-800 underline"
                 >
                   cberno@nevadaseniorservices.org
                 </a>
@@ -310,10 +310,10 @@ export default function UATDiscoveryPage() {
               {/* Connie Logo */}
               <div className="mt-8 flex justify-center opacity-40 hover:opacity-60 transition-opacity">
                 <Image
-                  src="/connie-logo-black-strong.svg"
-                  alt="Connie"
-                  width={120}
-                  height={32}
+                  src="/threadconnect-logo-darkteal.svg"
+                  alt="ThreadConnect"
+                  width={124}
+                  height={40}
                 />
               </div>
             </div>
@@ -324,7 +324,7 @@ export default function UATDiscoveryPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-100 to-slate-400 text-slate-800">
+    <div className="min-h-screen bg-gradient-to-b from-tc-cream to-tc-200 text-slate-800">
       <div className="container mx-auto px-6 py-8">
         <div className="max-w-4xl mx-auto relative">
           {/* Top Navigation - Only show on Step 0 and Success */}
@@ -378,10 +378,10 @@ export default function UATDiscoveryPage() {
               {(currentStep === 0 || submitSuccess) && (
                 <div className="flex justify-center mb-10">
                   <Image
-                    src="/connie-logo-black-strong.svg"
-                    alt="Connie"
-                    width={250}
-                    height={66}
+                    src="/threadconnect-logo-darkteal.svg"
+                    alt="ThreadConnect"
+                    width={232}
+                    height={75}
                     priority
                   />
                 </div>
@@ -410,11 +410,11 @@ export default function UATDiscoveryPage() {
                     </div>
                   </div>
 
-                  <div className="bg-indigo-50 border-2 border-indigo-300 rounded-xl p-8 space-y-6">
+                  <div className="bg-tc-50 border-2 border-tc-300 rounded-xl p-8 space-y-6">
                     <h3 className="text-2xl font-semibold text-slate-900 mb-4">What to Expect</h3>
                     <ul className="space-y-4 text-lg text-slate-700">
                       <li className="flex items-start gap-4">
-                        <span className="text-indigo-600 text-2xl flex-shrink-0">1</span>
+                        <span className="text-tc-600 text-2xl flex-shrink-0">1</span>
                         <span>
                           <strong className="text-slate-900">7 sections</strong> covering
                           organization info, operations, staffing, volumes, tech, goals, and
@@ -422,21 +422,21 @@ export default function UATDiscoveryPage() {
                         </span>
                       </li>
                       <li className="flex items-start gap-4">
-                        <span className="text-indigo-600 text-2xl flex-shrink-0">2</span>
+                        <span className="text-tc-600 text-2xl flex-shrink-0">2</span>
                         <span>
                           <strong className="text-slate-900">10-15 minutes</strong> to complete -
                           you can go back and forth between steps
                         </span>
                       </li>
                       <li className="flex items-start gap-4">
-                        <span className="text-indigo-600 text-2xl flex-shrink-0">3</span>
+                        <span className="text-tc-600 text-2xl flex-shrink-0">3</span>
                         <span>
                           <strong className="text-slate-900">Best estimates are fine</strong> -
                           we&apos;re looking for general understanding, not exact numbers
                         </span>
                       </li>
                       <li className="flex items-start gap-4">
-                        <span className="text-indigo-600 text-2xl flex-shrink-0">4</span>
+                        <span className="text-tc-600 text-2xl flex-shrink-0">4</span>
                         <span>
                           <strong className="text-slate-900">
                             Required fields marked with <span className="text-red-600">*</span>
@@ -477,7 +477,7 @@ export default function UATDiscoveryPage() {
                         required
                         value={formData.orgName}
                         onChange={(e) => setFormData({ ...formData, orgName: e.target.value })}
-                        className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                        className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-tc-500 focus:border-tc-500"
                       />
                     </div>
 
@@ -489,7 +489,7 @@ export default function UATDiscoveryPage() {
                         required
                         value={formData.orgType}
                         onChange={(e) => setFormData({ ...formData, orgType: e.target.value })}
-                        className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                        className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-tc-500 focus:border-tc-500"
                       >
                         <option value="">Select type...</option>
                         <option value="Senior Services / Area Agency on Aging">
@@ -515,7 +515,7 @@ export default function UATDiscoveryPage() {
                           onChange={(e) =>
                             setFormData({ ...formData, orgTypeOther: e.target.value })
                           }
-                          className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                          className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-tc-500 focus:border-tc-500"
                         />
                       </div>
                     )}
@@ -532,7 +532,7 @@ export default function UATDiscoveryPage() {
                           onChange={(e) =>
                             setFormData({ ...formData, contactName: e.target.value })
                           }
-                          className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                          className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-tc-500 focus:border-tc-500"
                         />
                       </div>
 
@@ -546,7 +546,7 @@ export default function UATDiscoveryPage() {
                           onChange={(e) =>
                             setFormData({ ...formData, contactTitle: e.target.value })
                           }
-                          className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                          className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-tc-500 focus:border-tc-500"
                         />
                       </div>
                     </div>
@@ -561,7 +561,7 @@ export default function UATDiscoveryPage() {
                           required
                           value={formData.email}
                           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                          className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                          className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-tc-500 focus:border-tc-500"
                         />
                       </div>
 
@@ -574,7 +574,7 @@ export default function UATDiscoveryPage() {
                           required
                           value={formData.phone}
                           onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                          className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                          className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-tc-500 focus:border-tc-500"
                         />
                       </div>
                     </div>
@@ -591,7 +591,7 @@ export default function UATDiscoveryPage() {
                           onChange={(e) =>
                             setFormData({ ...formData, serviceArea: e.target.value })
                           }
-                          className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                          className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-tc-500 focus:border-tc-500"
                         />
                       </div>
 
@@ -606,7 +606,7 @@ export default function UATDiscoveryPage() {
                           onChange={(e) =>
                             setFormData({ ...formData, clientsServed: e.target.value })
                           }
-                          className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                          className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-tc-500 focus:border-tc-500"
                         />
                       </div>
                     </div>
@@ -646,7 +646,7 @@ export default function UATDiscoveryPage() {
                               type="checkbox"
                               checked={formData.daysOfOperation.includes(day)}
                               onChange={() => handleCheckboxChange('daysOfOperation', day)}
-                              className="rounded border-2 border-slate-300 text-indigo-600 focus:ring-4 focus:ring-indigo-500 w-6 h-6"
+                              className="rounded border-2 border-slate-300 text-tc-600 focus:ring-4 focus:ring-tc-500 w-6 h-6"
                             />
                             <span className="text-lg text-slate-900">{day}</span>
                           </label>
@@ -666,7 +666,7 @@ export default function UATDiscoveryPage() {
                         onChange={(e) =>
                           setFormData({ ...formData, operatingHours: e.target.value })
                         }
-                        className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                        className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-tc-500 focus:border-tc-500"
                       />
                     </div>
 
@@ -679,7 +679,7 @@ export default function UATDiscoveryPage() {
                         onChange={(e) =>
                           setFormData({ ...formData, afterHoursSupport: e.target.value })
                         }
-                        className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                        className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-tc-500 focus:border-tc-500"
                       >
                         <option value="">Select...</option>
                         <option value="No, standard business hours only">
@@ -703,7 +703,7 @@ export default function UATDiscoveryPage() {
                             setFormData({ ...formData, afterHoursDescription: e.target.value })
                           }
                           rows={3}
-                          className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                          className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-tc-500 focus:border-tc-500"
                         />
                       </div>
                     )}
@@ -734,7 +734,7 @@ export default function UATDiscoveryPage() {
                         required
                         value={formData.staffCount}
                         onChange={(e) => setFormData({ ...formData, staffCount: e.target.value })}
-                        className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                        className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-tc-500 focus:border-tc-500"
                       />
                       <p className="text-base text-slate-600 mt-2">
                         Include agents, case managers, supervisors, and administrators
@@ -751,7 +751,7 @@ export default function UATDiscoveryPage() {
                         value={formData.staffRoles}
                         onChange={(e) => setFormData({ ...formData, staffRoles: e.target.value })}
                         rows={3}
-                        className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                        className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-tc-500 focus:border-tc-500"
                       />
                     </div>
 
@@ -775,7 +775,7 @@ export default function UATDiscoveryPage() {
                               type="checkbox"
                               checked={formData.busiestDays.includes(day)}
                               onChange={() => handleCheckboxChange('busiestDays', day)}
-                              className="rounded border-2 border-slate-300 text-indigo-600 focus:ring-4 focus:ring-indigo-500 w-6 h-6"
+                              className="rounded border-2 border-slate-300 text-tc-600 focus:ring-4 focus:ring-tc-500 w-6 h-6"
                             />
                             <span className="text-lg text-slate-900">
                               {day === 'Consistent across all days' ? 'Consistent' : day}
@@ -794,7 +794,7 @@ export default function UATDiscoveryPage() {
                         value={formData.usageNotes}
                         onChange={(e) => setFormData({ ...formData, usageNotes: e.target.value })}
                         rows={2}
-                        className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                        className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-tc-500 focus:border-tc-500"
                       />
                     </div>
                   </div>
@@ -823,14 +823,14 @@ export default function UATDiscoveryPage() {
 
                       <div className="space-y-3">
                         {/* Select All Option */}
-                        <label className="flex items-center space-x-3 p-4 bg-indigo-50 border-2 border-indigo-300 rounded-xl hover:bg-indigo-100 transition-colors cursor-pointer">
+                        <label className="flex items-center space-x-3 p-4 bg-tc-50 border-2 border-tc-300 rounded-xl hover:bg-tc-100 transition-colors cursor-pointer">
                           <input
                             type="checkbox"
                             checked={formData.channelsToMigrate.length === 7}
                             onChange={handleSelectAllChannels}
-                            className="rounded border-2 border-slate-300 text-indigo-600 focus:ring-4 focus:ring-indigo-500 w-6 h-6"
+                            className="rounded border-2 border-slate-300 text-tc-600 focus:ring-4 focus:ring-tc-500 w-6 h-6"
                           />
-                          <span className="text-lg font-semibold text-indigo-900">
+                          <span className="text-lg font-semibold text-tc-900">
                             Select All Channels
                           </span>
                         </label>
@@ -844,9 +844,9 @@ export default function UATDiscoveryPage() {
                               onChange={() =>
                                 handleCheckboxChange('channelsToMigrate', 'Live Voice Calls')
                               }
-                              className="rounded border-2 border-slate-300 text-indigo-600 focus:ring-4 focus:ring-indigo-500 w-6 h-6"
+                              className="rounded border-2 border-slate-300 text-tc-600 focus:ring-4 focus:ring-tc-500 w-6 h-6"
                             />
-                            <Phone className="w-6 h-6 text-indigo-600" />
+                            <Phone className="w-6 h-6 text-tc-600" />
                             <span className="text-lg text-slate-900 font-medium">
                               Live Voice Calls
                             </span>
@@ -859,7 +859,7 @@ export default function UATDiscoveryPage() {
                               onChange={() =>
                                 handleCheckboxChange('channelsToMigrate', 'Messaging SMS/TXT')
                               }
-                              className="rounded border-2 border-slate-300 text-indigo-600 focus:ring-4 focus:ring-indigo-500 w-6 h-6"
+                              className="rounded border-2 border-slate-300 text-tc-600 focus:ring-4 focus:ring-tc-500 w-6 h-6"
                             />
                             <MessageSquare className="w-6 h-6 text-green-600" />
                             <span className="text-lg text-slate-900 font-medium">
@@ -872,7 +872,7 @@ export default function UATDiscoveryPage() {
                               type="checkbox"
                               checked={formData.channelsToMigrate.includes('Webchat')}
                               onChange={() => handleCheckboxChange('channelsToMigrate', 'Webchat')}
-                              className="rounded border-2 border-slate-300 text-indigo-600 focus:ring-4 focus:ring-indigo-500 w-6 h-6"
+                              className="rounded border-2 border-slate-300 text-tc-600 focus:ring-4 focus:ring-tc-500 w-6 h-6"
                             />
                             <MessagesSquare className="w-6 h-6 text-blue-600" />
                             <span className="text-lg text-slate-900 font-medium">Webchat</span>
@@ -883,7 +883,7 @@ export default function UATDiscoveryPage() {
                               type="checkbox"
                               checked={formData.channelsToMigrate.includes('Webforms')}
                               onChange={() => handleCheckboxChange('channelsToMigrate', 'Webforms')}
-                              className="rounded border-2 border-slate-300 text-indigo-600 focus:ring-4 focus:ring-indigo-500 w-6 h-6"
+                              className="rounded border-2 border-slate-300 text-tc-600 focus:ring-4 focus:ring-tc-500 w-6 h-6"
                             />
                             <FileText className="w-6 h-6 text-purple-600" />
                             <span className="text-lg text-slate-900 font-medium">Webforms</span>
@@ -894,7 +894,7 @@ export default function UATDiscoveryPage() {
                               type="checkbox"
                               checked={formData.channelsToMigrate.includes('Email')}
                               onChange={() => handleCheckboxChange('channelsToMigrate', 'Email')}
-                              className="rounded border-2 border-slate-300 text-indigo-600 focus:ring-4 focus:ring-indigo-500 w-6 h-6"
+                              className="rounded border-2 border-slate-300 text-tc-600 focus:ring-4 focus:ring-tc-500 w-6 h-6"
                             />
                             <Mail className="w-6 h-6 text-red-600" />
                             <span className="text-lg text-slate-900 font-medium">Email</span>
@@ -905,7 +905,7 @@ export default function UATDiscoveryPage() {
                               type="checkbox"
                               checked={formData.channelsToMigrate.includes('Fax')}
                               onChange={() => handleCheckboxChange('channelsToMigrate', 'Fax')}
-                              className="rounded border-2 border-slate-300 text-indigo-600 focus:ring-4 focus:ring-indigo-500 w-6 h-6"
+                              className="rounded border-2 border-slate-300 text-tc-600 focus:ring-4 focus:ring-tc-500 w-6 h-6"
                             />
                             <Printer className="w-6 h-6 text-gray-600" />
                             <span className="text-lg text-slate-900 font-medium">Fax</span>
@@ -918,7 +918,7 @@ export default function UATDiscoveryPage() {
                               onChange={() =>
                                 handleCheckboxChange('channelsToMigrate', 'Social Media')
                               }
-                              className="rounded border-2 border-slate-300 text-indigo-600 focus:ring-4 focus:ring-indigo-500 w-6 h-6"
+                              className="rounded border-2 border-slate-300 text-tc-600 focus:ring-4 focus:ring-tc-500 w-6 h-6"
                             />
                             <Share2 className="w-6 h-6 text-pink-600" />
                             <span className="text-lg text-slate-900 font-medium">Social Media</span>
@@ -982,7 +982,7 @@ export default function UATDiscoveryPage() {
                               onChange={(e) =>
                                 setFormData({ ...formData, inboundCalls: e.target.value })
                               }
-                              className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                              className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-tc-500 focus:border-tc-500"
                             />
                           </div>
 
@@ -997,7 +997,7 @@ export default function UATDiscoveryPage() {
                               onChange={(e) =>
                                 setFormData({ ...formData, outboundCalls: e.target.value })
                               }
-                              className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                              className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-tc-500 focus:border-tc-500"
                             />
                           </div>
                         </div>
@@ -1012,7 +1012,7 @@ export default function UATDiscoveryPage() {
                             onChange={(e) =>
                               setFormData({ ...formData, avgCallDuration: e.target.value })
                             }
-                            className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                            className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-tc-500 focus:border-tc-500"
                           >
                             <option value="">Select...</option>
                             <option value="Under 2 minutes">Under 2 minutes</option>
@@ -1040,7 +1040,7 @@ export default function UATDiscoveryPage() {
                               onChange={(e) =>
                                 setFormData({ ...formData, inboundFaxes: e.target.value })
                               }
-                              className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                              className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-tc-500 focus:border-tc-500"
                             />
                           </div>
 
@@ -1055,7 +1055,7 @@ export default function UATDiscoveryPage() {
                               onChange={(e) =>
                                 setFormData({ ...formData, outboundFaxes: e.target.value })
                               }
-                              className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                              className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-tc-500 focus:border-tc-500"
                             />
                           </div>
                         </div>
@@ -1072,7 +1072,7 @@ export default function UATDiscoveryPage() {
                               onChange={(e) =>
                                 setFormData({ ...formData, avgFaxPagesInbound: e.target.value })
                               }
-                              className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                              className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-tc-500 focus:border-tc-500"
                             />
                           </div>
 
@@ -1087,7 +1087,7 @@ export default function UATDiscoveryPage() {
                               onChange={(e) =>
                                 setFormData({ ...formData, avgFaxPagesOutbound: e.target.value })
                               }
-                              className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                              className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-tc-500 focus:border-tc-500"
                             />
                           </div>
                         </div>
@@ -1106,7 +1106,7 @@ export default function UATDiscoveryPage() {
                             placeholder="Bulk and individual combined"
                             value={formData.emailsSent}
                             onChange={(e) => setFormData({ ...formData, emailsSent: e.target.value })}
-                            className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                            className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-tc-500 focus:border-tc-500"
                           />
                         </div>
 
@@ -1121,7 +1121,7 @@ export default function UATDiscoveryPage() {
                             onChange={(e) =>
                               setFormData({ ...formData, emailsReceived: e.target.value })
                             }
-                            className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                            className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-tc-500 focus:border-tc-500"
                           />
                         </div>
                       </div>
@@ -1137,7 +1137,7 @@ export default function UATDiscoveryPage() {
                           <select
                             value={formData.smsUsage}
                             onChange={(e) => setFormData({ ...formData, smsUsage: e.target.value })}
-                            className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                            className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-tc-500 focus:border-tc-500"
                           >
                             <option value="">Select...</option>
                             <option value="No, we don't use SMS">No, we don&apos;t use SMS</option>
@@ -1162,7 +1162,7 @@ export default function UATDiscoveryPage() {
                               type="number"
                               value={formData.smsVolume}
                               onChange={(e) => setFormData({ ...formData, smsVolume: e.target.value })}
-                              className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                              className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-tc-500 focus:border-tc-500"
                             />
                           </div>
                         )}
@@ -1181,7 +1181,7 @@ export default function UATDiscoveryPage() {
                             onChange={(e) =>
                               setFormData({ ...formData, webFormsUsage: e.target.value })
                             }
-                            className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                            className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-tc-500 focus:border-tc-500"
                           >
                             <option value="">Select...</option>
                             <option value="No">No</option>
@@ -1208,7 +1208,7 @@ export default function UATDiscoveryPage() {
                               onChange={(e) =>
                                 setFormData({ ...formData, formSubmissions: e.target.value })
                               }
-                              className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                              className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-tc-500 focus:border-tc-500"
                             />
                           </div>
                         )}
@@ -1242,7 +1242,7 @@ export default function UATDiscoveryPage() {
                         onChange={(e) =>
                           setFormData({ ...formData, hasTechnicalResources: e.target.value })
                         }
-                        className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                        className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-tc-500 focus:border-tc-500"
                       >
                         <option value="">Select...</option>
                         <option value="Yes">Yes</option>
@@ -1265,7 +1265,7 @@ export default function UATDiscoveryPage() {
                             })
                           }
                           rows={3}
-                          className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                          className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-tc-500 focus:border-tc-500"
                         />
                       </div>
                     )}
@@ -1277,7 +1277,7 @@ export default function UATDiscoveryPage() {
                       <select
                         value={formData.phoneSystem}
                         onChange={(e) => setFormData({ ...formData, phoneSystem: e.target.value })}
-                        className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                        className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-tc-500 focus:border-tc-500"
                       >
                         <option value="">Select...</option>
                         <option value="Traditional landline/PBX">Traditional landline/PBX</option>
@@ -1302,7 +1302,7 @@ export default function UATDiscoveryPage() {
                           onChange={(e) =>
                             setFormData({ ...formData, phoneSystemDetails: e.target.value })
                           }
-                          className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                          className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-tc-500 focus:border-tc-500"
                         />
                       </div>
                     )}
@@ -1318,7 +1318,7 @@ export default function UATDiscoveryPage() {
                         onChange={(e) =>
                           setFormData({ ...formData, mainBusinessLines: e.target.value })
                         }
-                        className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                        className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-tc-500 focus:border-tc-500"
                       />
                       <p className="text-base text-slate-600 mt-2">
                         e.g., (702) 555-1234, (702) 555-5678
@@ -1334,7 +1334,7 @@ export default function UATDiscoveryPage() {
                         onChange={(e) =>
                           setFormData({ ...formData, businessPhoneProvider: e.target.value })
                         }
-                        className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                        className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-tc-500 focus:border-tc-500"
                       >
                         <option value="">Select...</option>
                         <option value="Spectrum">Spectrum</option>
@@ -1359,7 +1359,7 @@ export default function UATDiscoveryPage() {
                       <select
                         value={formData.faxSystem}
                         onChange={(e) => setFormData({ ...formData, faxSystem: e.target.value })}
-                        className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                        className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-tc-500 focus:border-tc-500"
                       >
                         <option value="">Select...</option>
                         <option value="Physical fax machine">Physical fax machine</option>
@@ -1383,7 +1383,7 @@ export default function UATDiscoveryPage() {
                           onChange={(e) =>
                             setFormData({ ...formData, faxSystemDetails: e.target.value })
                           }
-                          className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                          className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-tc-500 focus:border-tc-500"
                         />
                       </div>
                     )}
@@ -1395,7 +1395,7 @@ export default function UATDiscoveryPage() {
                       <select
                         value={formData.emailSystem}
                         onChange={(e) => setFormData({ ...formData, emailSystem: e.target.value })}
-                        className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                        className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-tc-500 focus:border-tc-500"
                       >
                         <option value="">Select...</option>
                         <option value="Gmail / Google Workspace">Gmail / Google Workspace</option>
@@ -1417,7 +1417,7 @@ export default function UATDiscoveryPage() {
                           onChange={(e) =>
                             setFormData({ ...formData, emailSystemDetails: e.target.value })
                           }
-                          className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                          className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-tc-500 focus:border-tc-500"
                         />
                       </div>
                     )}
@@ -1431,7 +1431,7 @@ export default function UATDiscoveryPage() {
                         onChange={(e) =>
                           setFormData({ ...formData, websiteStatus: e.target.value })
                         }
-                        className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                        className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-tc-500 focus:border-tc-500"
                       >
                         <option value="">Select...</option>
                         <option value="Yes, WordPress">Yes, WordPress</option>
@@ -1454,7 +1454,7 @@ export default function UATDiscoveryPage() {
                         value={formData.painPoints}
                         onChange={(e) => setFormData({ ...formData, painPoints: e.target.value })}
                         rows={3}
-                        className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                        className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-tc-500 focus:border-tc-500"
                       />
                     </div>
                   </div>
@@ -1483,7 +1483,7 @@ export default function UATDiscoveryPage() {
                         value={formData.excitedAbout}
                         onChange={(e) => setFormData({ ...formData, excitedAbout: e.target.value })}
                         rows={6}
-                        className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                        className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-tc-500 focus:border-tc-500"
                       />
                     </div>
                   </div>
@@ -1514,7 +1514,7 @@ export default function UATDiscoveryPage() {
                           setFormData({ ...formData, additionalContext: e.target.value })
                         }
                         rows={3}
-                        className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                        className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-tc-500 focus:border-tc-500"
                       />
                     </div>
 
@@ -1525,7 +1525,7 @@ export default function UATDiscoveryPage() {
                       <select
                         value={formData.howHeard}
                         onChange={(e) => setFormData({ ...formData, howHeard: e.target.value })}
-                        className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                        className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-tc-500 focus:border-tc-500"
                       >
                         <option value="">Select...</option>
                         <option value="Direct outreach from NSS/Connie team">
@@ -1551,7 +1551,7 @@ export default function UATDiscoveryPage() {
                           onChange={(e) =>
                             setFormData({ ...formData, referralDetails: e.target.value })
                           }
-                          className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500"
+                          className="w-full px-6 py-4 border-2 border-slate-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-tc-500 focus:border-tc-500"
                         />
                       </div>
                     )}
@@ -1572,7 +1572,7 @@ export default function UATDiscoveryPage() {
                             href="https://connie.one/acceptable-use-policy"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-indigo-600 hover:text-indigo-800 underline text-base"
+                            className="text-tc-600 hover:text-tc-800 underline text-base"
                           >
                             Acceptable Use Policy
                           </a>
@@ -1581,7 +1581,7 @@ export default function UATDiscoveryPage() {
                             href="https://connie.one/terms-of-service"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-indigo-600 hover:text-indigo-800 underline text-base"
+                            className="text-tc-600 hover:text-tc-800 underline text-base"
                           >
                             Terms of Service
                           </a>
@@ -1590,7 +1590,7 @@ export default function UATDiscoveryPage() {
                             href="https://connie.one/privacy-policy"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-indigo-600 hover:text-indigo-800 underline text-base"
+                            className="text-tc-600 hover:text-tc-800 underline text-base"
                           >
                             Privacy Policy
                           </a>
@@ -1599,7 +1599,7 @@ export default function UATDiscoveryPage() {
                             href="https://connie.one/dataroom/legal"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-indigo-600 hover:text-indigo-800 underline text-base"
+                            className="text-tc-600 hover:text-tc-800 underline text-base"
                           >
                             UAT Cohort Team MOU
                           </a>
@@ -1632,7 +1632,7 @@ export default function UATDiscoveryPage() {
                 </div>
                 <div className="w-full bg-slate-200 rounded-full h-4 overflow-hidden">
                   <div
-                    className="bg-indigo-600 h-4 rounded-full transition-all duration-300 ease-in-out"
+                    className="bg-tc-600 h-4 rounded-full transition-all duration-300 ease-in-out"
                     style={{ width: `${(currentStep / totalSteps) * 100}%` }}
                   />
                 </div>
@@ -1654,7 +1654,7 @@ export default function UATDiscoveryPage() {
                   <button
                     type="button"
                     onClick={goToNextStep}
-                    className="flex items-center gap-2 px-5 py-2.5 bg-indigo-600 text-white font-medium text-base rounded-lg hover:bg-indigo-700 transition-colors"
+                    className="flex items-center gap-2 px-5 py-2.5 bg-tc-600 text-white font-medium text-base rounded-lg hover:bg-tc-700 transition-colors"
                   >
                     Next
                     <ChevronRight className="w-5 h-5" />
@@ -1676,7 +1676,7 @@ export default function UATDiscoveryPage() {
           {/* Small Logo at Bottom - Only on form steps */}
           {currentStep > 0 && !submitSuccess && (
             <div className="mt-8 flex justify-center opacity-40 hover:opacity-60 transition-opacity">
-              <Image src="/connie-logo-black-strong.svg" alt="Connie" width={120} height={32} />
+              <Image src="/threadconnect-logo-darkteal.svg" alt="ThreadConnect" width={124} height={40} />
             </div>
           )}
         </div>

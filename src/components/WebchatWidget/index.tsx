@@ -283,7 +283,7 @@ export const WebchatWidget: React.FC = () => {
         <div className="fixed inset-0 z-[9998] flex items-center justify-center bg-black/50 p-4">
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl max-w-md w-full p-6 animate-in fade-in zoom-in duration-200">
             <div className="text-center">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-pink-500 to-purple-500 flex items-center justify-center">
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-tc-500 to-tc-800 flex items-center justify-center">
                 <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
@@ -299,7 +299,7 @@ export const WebchatWidget: React.FC = () => {
                 <Link
                   href="/contact"
                   onClick={closeUnavailableMessage}
-                  className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-gradient-to-r from-pink-500 to-purple-500 text-white font-medium hover:opacity-90 transition-opacity"
+                  className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-gradient-to-r from-tc-500 to-tc-800 text-white font-medium hover:opacity-90 transition-opacity"
                 >
                   Contact Us
                 </Link>
@@ -321,7 +321,7 @@ export const WebchatWidget: React.FC = () => {
           onClick={handleClick}
           disabled={isLoading}
           aria-label={isLoading ? 'Loading chat...' : 'Open chat'}
-          className="fixed bottom-6 right-6 z-[9999] w-16 h-16 rounded-full bg-gradient-to-r from-pink-500 to-purple-500 text-white shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 flex items-center justify-center disabled:opacity-50 disabled:cursor-wait"
+          className="fixed bottom-6 right-6 z-[9999] w-16 h-16 rounded-full bg-gradient-to-r from-tc-500 to-tc-800 text-white shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 flex items-center justify-center disabled:opacity-50 disabled:cursor-wait"
         >
         {isLoading ? (
           <svg className="w-6 h-6 animate-spin" fill="none" viewBox="0 0 24 24">

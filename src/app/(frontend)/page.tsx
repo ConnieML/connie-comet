@@ -10,17 +10,17 @@ export const metadata: Metadata = {
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white flex flex-col">
+    <div className="min-h-screen bg-gradient-to-b from-tc-cream to-white flex flex-col">
       <div className="flex-1 flex items-center justify-center px-6">
         <div className="max-w-3xl w-full text-center space-y-8">
           {/* Logo */}
           <div className="flex justify-center mb-8">
-            <Logo className="h-16 w-auto" />
+            <Logo className="h-20 w-auto" />
           </div>
 
           {/* Main Content */}
           <div className="space-y-6">
-            <h1 className="text-5xl md:text-6xl font-semibold text-slate-900 tracking-tight">
+            <h1 className="text-5xl md:text-6xl font-semibold text-tc-800 tracking-tight">
               Future Home of Connie.one
             </h1>
 
@@ -33,13 +33,13 @@ export default function HomePage() {
           <div className="pt-8 flex flex-wrap justify-center gap-4">
             <Link
               href="/dataroom"
-              className="inline-block px-6 py-3 bg-slate-900 text-white font-medium rounded-lg hover:bg-slate-800 transition-colors"
+              className="inline-block px-6 py-3 bg-tc-800 text-white font-medium rounded-lg hover:bg-tc-900 transition-colors"
             >
               Document Portal
             </Link>
             <Link
               href="/dataroom/user-acceptance-testing/discovery"
-              className="inline-block px-6 py-3 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 transition-colors"
+              className="inline-block px-6 py-3 bg-tc-600 text-white font-medium rounded-lg hover:bg-tc-700 transition-colors"
             >
               UAT Discovery Form
             </Link>

@@ -97,12 +97,31 @@ const config = {
         success: 'hsl(var(--success))',
         error: 'hsl(var(--error))',
         warning: 'hsl(var(--warning))',
-        'twilio-blue': '#0263E0',
-        'twilio-navy': '#121C2D',
-        'twilio-muted': '#606B85',
-        'twilio-bg-subtle': '#F4F4F6',
-        'twilio-border': '#E1E3EA',
-        'twilio-teal': '#0E8A6E',
+        // Legacy token names kept so existing pages pick up the ThreadConnect
+        // palette without class renames. Previous Connie values in comments.
+        'twilio-blue': '#00393E', // was #0263E0 -> ThreadConnect Dark Teal
+        'twilio-navy': '#00393E', // was #121C2D -> ThreadConnect Dark Teal
+        'twilio-muted': '#545454', // was #606B85 -> ThreadConnect Gray
+        'twilio-bg-subtle': '#F6F2E8', // was #F4F4F6 -> ThreadConnect Cream
+        'twilio-border': '#D4EAE7', // was #E1E3EA -> Light Teal tint
+        'twilio-teal': '#037A84', // was #0E8A6E -> Teal, darkened for AA text on white
+        // ThreadConnect brand scale. 200 = Light Teal, 500 = Teal, 800 = Dark Teal.
+        tc: {
+          50: '#EEF7F6',
+          100: '#DCEFED',
+          200: '#B4DDD9',
+          300: '#8CCBC6',
+          400: '#4FB0B5',
+          500: '#048E99',
+          600: '#037A84',
+          700: '#00595F',
+          800: '#00393E',
+          900: '#002A2E',
+          cream: '#F6F2E8',
+          gray: '#545454',
+          orange: '#F8A01D',
+          pink: '#F06B63',
+        },
       },
       fontFamily: {
         mono: ['var(--font-geist-mono)'],

@@ -32,8 +32,8 @@ const fileTypeIcons: Record<string, { icon: string; color: string }> = {
   mp4: { icon: '🎬', color: 'text-purple-400' },
   webm: { icon: '🎬', color: 'text-purple-400' },
   mov: { icon: '🎬', color: 'text-purple-400' },
-  mp3: { icon: '🎵', color: 'text-pink-400' },
-  wav: { icon: '🎵', color: 'text-pink-400' },
+  mp3: { icon: '🎵', color: 'text-tc-300' },
+  wav: { icon: '🎵', color: 'text-tc-300' },
   zip: { icon: '📦', color: 'text-yellow-400' },
   svg: { icon: '◈', color: 'text-cyan-400' },
   psd: { icon: '🎨', color: 'text-blue-500' },
@@ -143,7 +143,7 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
   // Sort indicator component
   const SortIndicator = ({ field }: { field: string }) => {
     if (sortField !== field) return <span className="ml-1 text-zinc-600">↕</span>
-    return <span className="ml-1 text-pink-400">{sortDirection === 'asc' ? '↑' : '↓'}</span>
+    return <span className="ml-1 text-tc-300">{sortDirection === 'asc' ? '↑' : '↓'}</span>
   }
 
   // Known categories from your database
@@ -404,7 +404,7 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
   // ==========================================
   if (!selectedCategory) {
     return (
-      <div className="py-20 px-4 min-h-screen bg-gradient-to-b from-zinc-900 via-zinc-900 to-black">
+      <div className="py-20 px-4 min-h-screen bg-gradient-to-b from-tc-800 via-tc-900 to-tc-900">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="text-center mb-16">
@@ -431,7 +431,7 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
                     setSearchQuery('')
                     updateURL(category, null)
                   }}
-                  className="group bg-white/5 backdrop-blur-sm rounded-2xl overflow-hidden border border-white/10 hover:border-pink-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-pink-500/10 text-left"
+                  className="group bg-white/5 backdrop-blur-sm rounded-2xl overflow-hidden border border-white/10 hover:border-tc-400/50 transition-all duration-300 hover:shadow-xl hover:shadow-tc-400/10 text-left"
                 >
                   {/* Category Preview Image */}
                   <div className="aspect-[4/3] bg-zinc-800/50 relative flex items-center justify-center overflow-hidden">
@@ -447,10 +447,10 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
                       </span>
                     )}
                     {/* Overlay gradient */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-zinc-900/90 via-zinc-900/30 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-tc-900/90 via-tc-900/30 to-transparent" />
 
                     {/* Count badge */}
-                    <span className="absolute top-3 right-3 bg-pink-500/90 text-white text-sm px-3 py-1 rounded-full font-semibold">
+                    <span className="absolute top-3 right-3 bg-tc-600/90 text-white text-sm px-3 py-1 rounded-full font-semibold">
                       {count}
                     </span>
                   </div>
@@ -458,9 +458,9 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
                   {/* Category Info */}
                   <div className="p-5">
                     <div className="flex items-center gap-3">
-                      <span className="text-2xl text-pink-500">{config.icon}</span>
+                      <span className="text-2xl text-tc-400">{config.icon}</span>
                       <div>
-                        <h3 className="font-semibold text-white group-hover:text-pink-400 transition-colors">
+                        <h3 className="font-semibold text-white group-hover:text-tc-300 transition-colors">
                           {config.label}
                         </h3>
                         <p className="text-sm text-zinc-500">
@@ -484,7 +484,7 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
   const currentCategoryConfig = categoryConfig[selectedCategory] || { icon: '?', label: selectedCategory }
 
   return (
-    <div className="py-20 px-4 min-h-screen bg-gradient-to-b from-zinc-900 via-zinc-900 to-black">
+    <div className="py-20 px-4 min-h-screen bg-gradient-to-b from-tc-800 via-tc-900 to-tc-900">
       <div className="max-w-7xl mx-auto">
         {/* Back Button */}
         <button
@@ -504,7 +504,7 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
           <div>
             <div className="flex items-center gap-3 mb-2">
-              <span className="text-3xl text-pink-500">{currentCategoryConfig.icon}</span>
+              <span className="text-3xl text-tc-400">{currentCategoryConfig.icon}</span>
               <h2 className="text-3xl font-bold text-white">{currentCategoryConfig.label}</h2>
             </div>
             <p className="text-zinc-400">{filteredAssets.length} assets</p>
@@ -517,7 +517,7 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
               placeholder="Search in category..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full md:w-64 px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-pink-500/50 transition-colors"
+              className="w-full md:w-64 px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-tc-400/50 transition-colors"
             />
             {/* View Toggle */}
             <div className="flex bg-white/5 rounded-lg p-1 border border-white/10">
@@ -525,7 +525,7 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
                 onClick={() => setViewMode('list')}
                 className={`p-2 rounded-md transition-all ${
                   viewMode === 'list'
-                    ? 'bg-pink-500 text-white'
+                    ? 'bg-tc-600 text-white'
                     : 'text-zinc-400 hover:text-white'
                 }`}
                 title="List view"
@@ -538,7 +538,7 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
                 onClick={() => setViewMode('gallery')}
                 className={`p-2 rounded-md transition-all ${
                   viewMode === 'gallery'
-                    ? 'bg-pink-500 text-white'
+                    ? 'bg-tc-600 text-white'
                     : 'text-zinc-400 hover:text-white'
                 }`}
                 title="Gallery view"
@@ -561,7 +561,7 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
               }}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                 !selectedSubcategory
-                  ? 'bg-pink-500 text-white'
+                  ? 'bg-tc-600 text-white'
                   : 'bg-white/5 text-zinc-400 hover:bg-white/10 hover:text-white'
               }`}
             >
@@ -576,7 +576,7 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
                 }}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                   selectedSubcategory === sub
-                    ? 'bg-pink-500 text-white'
+                    ? 'bg-tc-600 text-white'
                     : 'bg-white/5 text-zinc-400 hover:bg-white/10 hover:text-white'
                 }`}
               >
@@ -646,12 +646,12 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
                           <img
                             src={getAssetThumbnail(asset)!}
                             alt={asset.name}
-                            className="w-12 h-12 object-cover rounded-lg cursor-pointer hover:ring-2 hover:ring-pink-500/50 transition-all"
+                            className="w-12 h-12 object-cover rounded-lg cursor-pointer hover:ring-2 hover:ring-tc-400/50 transition-all"
                             onClick={() => setPreviewAsset(asset)}
                           />
                         ) : (
                           <div
-                            className={`w-12 h-12 rounded-lg bg-zinc-800 flex items-center justify-center cursor-pointer hover:ring-2 hover:ring-pink-500/50 transition-all ${fileIcon.color}`}
+                            className={`w-12 h-12 rounded-lg bg-zinc-800 flex items-center justify-center cursor-pointer hover:ring-2 hover:ring-tc-400/50 transition-all ${fileIcon.color}`}
                             onClick={() => setPreviewAsset(asset)}
                           >
                             <span className="text-xl">{fileIcon.icon}</span>
@@ -712,7 +712,7 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
                         </button>
                         <button
                           onClick={() => handleDownload(asset)}
-                          className="p-2 rounded-lg bg-pink-500/80 hover:bg-pink-500 text-white transition-colors"
+                          className="p-2 rounded-lg bg-tc-600/80 hover:bg-tc-600 text-white transition-colors"
                           title="Download"
                         >
                           ↓
@@ -746,7 +746,7 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
                   return (
                     <div
                       key={asset.id}
-                      className="group bg-white/5 rounded-xl border border-white/10 overflow-hidden hover:border-pink-500/50 transition-all cursor-pointer"
+                      className="group bg-white/5 rounded-xl border border-white/10 overflow-hidden hover:border-tc-400/50 transition-all cursor-pointer"
                       onClick={() => setPreviewAsset(asset)}
                     >
                       {/* Thumbnail */}
@@ -783,7 +783,7 @@ export const BrandPortalBlock: React.FC<BrandPortalBlockProps> = ({
                               e.stopPropagation()
                               handleDownload(asset)
                             }}
-                            className="p-2 rounded-lg bg-pink-500 hover:bg-pink-400 text-white transition-colors"
+                            className="p-2 rounded-lg bg-tc-600 hover:bg-tc-700 text-white transition-colors"
                             title="Download"
                           >
                             ↓
@@ -984,7 +984,7 @@ const LightboxModal: React.FC<LightboxModalProps> = ({
               <button
                 onClick={onDownload}
                 disabled={downloading}
-                className="w-full flex items-center justify-center gap-2 bg-pink-500 hover:bg-pink-400 disabled:opacity-50 text-white font-medium py-3 px-4 rounded-xl transition-colors"
+                className="w-full flex items-center justify-center gap-2 bg-tc-600 hover:bg-tc-700 disabled:opacity-50 text-white font-medium py-3 px-4 rounded-xl transition-colors"
               >
                 {downloading ? (
                   <>

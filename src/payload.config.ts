@@ -35,7 +35,7 @@ export default buildConfig({
         {
           rel: 'icon',
           type: 'image/x-icon',
-          url: '/connie-headset-icon-pink.ico'
+          url: '/favicon.ico'
         },
         {
           rel: 'icon',

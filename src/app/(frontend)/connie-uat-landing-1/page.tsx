@@ -217,7 +217,7 @@ export default function ConnieUATLandingPage() {
                   href="https://calendly.com/connie-uat"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-block w-full py-3 px-6 bg-twilio-blue hover:bg-[#0052CC] text-white font-semibold rounded-md transition-colors"
+                  className="inline-block w-full py-3 px-6 bg-twilio-blue hover:bg-tc-900 text-white font-semibold rounded-md transition-colors"
                 >
                   Book a Meeting
                 </a>

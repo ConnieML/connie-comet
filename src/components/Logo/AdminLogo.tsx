@@ -1,10 +1,12 @@
 export default function AdminLogo() {
   return (
     /* eslint-disable @next/next/no-img-element */
-    <img 
-      src="/connie-logo_v1-white.svg" 
-      alt="Connie Logo" 
-      style={{ maxWidth: '150px', height: 'auto' }}
+    <img
+      src="/threadconnect-logo-white.svg"
+      alt="ThreadConnect"
+      width={179}
+      height={58}
+      style={{ maxWidth: '180px', height: 'auto' }}
     />
   )
 }

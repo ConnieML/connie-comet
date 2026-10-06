@@ -214,10 +214,10 @@ export default function ConnieTrainingSurveyPage() {
               </div>
               <div className="mt-8 flex justify-center opacity-40 hover:opacity-60 transition-opacity">
                 <Image
-                  src="/connie-logo-black-strong.svg"
-                  alt="Connie"
-                  width={120}
-                  height={32}
+                  src="/threadconnect-logo-darkteal.svg"
+                  alt="ThreadConnect"
+                  width={124}
+                  height={40}
                 />
               </div>
             </div>
@@ -257,10 +257,10 @@ export default function ConnieTrainingSurveyPage() {
                 <div className="space-y-8">
                   <div className="flex justify-center mb-10">
                     <Image
-                      src="/connie-logo-black-strong.svg"
-                      alt="Connie"
-                      width={250}
-                      height={66}
+                      src="/threadconnect-logo-darkteal.svg"
+                      alt="ThreadConnect"
+                      width={232}
+                      height={75}
                       priority
                     />
                   </div>
@@ -885,7 +885,7 @@ export default function ConnieTrainingSurveyPage() {
 
           {currentStep > 0 && !submitSuccess && (
             <div className="mt-8 flex justify-center opacity-40 hover:opacity-60 transition-opacity">
-              <Image src="/connie-logo-black-strong.svg" alt="Connie" width={120} height={32} />
+              <Image src="/threadconnect-logo-darkteal.svg" alt="ThreadConnect" width={124} height={40} />
             </div>
           )}
         </div>

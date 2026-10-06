@@ -10,11 +10,11 @@ export const Icon: React.FC<Props> = (props) => {
   return (
     /* eslint-disable @next/next/no-img-element */
     <img
-      alt="Connie Icon"
+      alt="ThreadConnect"
       width={32}
       height={32}
       className={className}
-      src="/connie-headset-icon-pink.ico"
+      src="/favicon.svg"
     />
   )
 }
